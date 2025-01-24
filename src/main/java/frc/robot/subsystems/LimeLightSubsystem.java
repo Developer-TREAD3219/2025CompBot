@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 // Currently not used
 //import org.opencv.photo.Photo;
 import org.photonvision.PhotonCamera;
+import java.util.List;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -29,14 +30,17 @@ public class LimeLightSubsystem extends SubsystemBase {
         camera.setLED(VisionLEDMode.kOff);
     }
 
-    public void dectectAprilTags(){
+    public void detectAprilTags(){
         camera.setDriverMode(false);
         camera.setPipelineIndex(0);
         camera.setLED(VisionLEDMode.kOff);
     }
 
     public void update() {
-        result = camera.getLatestResult();
+        List<PhotonPipelineResult> results = camera.getAllUnreadResults();
+        if (!results.isEmpty()) {
+            result = results.get(0);
+        }
     }
     public void findBestTarget(){
         bestTarget = result.getBestTarget();
@@ -53,7 +57,7 @@ public class LimeLightSubsystem extends SubsystemBase {
     public double getPitch(){
         return bestTarget.getPitch();
     }
-    public boolean isAmbiguesPose(){
+    public boolean isAmbiguousPose(){
         return bestTarget.getPoseAmbiguity() > 0.1;
     }
     public Transform3d getBestCameraToTarget(){
@@ -68,7 +72,7 @@ public class LimeLightSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Skew", getSkew());
             SmartDashboard.putNumber("Yaw", getYaw());
             SmartDashboard.putNumber("Pitch", getPitch());
-            SmartDashboard.putBoolean("Ambigues Pose", isAmbiguesPose());
+            SmartDashboard.putBoolean("Ambiguous Pose", isAmbiguousPose());
         }
         //This method will be called once per scheduler run
     }
