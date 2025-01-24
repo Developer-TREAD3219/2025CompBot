@@ -14,11 +14,11 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+// TODO: add our other subsystems
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -33,6 +33,7 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
+  // TODO: Add our other subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   // The driver's controller
@@ -70,6 +71,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
         // Drive Controller inputs
+        // TODO: Add button mappings for the driver controller
+        // The X button on the driver controller locks our wheels in the X position if we hold RB 
     new JoystickButton(m_driverController, Button.kR1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
@@ -77,6 +80,7 @@ public class RobotContainer {
 
     // Y button makes whatever direction the robot is facing the new forward
     new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(m_robotDrive.resetYaw());
+    // TODO: Add button mappings for the gunner controller
 
   }
 
@@ -93,6 +97,7 @@ public class RobotContainer {
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(DriveConstants.kDriveKinematics);
 
+    // TODO: Do we keep this?
     // An example trajectory to follow. All units in meters.
     Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction

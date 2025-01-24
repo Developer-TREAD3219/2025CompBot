@@ -1,7 +1,10 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
+// TODO:Integrate Pathplanner adjustments from here https://pathplanner.dev/pplib-getting-started.html#install-pathplannerlib
+// Integration will require us to create the following methods in DriveSubsystem.java:
+// resetPose - Resets the robot's odometry to the given pose
+// getRobotRelativeSpeeds or getCurrentSpeeds - Returns the current robot-relative ChassisSpeeds
 package frc.robot.subsystems;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
