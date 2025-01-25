@@ -74,6 +74,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+        // TODO: Add PathplannerAuto or more likely AutoChooser here. An example can be found here https://github.com/mjansen4857/pathplanner/blob/main/examples/java/src/main/java/frc/robot/RobotContainer.java
         // Drive Controller inputs
         // TODO: Add button mappings for the driver controller
         // The X button on the driver controller locks our wheels in the X position if we hold RB 
@@ -93,15 +94,15 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // Create config for trajectory
+  public Command getAutonomousCommand() { 
+    //TODO: Yeet everything in this method and replace it with the PathplannerAuto code on the getting starteg page
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(DriveConstants.kDriveKinematics);
 
-    // TODO: Do we keep this?
+    // TODO: Do we keep this?... The answer is NO!
     // An example trajectory to follow. All units in meters.
     Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction

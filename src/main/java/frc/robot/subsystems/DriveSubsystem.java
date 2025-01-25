@@ -2,8 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of the
 // WPILib BSD license file in the root directory of this project.
 // TODO:Integrate Pathplanner adjustments from here https://pathplanner.dev/pplib-getting-started.html#install-pathplannerlib
-// Integration will require us to create the following methods in DriveSubsystem.java:
-// resetPose - Resets the robot's odometry to the given pose
+// we now need to add the Autobuilder
 package frc.robot.subsystems;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
@@ -63,6 +62,7 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
+    // TODO: I'm pretty sure the AutoBuilder is supposed to be here
   }
 
   @Override
@@ -90,9 +90,12 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Resets the robot's odometry to the given pose
    */
-  public void resetPose() {
-   // return m_poseEstimator.getEstimatedPosition();
-  }
+  public void resetPose(Pose2d pose) {
+    m_poseEstimator.resetPosition(
+        getGyroRotation2d(),
+        getSwervePositions(),
+        pose);
+}
 
   /**
    * Resets the odometry to the specified pose.
