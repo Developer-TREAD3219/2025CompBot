@@ -73,7 +73,7 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() {
+  private void configureButtonBindings() { 
         // TODO: Add PathplannerAuto or more likely AutoChooser here. An example can be found here https://github.com/mjansen4857/pathplanner/blob/main/examples/java/src/main/java/frc/robot/RobotContainer.java
         // Drive Controller inputs
         // TODO: Add button mappings for the driver controller
