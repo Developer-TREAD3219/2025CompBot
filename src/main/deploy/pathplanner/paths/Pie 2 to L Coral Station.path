@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.7342500000000003,
+        "y": 2.767249999999999
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.1005000000016194,
+        "y": 2.7575000000029193
+      },
+      "isLocked": false,
+      "linkedName": "Pie 2"
+    },
+    {
+      "anchor": {
+        "x": 1.2967499999989482,
+        "y": 7.018249999999699
+      },
+      "prevControl": {
+        "x": 1.384500000000568,
+        "y": 6.735500000002618
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "L Coral Station"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -52.59464336859145
+  },
+  "reversed": false,
+  "folder": "Pie 1-6 to L and R Coral Station ",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 57.339087278326254
+  },
+  "useDefaultConstraints": true
+}

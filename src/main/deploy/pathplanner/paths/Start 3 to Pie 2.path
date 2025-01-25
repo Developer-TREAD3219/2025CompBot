@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.775,
+        "y": 5.048749999999999
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.634249999995299,
+        "y": 4.14200000000509
+      },
+      "isLocked": false,
+      "linkedName": "Start 3"
+    },
+    {
+      "anchor": {
+        "x": 3.7342500000000003,
+        "y": 2.767249999999999
+      },
+      "prevControl": {
+        "x": 4.299749999995298,
+        "y": 1.3437500000050886
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Pie 2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 57.339087278326254
+  },
+  "reversed": false,
+  "folder": "Blue Start 1-3 To Pie 1-6",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

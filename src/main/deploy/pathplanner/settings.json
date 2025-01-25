@@ -2,7 +2,11 @@
   "robotWidth": 0.9,
   "robotLength": 0.9,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Blue Start 1-3 To Pie 1-6",
+    "L and R Coral Station to Pie 1-6",
+    "Pie 1-6 to L and R Coral Station "
+  ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
