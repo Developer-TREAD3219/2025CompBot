@@ -238,8 +238,7 @@ public class DriveSubsystem extends SubsystemBase {
         m_frontRight.getState(),
         m_rearLeft.getState(),
         m_rearRight.getState()
-    };
-
+      };
     return DriveConstants.kDriveKinematics.toChassisSpeeds(swerveModuleStates);
   }
 }

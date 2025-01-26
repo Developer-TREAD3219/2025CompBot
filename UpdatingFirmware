@@ -1,0 +1,34 @@
+UPDATING FIRMWARE
+
+On Rev Hardware Client
+1. Run Rev Hardware Client
+2. Click Update Rev Hardware Client, if necessary
+
+Drive NEO (Larger)
+1. Plug Laptop into NEO motor
+- Choose motor controller to update
+2. Restore factory defaults (button at buttom of Basic tab)
+3. Perform update, if necessary
+4. Smart current limit 40
+5. Set CAN ID
+6. Click Persist Parameters (buttom at bottom)
+
+Angle NEO (Small)
+1. Plug laptop into Spark MAX motor controller
+2. Restore factory default on Basic tab
+3. Update Firmware, if necessary 
+4. Set CAN ID
+5. Smart Current limit 20 
+6. Click Persist Parameters
+7. Label Spark Max with CAN ID and Position
+
+Through bore encoder
+1. Connect encoder cable from turning motor to SPARK MAX
+2. Attach breakout board to top of controller 
+3. Connect 6 color ribbon cable between turning motor and breakout board
+4. Rotate wheel close to zero 
+5. Attach Calibration Plate
+6. In Rev Hardware Client
+- Go to absolute encoder tab
+- Set direction = Inverted
+- Click Zero Offset
