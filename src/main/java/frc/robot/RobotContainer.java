@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-//TODO: Add other subsystems
+//TODO: Reminder to import any new subsystems
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.CoralDeliverySubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -38,7 +38,7 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  // TODO: Add our other subsystems
+  // TODO: Initialize the rest of our subsystems here. They should follow the pattern of the DriveSubsystem below.
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   // The driver's controller
@@ -96,7 +96,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() { 
-    //TODO: Yeet everything in this method and replace it with the PathplannerAuto code on the getting starteg page
+    //TODO: Yeet everything in this method and replace it with the PathplannerAuto code on the getting started page
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)

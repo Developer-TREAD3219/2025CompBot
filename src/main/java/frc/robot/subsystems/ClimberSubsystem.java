@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
-    // TODO: Add the motor that will drive the Climber
-public class ClimberSubsystem {
+    // TODO: ClimberSubsystem should extend from SubsystemBase. See an example subsystem here https://docs.wpilib.org/en/stable/docs/software/commandbased/subsystems.html
+    // TODO:  Make placeholder extend and retract methods for the climber
+    public class ClimberSubsystem {
     
 }
