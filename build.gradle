@@ -72,8 +72,6 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-        // Add the Limelight library dependency
-    implementation 'com.limelightvision:limelight-java:1.0.0'
 }
 
 test {
