@@ -1,79 +1,119 @@
 package frc.robot.subsystems;
 
-// Currently not used
-//import org.opencv.photo.Photo;
-import org.photonvision.PhotonCamera;
-import java.util.List;
-import org.photonvision.common.hardware.VisionLEDMode;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
+import frc.robot.utils.LimelightHelpers;
+import frc.robot.utils.LimelightHelpers.LimelightTarget_Fiducial;
+
+import java.util.Arrays;
 
 import edu.wpi.first.math.geometry.Transform3d;
-// Currently not used
-// import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants.VisionConstants;
 
 public class LimeLightSubsystem extends SubsystemBase {
-    //limelight for reading Apriltags 
-    PhotonCamera camera;
-    public PhotonPipelineResult result;
-    public PhotonTrackedTarget bestTarget;
+    // Limelight for reading AprilTags
+    private final String limelightCam = VisionConstants.kCameraName;
+    private LimelightHelpers.LimelightResults result;
+    private LimelightHelpers.LimelightTarget_Fiducial currentLock;
+
+    // List of Reef Tags
+    private final int[] reefTags = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
+    
+    // Target lock buffer duration: how long we're ok with keeping an old result
+    private final double bufferTime = 1.0;
+    private double lastUpdateTime = 0.0;
+
+    // Target lock on maxDistance: the farthest away in meters that we want to lock on from
+    private final double maxLockOnDistance = 0.5;
+
+    private double currentLockDistance = Double.MAX_VALUE;
 
     public LimeLightSubsystem() {
-        camera = new PhotonCamera(VisionConstants.kCameraName);
+        // Initialize Limelight settings if needed
     }
 
     public void driverMode() {
-        camera.setDriverMode(true);
-        camera.setLED(VisionLEDMode.kOff);
+        LimelightHelpers.setLEDMode_ForceOff(limelightCam);
+        LimelightHelpers.setStreamMode_Standard(limelightCam);
     }
 
-    public void detectAprilTags(){
-        camera.setDriverMode(false);
-        camera.setPipelineIndex(0);
-        camera.setLED(VisionLEDMode.kOff);
+    public void detectAprilTags() {
+        LimelightHelpers.setLEDMode_ForceOn(limelightCam);
+        LimelightHelpers.setPipelineIndex(limelightCam, 0);
     }
 
     public void update() {
-        List<PhotonPipelineResult> results = camera.getAllUnreadResults();
-        if (!results.isEmpty()) {
-            result = results.get(0);
+        double currentTime = Timer.getFPGATimestamp();
+        result = LimelightHelpers.getLatestResults(limelightCam);
+
+        // Clear our lock on if it's been too long
+        if (currentLock != null && (currentTime - lastUpdateTime > bufferTime)) {
+            currentLock = null;
+            currentLockDistance = Double.MAX_VALUE;
+        }
+
+        // Look for the last result that has a valid target
+        if (result != null && result.targets_Fiducials.length > 0) {
+            for (LimelightHelpers.LimelightTarget_Fiducial target : result.targets_Fiducials) {
+                if (Arrays.stream(reefTags).anyMatch(id -> id == target.fiducialID)) {
+                    currentLock = target;
+                    lastUpdateTime = currentTime;
+                    break;
+                }
+            }
         }
     }
-    public void findBestTarget(){
-        bestTarget = result.getBestTarget();
+
+    public void attemptReefLockon() {
+        if (result != null && result.targets_Fiducials.length > 0) {
+            for (LimelightHelpers.LimelightTarget_Fiducial target : result.targets_Fiducials) {
+                if (Arrays.stream(reefTags).anyMatch(id -> id == target.fiducialID)) {
+                    double distance = get2dDistance(target);
+                    if (distance < maxLockOnDistance && distance < currentLockDistance) {
+                        currentLock = target;
+                        currentLockDistance = distance;
+                    }
+                }
+            }
+        }
     }
-    public int getApriltagID(){
-        return bestTarget.getFiducialId();
+
+    public int getApriltagID() {
+        return currentLock != null ? (int) currentLock.fiducialID : -1;
     }
-    public double getSkew(){
-        return bestTarget.getSkew();
+
+    public double getSkew() {
+        return currentLock != null ? currentLock.ts : 0.0;
     }
-    public double getYaw(){
-        return bestTarget.getYaw();
+
+    public double getYaw() {
+        return currentLock != null ? currentLock.tx : 0.0;
     }
-    public double getPitch(){
-        return bestTarget.getPitch();
+
+    public double getPitch() {
+        return currentLock != null ? currentLock.ty : 0.0;
     }
-    public boolean isAmbiguousPose(){
-        return bestTarget.getPoseAmbiguity() > 0.1;
+
+    // public boolean isAmbiguousPose() {
+    //     return currentLock != null && currentLock.ambiguity > 0.1;
+    // }
+
+    public double get2dDistance(LimelightTarget_Fiducial target) {
+        return target.getTargetPose_RobotSpace().getTranslation().toTranslation2d().getNorm();
     }
-    public Transform3d getBestCameraToTarget(){
-        return bestTarget.getBestCameraToTarget();
-    }
+
     @Override
-    public void periodic(){
+    public void periodic() {
         update();
-        if (result.hasTargets()){
-            findBestTarget();
+        if (currentLock != null) {
             SmartDashboard.putNumber("Apriltag ID", getApriltagID());
             SmartDashboard.putNumber("Skew", getSkew());
             SmartDashboard.putNumber("Yaw", getYaw());
             SmartDashboard.putNumber("Pitch", getPitch());
-            SmartDashboard.putBoolean("Ambiguous Pose", isAmbiguousPose());
+            // SmartDashboard.putBoolean("Ambiguous Pose", isAmbiguousPose());
+            SmartDashboard.putNumber("Distance", get2dDistance(currentLock));
         }
-        //This method will be called once per scheduler run
+        // This method will be called once per scheduler run
     }
 }
