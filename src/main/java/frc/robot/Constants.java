@@ -60,6 +60,8 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 8;
 
     public static final boolean kGyroReversed = false;
+
+    public static final int kPigeonID = 0;
   }
 
   public static final class ModuleConstants {
@@ -109,5 +111,33 @@ public final class Constants {
 
   public static final class VisionConstants {
     public static final String kCameraName = "April";
+  }
+
+  public static final class ElevatorConstants {
+    // TODO: UPDATE CAN ID and other constants
+    public static final int KLeftElevatorID = 1;
+    public static final int KRightElevatorID = 1;
+    public static final double kDownPos = 0;
+    public static final double kL1 = 0;
+    public static final double kL2 = 0;
+    public static final double kL3 = 0;
+    public static final double kL4 = 0;
+    public static final int kLimitSwitchPort = 0;
+    public static final double kMaxVelocity = 0;
+    
+    public static final double kMaxAcceleration = 0;
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final int kCountsPerInch = 0;
+    public static final double kMaxPos = 0;
+    public static final double kMax_output = 0;
+    public static final double kBottomPos = 0;
+    public static final double kPosTolerance = 0;
+    public static final double kS = 0;
+    public static final double kG = 0;
+    public static final double kV = 0;
+    public static final double kMinPos = 0;
+
   }
 }
