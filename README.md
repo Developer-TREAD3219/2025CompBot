@@ -1,22 +1,18 @@
-# MAXSwerve Java Template v2025.1
+# TREAD 3219 - 2025 FRC Reefscape Competition Robot Code
 
-See [the online changelog](https://github.com/REVrobotics/MAXSwerve-Java-Template/blob/main/CHANGELOG.md) for information about updates to the template that may have been released since you created your project.
+## Overview
+This repository contains the code for **Coraline**, Team **TREAD 3219**'s robot for the **2025 FIRST Robotics Competition (FRC) game, Reefscape**. Our robot utilizes **swerve drive** and is programmed using **Java and WPILib** within the **command-based framework**.
 
-## Description
+## Features
+- **Swerve Drive** for precise omnidirectional movement
+- **Command-Based Architecture** for modular and scalable control
+- **WPILib Integration** for seamless FRC hardware/software interaction
+- Additional subsystems and autonomous strategies to be developed as the season progresses
 
-A template project for an FRC swerve drivetrain that uses REV MAXSwerve Modules.
+## Getting Started
+### Prerequisites
+- Install [WPILib](https://docs.wpilib.org/)
+- Install [Visual Studio Code](https://code.visualstudio.com/) with the WPILib extension
+- Java 17 (required for 2025 FRC software)
 
-Note that this is meant to be used with a drivetrain composed of four MAXSwerve Modules, each configured with two SPARKS MAX, a NEO as the driving motor, a NEO 550 as the turning motor, and a REV Through Bore Encoder as the absolute turning encoder.
-
-To get started, make sure you have calibrated the zero offsets for the absolute encoders in the Hardware Client using the `Absolute Encoder` tab under the associated turning SPARK MAX devices.
-
-## Prerequisites
-
-* SPARK MAX Firmware v25.0.0
-* REVLib v2025.0.0
-
-## Configuration
-
-It is possible that this project will not work for your robot right out of the box. Various things like the CAN IDs, PIDF gains, chassis configuration, etc. must be determined for your own robot!
-
-These values can be adjusted in the `Configs.java` and `Constants.java` files.
+### Cloning the Repository
