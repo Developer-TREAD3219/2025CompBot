@@ -88,7 +88,7 @@ public class RobotContainer {
   private void configureButtonBindings() { 
         // Drive Controller inputs
         // TODO: Add button mappings for the driver controller
-        // The X button on the driver controller locks our wheels in the X position if we hold RB 
+        // The RB button on the driver controller locks our wheels in the X position if we held 
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
