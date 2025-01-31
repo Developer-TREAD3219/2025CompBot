@@ -114,7 +114,6 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    // TODO: UPDATE CAN ID and other constants
     public static final int KLeftElevatorID = 1;
     public static final int KRightElevatorID = 1;
     public static final double kDownPos = 0;

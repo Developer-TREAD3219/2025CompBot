@@ -97,6 +97,22 @@ public class RobotContainer {
     // Y button makes whatever direction the robot is facing the new forward
     new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(m_robotDrive.resetYaw());
     // TODO: Add button mappings for the gunner controller
+//Gunner Control
+// Button Comp: 
+// LT + RT + Button:A= Open Trap Door during Climb
+// LT + RT + LJoystick= Move Elevator Manually, In case of Auto Breaking
+// DPad Right + Button:Y= Spin Roller at Max Speed
+// Hold L and R DPad= Climber Stick moves towards or away from Robot
+//Regular Buttons:
+//LT= Score Left Coral 
+//RT= Score Right Coral
+//X= Level 1 for Coral Auto (should automatically got to selected Level)
+//Y= Level 2 for Coral Auto (should automatically got to selected Level)
+//B= Level 3 for Coral Auto (should automatically got to selected Level)
+//A= Level 4 for Coral Auto (should automatically got to selected Level)
+//DPad Up= Going Up to Selected Level and should be Combined with Level Auto
+//DPad Down= Going Down to Selected Level and should be Combined with Level Auto
+
 
   }
 
