@@ -1,4 +1,4 @@
-# TREAD 3219 - 2025 FRC Reefscape Competition Robot Code
+# TREAD 3219 - 2025 FRC Reefscape Comp bot 'Coraline' Code
 
 ## Overview
 This repository contains the code for **Coraline**, Team **TREAD 3219**'s robot for the **2025 FIRST Robotics Competition (FRC) game, Reefscape**. Our robot utilizes **swerve drive** and is programmed using **Java and WPILib** within the **command-based framework**.
