@@ -69,8 +69,6 @@ public class DriveSubsystem extends SubsystemBase {
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
     // TODO: I'm pretty sure the AutoBuilder is supposed to be here
-
-    public void robotContainer 
   }
 
   @Override
