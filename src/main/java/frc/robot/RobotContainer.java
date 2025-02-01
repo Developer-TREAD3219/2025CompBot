@@ -39,7 +39,11 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
+  // TODO: Add the subsystems to the RobotContainer
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final ClimberSubsystem m_robotClimber = new ClimberSubsystem();
+  //todo: need sensor at bottom to reset controller value
+  private final ElevatorSubsystem m_robotElevator = new ElevatorSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -84,11 +88,14 @@ public class RobotContainer {
             m_robotDrive));
 
     // Y button makes whatever direction the robot is facing the new forward
-    new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(m_robotDrive.resetYaw());
+    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+        .onTrue(m_robotDrive.resetYaw());
 
     // TODO: Add button mappings for the gunner controller
+    
     // The X button on the gunner controller raises the elevator to L1
-    new JoystickButton(m_gunnerController, XboxController.Button.kX.value).onTrue(new ElevatorL1());
+    new JoystickButton(m_gunnerController, XboxController.Button.kX.value)
+        .onTrue(new ElevatorL1(m_robotElevator));
   }
 
   /**

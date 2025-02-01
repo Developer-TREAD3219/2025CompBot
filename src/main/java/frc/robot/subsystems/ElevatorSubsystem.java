@@ -13,17 +13,16 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-// TODO: Add the motor that will drive the Elevator
 // TODO: Add placeholder methods to raise the Elevator to L2 and L3 and L4
-
-
 // TODO: Add a method to return the Elevator to L1
+
 public class ElevatorSubsystem extends SubsystemBase{
     private final SparkMax primaryMotor;
     private final SparkMax followerMotor;
     private final RelativeEncoder encoder;
+    //TODO: is this the right kind of sensor for the bottom limit?
     private final DigitalInput bottomLimit;
     private final PIDController pidController;
     private final TrapezoidProfile.Constraints constraints;
@@ -56,7 +55,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         followerMotor = new SparkMax(ElevatorConstants.KRightElevatorID, MotorType.kBrushless);
         
         SparkMaxConfig followerConfig = new SparkMaxConfig();
-        followerConfig.follow(primaryMotor, false);
+        followerConfig.follow(primaryMotor, true);
 
         // Configure follower
         followerMotor.configure(followerConfig, null, null); 
@@ -65,6 +64,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         bottomLimit = new DigitalInput(ElevatorConstants.kLimitSwitchPort);
 
         resetConfig.idleMode(IdleMode.kBrake);
+        //TODO: Ask the Great Bearded One if these should be set here, or are they just set on the physical motor controller?
         resetConfig.smartCurrentLimit(40);
         resetConfig.voltageCompensation(12.0);
 
@@ -94,7 +94,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         primaryMotor.configure(resetConfig, ResetMode.kResetSafeParameters, null);
         
         // Follower motor configuration
-        primaryMotor.configure(resetConfig, ResetMode.kResetSafeParameters, null);
+        followerMotor.configure(resetConfig, ResetMode.kResetSafeParameters, null);
     }
 
     @Override
