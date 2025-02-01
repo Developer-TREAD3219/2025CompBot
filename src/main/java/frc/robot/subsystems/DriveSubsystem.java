@@ -51,7 +51,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private final Pigeon2 pigeon;
 
   // The robot configuration
@@ -71,11 +71,12 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     pigeon = new Pigeon2(DriveConstants.kPigeonID);
-     pigeon.clearStickyFaults();
-     pigeon.getConfigurator().apply(new Pigeon2Configuration());
+    pigeon.clearStickyFaults();
+    pigeon.getConfigurator().apply(new Pigeon2Configuration());
     
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
+
 
     
     //TODO Get the AutoBuilder working once we get configs
@@ -110,7 +111,8 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_poseEstimator.update(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+      pigeon.getRotation2d(),       
+      // Rotation2d.fromDegrees(m_gyro.getAngle()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),

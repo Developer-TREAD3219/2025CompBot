@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ElevatorL1;
 //TODO: Reminder to import any new subsystems
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.CoralDeliverySubsystem;
@@ -97,7 +98,7 @@ public class RobotContainer {
 
     // Y button makes whatever direction the robot is facing the new forward
     new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(m_robotDrive.resetYaw());
-    // TODO: Add button mappings for the gunner controller
+// TODO: Add button mappings for the gunner controller
 //Gunner Control
 // Button Comp: 
 // LT + RT + Button:A= Open Trap Door during Climb
@@ -114,7 +115,9 @@ public class RobotContainer {
 //DPad Up= Going Up to Selected Level and should be Combined with Level Auto
 //DPad Down= Going Down to Selected Level and should be Combined with Level Auto
 
-
+    // TODO: Add button mappings for the gunner controller
+    // The X button on the gunner controller raises the elevator to L1
+    new JoystickButton(m_gunnerController, XboxController.Button.kX.value).onTrue(new ElevatorL1());
   }
 
   /**
@@ -122,7 +125,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() { 
+  public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
 }
