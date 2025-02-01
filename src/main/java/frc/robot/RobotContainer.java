@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ElevatorL1;
 //TODO: Reminder to import any new subsystems
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.CoralDeliverySubsystem;
@@ -38,7 +39,6 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  // TODO: Initialize the rest of our subsystems here. They should follow the pattern of the DriveSubsystem below.
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   // The driver's controller
@@ -75,7 +75,6 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() { 
-        // TODO: Add PathplannerAuto or more likely AutoChooser here. An example can be found here https://github.com/mjansen4857/pathplanner/blob/main/examples/java/src/main/java/frc/robot/RobotContainer.java
         // Drive Controller inputs
         // TODO: Add button mappings for the driver controller
         // The X button on the driver controller locks our wheels in the X position if we hold RB 
@@ -86,8 +85,10 @@ public class RobotContainer {
 
     // Y button makes whatever direction the robot is facing the new forward
     new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(m_robotDrive.resetYaw());
-    // TODO: Add button mappings for the gunner controller
 
+    // TODO: Add button mappings for the gunner controller
+    // The X button on the gunner controller raises the elevator to L1
+    new JoystickButton(m_gunnerController, XboxController.Button.kX.value).onTrue(new ElevatorL1());
   }
 
   /**
@@ -96,14 +97,12 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() { 
-    //TODO: Yeet everything in this method and replace it with the PathplannerAuto code on the getting started page
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(DriveConstants.kDriveKinematics);
 
-    // TODO: Do we keep this?... The answer is NO!
     // An example trajectory to follow. All units in meters.
     Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction

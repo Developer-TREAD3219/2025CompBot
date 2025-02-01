@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
     public class ClimberSubsystem extends SubsystemBase {
             public ClimberSubsystem() {
                 
-
+                    
                 
 
 
@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
          public void Extend() {
                     // code for extending Climber
+                    System.out.println("");
+
+
                 }
 
     
@@ -22,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
         
                 }
                 public void periodic() {
-                    // This method will be called once per scheduler run   
+                    // This method will be called once per scheduler run 
+
          };
 }

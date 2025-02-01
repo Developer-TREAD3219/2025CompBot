@@ -16,8 +16,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
-// import com.ctre.phoenix6.configs.Pigeon2Configuration;
-// import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -47,8 +47,8 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
-  //private final Pigeon2 pigeon;
+  private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  private final Pigeon2 pigeon;
 
   // Odometry class for tracking robot pose
   private final SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
@@ -62,22 +62,23 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    // pigeon = new Pigeon2(DriveConstants.kPigeonID);
-    // pigeon.clearStickyFaults();
-    // pigeon.getConfigurator().apply(new Pigeon2Configuration());
+    pigeon = new Pigeon2(DriveConstants.kPigeonID);
+    pigeon.clearStickyFaults();
+    pigeon.getConfigurator().apply(new Pigeon2Configuration());
     
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
     // TODO: I'm pretty sure the AutoBuilder is supposed to be here
 
-    public void robotContainer 
+     
   }
 
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
     m_poseEstimator.update(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+      pigeon.getRotation2d(),       
+      // Rotation2d.fromDegrees(m_gyro.getAngle()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
