@@ -8,7 +8,6 @@ package frc.robot.subsystems;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
@@ -77,9 +76,11 @@ public class DriveSubsystem extends SubsystemBase {
     
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
-    // TODO: I'm pretty sure the AutoBuilder is supposed to be here
+
     
     //TODO Get the AutoBuilder working once we get configs
+   
+
     //AutoBuilder.configure(
       //this::getPose, // Robot pose supplier
       //this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
