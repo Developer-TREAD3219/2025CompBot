@@ -128,8 +128,9 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    public static final int KLeftElevatorID = 1;
-    public static final int KRightElevatorID = 1;
+    //TODO: ask the great bearded one what these ID's should be. I had to change them because the simulator yells at you if you try to use the same number twice
+    public static final int KLeftElevatorID = 99;
+    public static final int KRightElevatorID = 98;
     public static final double kDownPos = 0;
     public static final double kL1 = 0;
     public static final double kL2 = 0;
