@@ -44,11 +44,16 @@ import com.pathplanner.lib.auto.AutoBuilder;
  */
 public class RobotContainer {
   // The robot's subsystems
+  // TODO: Add the subsystems to the RobotContainer
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+
+  //todo: need sensor at bottom to reset controller value
+
   private final CoralDeliverySubsystem m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final LimeLightSubsystem m_LimeLightSubsystem = new LimeLightSubsystem();
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
@@ -138,9 +143,12 @@ public class RobotContainer {
 //DPad Up= Going Up to Selected Level and should be Combined with Level Auto
 //DPad Down= Going Down to Selected Level and should be Combined with Level Auto
 
+
     // TODO: Add button mappings for the gunner controller
+    
     // The X button on the gunner controller raises the elevator to L1
-    new JoystickButton(m_gunnerController, XboxController.Button.kX.value).onTrue(new ElevatorL1());
+    new JoystickButton(m_gunnerController, XboxController.Button.kX.value)
+        .onTrue(new ElevatorL1(m_robotElevator));
   }
 
   /**
