@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.config.RobotConfig;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -30,6 +32,18 @@ public final class Constants {
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
+
+   //TODO RobotConfig Edit this when we get the robot configs 
+    public static RobotConfig config;
+
+    static {
+      try {
+        config = RobotConfig.fromGUISettings();
+      } catch (Exception e) {
+        // Handle exception as needed
+        e.printStackTrace();
+      }
+    }
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(26.5);
@@ -114,8 +128,9 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    public static final int KLeftElevatorID = 1;
-    public static final int KRightElevatorID = 1;
+    //TODO: ask the great bearded one what these ID's should be. I had to change them because the simulator yells at you if you try to use the same number twice
+    public static final int KLeftElevatorID = 99;
+    public static final int KRightElevatorID = 98;
     public static final double kDownPos = 0;
     public static final double kL1 = 0;
     public static final double kL2 = 0;

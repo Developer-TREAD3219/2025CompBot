@@ -1,7 +1,10 @@
+//TODO: We should add some sort of toggle to this system. We don't want to move the arm when we are ready to park
+// We can accomplish by adding an isEnabled bool that starts as false and gets set as true when we enter climb mode
+// Extend and retract should first check if isEnabled before they run the motor
+// 
+
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-    // TODO: ClimberSubsystem should extend from SubsystemBase. See an example subsystem here https://docs.wpilib.org/en/stable/docs/software/commandbased/subsystems.html
-    // TODO:  Make placeholder extend and retract methods for the climber
     public class ClimberSubsystem extends SubsystemBase {
             public ClimberSubsystem() {
                 
