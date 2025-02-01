@@ -15,6 +15,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -24,11 +26,14 @@ import frc.robot.subsystems.CoralDeliverySubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.subsystems.CoralIntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+
+import com.pathplanner.lib.auto.AutoBuilder;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -38,12 +43,17 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  // TODO: Initialize the rest of our subsystems here. They should follow the pattern of the DriveSubsystem below.
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-
+  private final CoralDeliverySubsystem m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
+  private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+  private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  private final LimeLightSubsystem m_LimeLightSubsystem = new LimeLightSubsystem();
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
+
+  private final SendableChooser<Command> autoChooser;
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -51,6 +61,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -75,10 +87,9 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() { 
-        // TODO: Add PathplannerAuto or more likely AutoChooser here. An example can be found here https://github.com/mjansen4857/pathplanner/blob/main/examples/java/src/main/java/frc/robot/RobotContainer.java
         // Drive Controller inputs
         // TODO: Add button mappings for the driver controller
-        // The X button on the driver controller locks our wheels in the X position if we hold RB 
+        // The RB button on the driver controller locks our wheels in the X position if we held 
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
@@ -87,6 +98,22 @@ public class RobotContainer {
     // Y button makes whatever direction the robot is facing the new forward
     new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(m_robotDrive.resetYaw());
     // TODO: Add button mappings for the gunner controller
+//Gunner Control
+// Button Comp: 
+// LT + RT + Button:A= Open Trap Door during Climb
+// LT + RT + LJoystick= Move Elevator Manually, In case of Auto Breaking
+// DPad Right + Button:Y= Spin Roller at Max Speed
+// Hold L and R DPad= Climber Stick moves towards or away from Robot
+//Regular Buttons:
+//LT= Score Left Coral 
+//RT= Score Right Coral
+//X= Level 1 for Coral Auto (should automatically got to selected Level)
+//Y= Level 2 for Coral Auto (should automatically got to selected Level)
+//B= Level 3 for Coral Auto (should automatically got to selected Level)
+//A= Level 4 for Coral Auto (should automatically got to selected Level)
+//DPad Up= Going Up to Selected Level and should be Combined with Level Auto
+//DPad Down= Going Down to Selected Level and should be Combined with Level Auto
+
 
   }
 
@@ -96,44 +123,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() { 
-    //TODO: Yeet everything in this method and replace it with the PathplannerAuto code on the getting started page
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    // TODO: Do we keep this?... The answer is NO!
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config);
-
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+    return autoChooser.getSelected();
   }
 }
