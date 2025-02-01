@@ -27,7 +27,7 @@ import frc.robot.subsystems.CoralDeliverySubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -76,6 +76,26 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
+    
+    //TODO: Add our commands here
+    //TODO: Intake Coral: 
+            //This should require just the Coral intake and some generic sensor to detect a stop
+            //we want to be able to intake and stop when we have a coral
+      
+    //TODO: We need to plan out how were going to structure our coral scoring commands
+          //this is going to require the Elavator CoralDelivery Drive and Limelight systems
+          // we want to be able to score a left and right version of L2 L3 and L4 as well as L1 which doesn't require a side(we may still want one or we may want to handle scoring L1 in an entirely different way discussion topic)
+          // This should probably all be in 1 command with logic to choose between the 7 different scoring configurations
+          // Keeping it all in 1 command means we only have to adjust one command as we fine tune
+          // We are going to want a way to abort the command incase there is a technical difficulty
+          // It would be really cool if we made the controllers rumble when this action is done so the driver knows they can go
+          // Make sure it lowers back down so we can drive fast without tipping
+    
+    //TODO: We need a command that switches us into an end game mode
+          //This is going to use the intake climber elevator maybe(to bring it home) and a Camera we haven't set up yet.
+          //We want to open the intake enable the climber and switch from the Limelight to our climbcam
+          //WE DO NOT WANT TO ACCIDENTLY TRIGGER THIS once we open that door its not closing and we can't score anymore
+
   }
 
   /**
@@ -99,6 +119,9 @@ public class RobotContainer {
     // Y button makes whatever direction the robot is facing the new forward
     new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(m_robotDrive.resetYaw());
 // TODO: Add button mappings for the gunner controller
+// Many of these are going to need their own commmands
+
+
 //Gunner Control
 // Button Comp: 
 // LT + RT + Button:A= Open Trap Door during Climb
