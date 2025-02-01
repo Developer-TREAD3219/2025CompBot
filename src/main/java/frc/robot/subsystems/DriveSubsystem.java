@@ -76,9 +76,11 @@ public class DriveSubsystem extends SubsystemBase {
     
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
+
     
     //TODO Get the AutoBuilder working once we get configs
    
+
     //AutoBuilder.configure(
       //this::getPose, // Robot pose supplier
       //this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
