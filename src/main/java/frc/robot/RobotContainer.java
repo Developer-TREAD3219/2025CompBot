@@ -148,7 +148,7 @@ public class RobotContainer {
     
     // The X button on the gunner controller raises the elevator to L1
     new JoystickButton(m_gunnerController, XboxController.Button.kX.value)
-        .onTrue(new ElevatorL1(m_robotElevator));
+        .onTrue(new ElevatorL1(m_ElevatorSubsystem));
   }
 
   /**
