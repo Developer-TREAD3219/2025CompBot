@@ -60,7 +60,7 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
 
-  private final SendableChooser<Command> autoChooser;
+//   private final SendableChooser<Command> autoChooser;
 
 
   /**
@@ -69,8 +69,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    // autoChooser = AutoBuilder.buildAutoChooser();
+    // SmartDashboard.putData("Auto Chooser", autoChooser);
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -102,8 +102,24 @@ public class RobotContainer {
           //This is going to use the intake climber elevator maybe(to bring it home) and a Camera we haven't set up yet.
           //We want to open the intake enable the climber and switch from the Limelight to our climbcam
           //WE DO NOT WANT TO ACCIDENTLY TRIGGER THIS once we open that door its not closing and we can't score anymore
+        // Define the Trigger
+        Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
 
-  }
+        // Bind the Trigger to the AutoScoreCommand
+        autoScoreTrigger.onTrue(new RunCommand(
+            () -> System.out.println("Auto Score Command Requested"),
+            m_robotDrive));
+    }
+
+    // Check if we have a valid button combo for auto score
+    private boolean autoScoreCommandRequested() {
+        return (m_gunnerController.getAButton() ||
+                m_gunnerController.getYButton() ||
+                m_gunnerController.getXButton() ||
+                m_gunnerController.getBButton() ) &&
+               (m_gunnerController.getLeftTriggerAxis() > 0.9 ||
+                m_gunnerController.getRightTriggerAxis() > 0.9);
+    }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -152,26 +168,8 @@ public class RobotContainer {
      
     new JoystickButton(m_gunnerController, XboxController.Button.kX.value)
         .onTrue(new ElevatorL1(m_ElevatorSubsystem));
-      
-    // Define the Trigger
-    Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
-
-    // Bind the Trigger to the AutoScoreCommand
-    autoScoreTrigger.onTrue(new RunCommand(
-        () -> System.out.println("Auto Score Command Requested"),
-        m_robotDrive));
-  }
-  //LT= Score Left Coral
-//X= Level 1 for Coral Auto (should automatically got to selected Level)
-// Check if we have a valid button combo for auto score
-private boolean autoScoreCommandRequested() {
-    return (m_gunnerController.getAButton() ||
-            m_gunnerController.getYButton() ||
-            m_gunnerController.getXButton() ||
-            m_gunnerController.getBButton() ) &&
-           (m_gunnerController.getLeftTriggerAxis() > 0.9 ||
-            m_gunnerController.getRightTriggerAxis() > 0.9);
 }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -179,6 +177,7 @@ private boolean autoScoreCommandRequested() {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    // Return a placeholder command, replace with actual autonomous command
+    return new RunCommand(() -> System.out.println("Autonomous Command Running"), m_robotDrive);
   }
 }
