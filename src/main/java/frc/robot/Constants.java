@@ -75,7 +75,7 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
-    public static final int kPigeonID = 0;
+    public static final int kPigeonID = 10;
   }
 
   public static final class ModuleConstants {

@@ -261,9 +261,12 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The current rotation.
    */
   private Rotation2d getGyroRotation2d() {
-    return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble()%360);
-    // return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ));
-  }
+    if (pigeon == null) {
+        // Handle the case where pigeon is not initialized
+        return Rotation2d.fromDegrees(0); // or some default value
+    }
+    return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble() % 360);
+}
 
   /**
    * Returns the current positions of the swerve modules.
