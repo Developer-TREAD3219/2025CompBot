@@ -32,9 +32,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import frc.robot.commands.AutoScoreCommand;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -147,9 +149,29 @@ public class RobotContainer {
     // TODO: Add button mappings for the gunner controller
     
     // The X button on the gunner controller raises the elevator to L1
+     
     new JoystickButton(m_gunnerController, XboxController.Button.kX.value)
         .onTrue(new ElevatorL1(m_ElevatorSubsystem));
+      
+    // Define the Trigger
+    Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
+
+    // Bind the Trigger to the AutoScoreCommand
+    autoScoreTrigger.onTrue(new RunCommand(
+        () -> System.out.println("Auto Score Command Requested"),
+        m_robotDrive));
   }
+  //LT= Score Left Coral
+//X= Level 1 for Coral Auto (should automatically got to selected Level)
+// Check if we have a valid button combo for auto score
+private boolean autoScoreCommandRequested() {
+    return (m_gunnerController.getAButton() ||
+            m_gunnerController.getYButton() ||
+            m_gunnerController.getXButton() ||
+            m_gunnerController.getBButton() ) &&
+           (m_gunnerController.getLeftTriggerAxis() > 0.9 ||
+            m_gunnerController.getRightTriggerAxis() > 0.9);
+}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

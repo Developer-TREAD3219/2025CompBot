@@ -28,12 +28,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
       public void execute() {
       }
 
-    
-      // If this returns true, the command will end.
-      @Override
-      public boolean isFinished() {
-        return subsystem.isAtPosition(ElevatorPosition.POSITION_1);
-      }
+    // we shouldn't need an isFinished() method if our call is in the initialize and not the execute.
+    //   // If this returns true, the command will end.
+    //   @Override
+    //   public boolean isFinished() {
+    //     return subsystem.isAtPosition(ElevatorPosition.POSITION_1);
+    //   }
       
       // Called once the command ends or is interrupted.
       @Override
