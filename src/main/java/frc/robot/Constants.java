@@ -8,7 +8,6 @@
 package frc.robot;
 
 import com.pathplanner.lib.config.RobotConfig;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -34,17 +33,8 @@ public final class Constants {
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
    //TODO RobotConfig Edit this when we get the robot configs 
-    public static RobotConfig config;
-
-    static {
-      try {
-        config = RobotConfig.fromGUISettings();
-      } catch (Exception e) {
-        // Handle exception as needed
-        e.printStackTrace();
-      }
-    }
-
+    //public static RobotConfig config;
+    
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(26.5);
     // Distance between centers of right and left wheels on robot
