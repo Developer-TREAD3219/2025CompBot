@@ -157,12 +157,12 @@ public class RobotContainer {
     Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
 
     // Bind the Trigger to the AutoScoreCommand
+    //TODO: call command, passing parameters for m_gunnerController and m_ElevatorSubsystem
     autoScoreTrigger.onTrue(new RunCommand(
         () -> System.out.println("Auto Score Command Requested"),
         m_robotDrive));
   }
-  //LT= Score Left Coral
-//X= Level 1 for Coral Auto (should automatically got to selected Level)
+
 // Check if we have a valid button combo for auto score
 private boolean autoScoreCommandRequested() {
     return (m_gunnerController.getAButton() ||
