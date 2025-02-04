@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ElevatorL1;
+
 //TODO: Reminder to import any new subsystems
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.CoralDeliverySubsystem;
@@ -146,13 +146,7 @@ public class RobotContainer {
 //DPad Down= Going Down to Selected Level and should be Combined with Level Auto
 
 
-    // TODO: Add button mappings for the gunner controller
-    
-    // The X button on the gunner controller raises the elevator to L1
-     
-    new JoystickButton(m_gunnerController, XboxController.Button.kX.value)
-        .onTrue(new ElevatorL1(m_ElevatorSubsystem));
-      
+    // TODO: Add button mappings for the gunner controller  
     // Define the Trigger
     Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
 
