@@ -268,13 +268,8 @@ public class DriveSubsystem extends SubsystemBase {
    */
   //TODO: take out Try/Catch block when not testing with Simulator
   private Rotation2d getGyroRotation2d() {
-    // return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble()%360);
-    try {
-      return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble() % 360);
-    } catch (Exception e) {
-      return Rotation2d.fromDegrees(180);
-    }
-    // return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ));
+    return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble()%360);
+    //return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ));
   }
 
   /**
