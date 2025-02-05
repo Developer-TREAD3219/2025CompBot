@@ -23,34 +23,33 @@ public class AutoScoreCommand extends Command {
         if (gunnerController.getLeftTriggerAxis() > 0.9) {
             if (gunnerController.getYButton()) {
                 // elevatorSubsystem.setPositionInches(ElevatorConstants.kL1);
-                commandStatus = "Success: Elevator can score L1";
+                commandStatus = "Success: Elevator can score L1 on the left";
             } else if (gunnerController.getXButton()) {
                 // elevatorSubsystem.setPositionInches(ElevatorConstants.kL2);
-                commandStatus = "Success: Elevator can score L2";
+                commandStatus = "Success: Elevator can score L2 on the left";
             } else if (gunnerController.getBButton()) {
                 // elevatorSubsystem.setPositionInches(ElevatorConstants.kL3);
-                commandStatus = "Success: Elevator can score L3";
+                commandStatus = "Success: Elevator can score L3 on the left";
             } else if (gunnerController.getAButton()) {
                 // elevatorSubsystem.setPositionInches(ElevatorConstants.kL4);
-                commandStatus = "Success: Elevator can score L4";
+                commandStatus = "Success: Elevator can score L4 on the left";
             }
         }
 
         // Add shift to the Right when the Right Trigger is pressed
         if (gunnerController.getRightTriggerAxis() > 0.9) {
             if (gunnerController.getAButton()) {
-                System.out.println("A Button Pressed");
                 // elevatorSubsystem.setPositionInches(ElevatorConstants.kL1);
-                commandStatus = "Success: Elevator can score L1";
+                commandStatus = "Success: Elevator can score L1 on the right";
             } else if (gunnerController.getYButton()) {
                 // elevatorSubsystem.setPositionInches(ElevatorConstants.kL2);
-                commandStatus = "Success: Elevator can score L2";
+                commandStatus = "Success: Elevator can score L2 on the right";
             } else if (gunnerController.getXButton()) {
                 // elevatorSubsystem.setPositionInches(ElevatorConstants.kL3);
-                commandStatus = "Success: Elevator can score L3";
+                commandStatus = "Success: Elevator can score L3 on the right";
             } else if (gunnerController.getBButton()) {
                 // elevatorSubsystem.setPositionInches(ElevatorConstants.kL4);
-                commandStatus = "Success: Elevator can score L4";
+                commandStatus = "Success: Elevator can score L4 on the right";
             }
         }
 
