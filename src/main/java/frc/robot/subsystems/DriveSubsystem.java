@@ -58,6 +58,7 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   //private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private final Pigeon2 pigeon;
+  private Rotation2d headingOffset = new Rotation2d();
 
   // The robot configuration
   //TODO Get this Private Robot Config Working
@@ -258,10 +259,10 @@ public class DriveSubsystem extends SubsystemBase {
   // }
 
    /**
-   * Zeroes the heading of the pigeon (So whatever way the robot is facing is forward)
+   * Sets the current direction as forward for the driver
    */
-  public Command resetYaw() {
-    return new InstantCommand(() -> zeroHeading());
+  public void resetYaw() {
+    headingOffset = Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble() % 360);
   }
 
     /**

@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 // TODO: We are going to need to tune the amount our elavator moves to score each coral. Add constant doubles for each height. 
-// They are placeholder right now so don't worry about setting a valude. Make sure they follow the pattern of the other constants.
+// They are placeholder right now so don't worry about setting a value. Make sure they follow the pattern of the other constants.
 
 package frc.robot;
 

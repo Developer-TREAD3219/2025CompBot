@@ -14,9 +14,13 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.GenericEntry;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -55,11 +59,15 @@ public class RobotContainer {
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final LimeLightSubsystem m_LimeLightSubsystem = new LimeLightSubsystem();
+  
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
 
+  // Set up shuffleboard
+  ShuffleboardTab elevatorTab = Shuffleboard.getTab("Elevator");
+  GenericEntry elevatorTestEntry = elevatorTab.add("elevatorTest", "Waiting for command").getEntry();
   private final SendableChooser<Command> autoChooser;
 
 
@@ -124,9 +132,8 @@ public class RobotContainer {
             m_robotDrive));
 
     // Y button makes whatever direction the robot is facing the new forward
-    new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(m_robotDrive.resetYaw());
+    new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new RunCommand(() -> m_robotDrive.resetYaw(), m_robotDrive));
 // TODO: Add button mappings for the gunner controller
-// Many of these are going to need their own commmands
 
 
 //Gunner Control
@@ -152,10 +159,12 @@ public class RobotContainer {
 
     // Bind the Trigger to the AutoScoreCommand
     //TODO: call command, passing parameters for m_gunnerController and m_ElevatorSubsystem
-    autoScoreTrigger.onTrue(new RunCommand(
-        () -> System.out.println("Auto Score Command Requested"),
-        m_robotDrive));
-  }
+    // Bind the Trigger to the AutoScoreCommand
+    autoScoreTrigger.onTrue(new RunCommand(() -> {
+      new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerController).schedule();
+  }, m_ElevatorSubsystem));
+}
+
 
 // Check if we have a valid button combo for auto score
 private boolean autoScoreCommandRequested() {
