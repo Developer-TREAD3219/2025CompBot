@@ -2,6 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of the
 // WPILib BSD license file in the root directory of this project.
 // TODO:Integrate the following Pathplanner adjustments from here https://pathplanner.dev/pplib-getting-started.html#install-pathplannerlib
+// TODO: Mr Berry might have borken the Y button functionality
 // we now need to add the Autobuilder it needs to go around line 65. look for the Todo
 package frc.robot.subsystems;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -59,10 +60,6 @@ public class DriveSubsystem extends SubsystemBase {
   //private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private final Pigeon2 pigeon;
   private Rotation2d headingOffset = new Rotation2d();
-
-  // The robot configuration
-  //TODO Get this Private Robot Config Working
- //private final RobotConfig config = new RobotConfig(); // Replace RobotConfig with the actual type if known
 
   // Odometry class for tracking robot pose
   private final SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
