@@ -14,17 +14,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.networktables.GenericEntry;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-
 //TODO: Reminder to import any new subsystems
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.CoralDeliverySubsystem;
@@ -58,16 +53,12 @@ public class RobotContainer {
   private final CoralDeliverySubsystem m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
-  private final LimeLightSubsystem m_LimeLightSubsystem = new LimeLightSubsystem();
-  
+  private final LimeLightSubsystem m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
 
-  // Set up shuffleboard
-  ShuffleboardTab elevatorTab = Shuffleboard.getTab("Elevator");
-  GenericEntry elevatorTestEntry = elevatorTab.add("elevatorTest", "Waiting for command").getEntry();
   private final SendableChooser<Command> autoChooser;
 
 
@@ -134,6 +125,7 @@ public class RobotContainer {
     // Y button makes whatever direction the robot is facing the new forward
     new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new RunCommand(() -> m_robotDrive.resetYaw(), m_robotDrive));
 // TODO: Add button mappings for the gunner controller
+// Many of these are going to need their own commmands
 
 
 //Gunner Control
@@ -151,21 +143,20 @@ public class RobotContainer {
 //A= Level 4 for Coral Auto (should automatically got to selected Level)
 //DPad Up= Going Up to Selected Level and should be Combined with Level Auto
 //DPad Down= Going Down to Selected Level and should be Combined with Level Auto
+//Start= Toggle between Manual and Automatic mode.
 
-
-    // TODO: Add button mappings for the gunner controller  
+    // TODO: Add button mappings for the gunner controller
+   
     // Define the Trigger
     Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
 
     // Bind the Trigger to the AutoScoreCommand
-    //TODO: call command, passing parameters for m_gunnerController and m_ElevatorSubsystem
-    // Bind the Trigger to the AutoScoreCommand
-    autoScoreTrigger.onTrue(new RunCommand(() -> {
-      new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerController).schedule();
-  }, m_ElevatorSubsystem));
-}
-
-
+    autoScoreTrigger.onTrue(new RunCommand(
+        () -> System.out.println("Auto Score Command Requested"),
+        m_robotDrive));
+  }
+  //LT= Score Left Coral
+//X= Level 1 for Coral Auto (should automatically got to selected Level)
 // Check if we have a valid button combo for auto score
 private boolean autoScoreCommandRequested() {
     return (m_gunnerController.getAButton() ||
