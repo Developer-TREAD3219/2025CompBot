@@ -62,7 +62,7 @@ public class DriveSubsystem extends SubsystemBase {
   private Rotation2d headingOffset = new Rotation2d();
 
   // Odometry class for tracking robot pose
-  private final SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
+  public final SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
       getGyroRotation2d(),                          // Current heading
       getSwervePositions(),                         // Swerve module positions array
@@ -70,6 +70,13 @@ public class DriveSubsystem extends SubsystemBase {
       // Optionally, you can provide standard deviation arrays for state and vision
       // measurement if you want to tune the Kalman filter more precisely.
   );
+
+public SwerveDrivePoseEstimator getPoseEstimator() {
+  return m_poseEstimator;
+}
+public Pigeon2 getGyro() {
+  return pigeon;
+}
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {

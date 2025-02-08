@@ -16,6 +16,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // TODO: Add placeholder methods to raise the Elevator to L2 and L3 and L4
+
+
 // TODO: Add a method to return the Elevator to L1
 
 public class ElevatorSubsystem extends SubsystemBase{
@@ -29,6 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     private TrapezoidProfile.State goalState;
     private TrapezoidProfile.State currentState;
     private final TrapezoidProfile profile;
+    private boolean isAutomated;
 
     private ElevatorPosition currentTarget = ElevatorPosition.DOWN;
     private boolean isHomed = false;
@@ -65,6 +68,8 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         resetConfig.idleMode(IdleMode.kBrake);
         //TODO: Ask the Great Bearded One if these should be set here, or are they just set on the physical motor controller?
+
+
         resetConfig.smartCurrentLimit(40);
         resetConfig.voltageCompensation(12.0);
 
@@ -229,5 +234,24 @@ public class ElevatorSubsystem extends SubsystemBase{
         
         primaryMotor.set(MathUtil.clamp(power, -ElevatorConstants.kMax_output, ElevatorConstants.kMax_output));
     }
+
+
+
+    public void toggleForAutomated() {
+        isAutomated = !isAutomated;
+ }
+
+ public void enable() {
+        isAutomated = true;
+ }
+
+ public void disable(){
+
+        isAutomated = false;
+ }
+
+
 }
+
+
 

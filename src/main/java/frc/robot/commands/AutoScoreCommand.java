@@ -50,6 +50,7 @@ public class AutoScoreCommand extends Command {
             } else if (gunnerController.getBButton()) {
                 // elevatorSubsystem.setPositionInches(ElevatorConstants.kL4);
                 commandStatus = "Success: Elevator can score L4 on the right";
+                
             }
         }
 
