@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,6 +39,7 @@ import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import frc.robot.commands.AutoScoreCommand;
+import frc.robot.commands.BeginEndMatch;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -71,7 +73,10 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Supresses the "No Joystick Connected" Spam
-    DriverStation.silenceJoystickConnectionWarning(true);
+
+    if (RobotBase.isSimulation() || DriverStation.isTest()) {
+  DriverStation.silenceJoystickConnectionWarning(true);
+}
     // Configure the button bindings
     configureButtonBindings();
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -127,16 +132,24 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-
+    
+// LT + RT + Button:A= Open Trap Door during Climb
+        
     // Y button makes whatever direction the robot is facing the new forward
     new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new RunCommand(() -> m_robotDrive.resetYaw(), m_robotDrive));
-// TODO: Add button mappings for the gunner controller
+
+     // Define the Trigger
+     Trigger EndTriggerStart = new Trigger(this::EndGameStartRequested);
+
+     // Bind the Trigger to the End Game Start
+     EndTriggerStart.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem));
+
 // Many of these are going to need their own commmands
 
 
 //Gunner Control
 // Button Comp: 
-// LT + RT + Button:A= Open Trap Door during Climb
+
 // LT + RT + LJoystick= Move Elevator Manually, In case of Auto Breaking
 // DPad Right + Button:Y= Spin Roller at Max Speed
 // Hold L and R DPad= Climber Stick moves towards or away from Robot
@@ -164,7 +177,13 @@ public class RobotContainer {
     autoScoreTrigger.onTrue(new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerController));
   }
   //LT= Score Left Coral
-//X= Level 1 for Coral Auto (should automatically got to selected Level)
+
+
+  // Method to get the time remaining in the match
+  public double getMatchTime() {
+    return DriverStation.getMatchTime();
+}
+
 // Check if we have a valid button combo for auto score
 private boolean autoScoreCommandRequested() {
     return (m_gunnerController.getAButton() ||
@@ -174,6 +193,17 @@ private boolean autoScoreCommandRequested() {
            (m_gunnerController.getLeftTriggerAxis() > 0.9 ||
             m_gunnerController.getRightTriggerAxis() > 0.9);
 }
+
+public boolean EndGameStartRequested() {
+  return (m_driverController.getLeftTriggerAxis() > 0.9 &&
+          m_driverController.getRightTriggerAxis() > 0.9 &&
+          m_driverController.getAButton()) &&
+          (
+          getMatchTime() < 30 || 
+          RobotBase.isSimulation() || 
+          DriverStation.isTest());
+}
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
