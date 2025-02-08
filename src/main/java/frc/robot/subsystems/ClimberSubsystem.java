@@ -5,21 +5,24 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
 
-    private final SparkMax climberMotor;
+    SparkFlex climberMotor = new SparkFlex(ClimberConstants.KClimberMotorID, MotorType.kBrushless);
+    RelativeEncoder climberEncoder = climberMotor.getEncoder();
+    //SparkPIDController pitchPidController;
+
     private boolean isEnabled = false;
 
             //make private boolean to make sure only the toggle will cause it to start
             //create a way to disable and enable the extend       
 
     public ClimberSubsystem() {
-        climberMotor = new SparkMax(ClimberConstants.KClimberMotorID, MotorType.kBrushless); 
     }
     
     public void rotateClimber(int degrees) {
