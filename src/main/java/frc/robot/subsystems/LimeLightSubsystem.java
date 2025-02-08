@@ -1,21 +1,28 @@
 package frc.robot.subsystems;
-
 import frc.robot.utils.LimelightHelpers;
 import frc.robot.utils.LimelightHelpers.LimelightTarget_Fiducial;
-
+import frc.robot.subsystems.DriveSubsystem;
 import java.util.Arrays;
+
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 //import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants.VisionConstants;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+
 public class LimeLightSubsystem extends SubsystemBase {
+    private final SwerveDrivePoseEstimator m_poseEstimator;
+    private final Pigeon2 m_gyro; // Add this line to declare m_gyro
     // Limelight for reading AprilTags
     private final String limelightCam = VisionConstants.kCameraName;
     private LimelightHelpers.LimelightResults result;
     private LimelightHelpers.LimelightTarget_Fiducial currentLock;
+    private double currentLockDistance = Double.MAX_VALUE;
 
     // List of Reef Tags
     private final int[] reefTags = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
@@ -27,10 +34,10 @@ public class LimeLightSubsystem extends SubsystemBase {
     // Target lock on maxDistance: the farthest away in meters that we want to lock on from
     private final double maxLockOnDistance = 0.5;
 
-    private double currentLockDistance = Double.MAX_VALUE;
-
-    public LimeLightSubsystem() {
+    public LimeLightSubsystem(DriveSubsystem driveSubsystem) {
         // Initialize Limelight settings if needed
+        this.m_poseEstimator = driveSubsystem.getPoseEstimator();
+        this.m_gyro = driveSubsystem.getGyro(); // Initialize with appropriate parameters
     }
 
     public void driverMode() {
@@ -62,6 +69,27 @@ public class LimeLightSubsystem extends SubsystemBase {
                     break;
                 }
             }
+        }
+    }
+
+    public void updateRobotOrientation() {
+        LimelightHelpers.SetRobotOrientation("limelight", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        boolean doRejectUpdate = false;
+        if(Math.abs(m_gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
+            doRejectUpdate = true;
+        }
+        if(mt2.tagCount == 0)
+        {
+            doRejectUpdate = true;
+        }
+        if(!doRejectUpdate)
+        {
+            m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+            m_poseEstimator.addVisionMeasurement(
+                mt2.pose,
+                mt2.timestampSeconds);
         }
     }
 

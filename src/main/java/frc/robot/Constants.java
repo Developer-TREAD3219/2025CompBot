@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-// TODO: We are going to need to tune the amount our elavator moves to score each coral. Add constant doubles for each height. 
+// TODO:Add constant doubles for each height. 
 // They are placeholder right now so don't worry about setting a valude. Make sure they follow the pattern of the other constants.
 
 package frc.robot;
@@ -34,6 +34,7 @@ public final class Constants {
 
    //TODO RobotConfig Edit this when we get the robot configs 
     //public static RobotConfig config;
+
     
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(26.5);
@@ -117,10 +118,14 @@ public final class Constants {
     public static final String kCameraName = "April";
   }
 
+  public static final class coralDeliveryConstants{
+    public static final int kCoralDeliveryMotorID = 0;
+
+  } 
   public static final class ElevatorConstants {
     //TODO: ask the great bearded one what these ID's should be. I had to change them because the simulator yells at you if you try to use the same number twice
-    public static final int KLeftElevatorID = 99;
-    public static final int KRightElevatorID = 98;
+    public static final int KLeftElevatorID = 9;
+    public static final int KRightElevatorID = 10;
     public static final double kDownPos = 0;
     public static final double kL1 = 0;
     public static final double kL2 = 0;
@@ -149,4 +154,20 @@ public final class Constants {
     public static final double kIntakeServoOpen = 0;
     public static final double kIntakeServoClose = 0;
   }
+
+  public static final class ClimberConstants {
+    public static final int KClimberID = 14;
+  //Add code constants for Neo motors 
+  }
+
+  public static final class ElevatorIntakeConstants {
+    public static final int kElevatorIntakeID = 13;
+    //Add code cons=stantsflex shaft motor
+  }
+   public static final class ElevatorSliderConstants {
+    public static final int kElevatorSliderID = 12;
+    //flex shaft motors
+  
+   }
 }
+

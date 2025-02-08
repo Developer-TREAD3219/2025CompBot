@@ -2,9 +2,11 @@
 // Open Source Software; you can modify and/or share it under the terms of the
 // WPILib BSD license file in the root directory of this project.
 // TODO:Integrate the following Pathplanner adjustments from here https://pathplanner.dev/pplib-getting-started.html#install-pathplannerlib
+// TODO: Mr Berry might have borken the Y button functionality
 // we now need to add the Autobuilder it needs to go around line 65. look for the Todo
 package frc.robot.subsystems;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
@@ -20,6 +22,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 // import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
+
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import frc.robot.Constants.DriveConstants;
@@ -55,13 +59,10 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   //private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private final Pigeon2 pigeon;
-
-  // The robot configuration
-  //TODO Get this Private Robot Config Working
- //private final RobotConfig config = new RobotConfig(); // Replace RobotConfig with the actual type if known
+  private Rotation2d headingOffset = new Rotation2d();
 
   // Odometry class for tracking robot pose
-  private final SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
+  public final SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
       getGyroRotation2d(),                          // Current heading
       getSwervePositions(),                         // Swerve module positions array
@@ -69,6 +70,13 @@ public class DriveSubsystem extends SubsystemBase {
       // Optionally, you can provide standard deviation arrays for state and vision
       // measurement if you want to tune the Kalman filter more precisely.
   );
+
+public SwerveDrivePoseEstimator getPoseEstimator() {
+  return m_poseEstimator;
+}
+public Pigeon2 getGyro() {
+  return pigeon;
+}
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -83,37 +91,37 @@ public class DriveSubsystem extends SubsystemBase {
     
     //TODO Get the AutoBuilder working once we get configs
    
-    // RobotConfig config;
-    // try{
-    //   config = RobotConfig.fromGUISettings();
-    // } catch (Exception e) {
-    //   // Handle exception as needed
-    //   e.printStackTrace();
-    // }
+    RobotConfig config;
+    try{
+      config = RobotConfig.fromGUISettings();
 
-    // AutoBuilder.configure(
-    //   this::getPose, // Robot pose supplier
-    //   this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-    //   this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    //   (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-    //   new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-    //           new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-    //           new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-    //   ),
-    //   config, // The robot configuration
-    //         () -> {
-    //           //Boolean supplier that controls when the path will be mirrored for the red alliance
-    //           // This will flip the path being followed to the red side of the field.
-    //           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    AutoBuilder.configure(
+      this::getPose, // Robot pose supplier
+      this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+      this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+      (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+      new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+              new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+              new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+      ),
+      config, // The robot configuration
+            () -> {
+              //Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    //           var alliance = DriverStation.getAlliance();
-    //           if (alliance.isPresent()) {
-    //             return alliance.get() == DriverStation.Alliance.Red;
-    //           }
-    //           return false;
-    //         },
-    //         this // Reference to this subsystem to set requirements
-    // );
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+          );
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -178,6 +186,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     // Convert the commanded speeds into the correct units for the drivetrain
+    // TODO: lets add that drivecontroll exponentiation we discussed. Ask Mr B for details
     double xSpeedDelivered = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double ySpeedDelivered = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = rot * DriveConstants.kMaxAngularSpeed;
@@ -255,10 +264,10 @@ public class DriveSubsystem extends SubsystemBase {
   // }
 
    /**
-   * Zeroes the heading of the pigeon (So whatever way the robot is facing is forward)
+   * Sets the current direction as forward for the driver
    */
-  public Command resetYaw() {
-    return new InstantCommand(() -> zeroHeading());
+  public void resetYaw() {
+    headingOffset = Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble() % 360);
   }
 
     /**
@@ -266,12 +275,13 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @return The current rotation.
    */
-  //TODO: take out Try/Catch block when not testing with Simulator
-  private Rotation2d getGyroRotation2d() {
-    return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble()%360);
+private Rotation2d getGyroRotation2d() {
+    if (RobotBase.isSimulation()) {
+        return new Rotation2d(0); // Return 0-degree rotation in simulation
+    }
+    return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble() % 360);
     //return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ));
-  }
-
+}
   /**
    * Returns the current positions of the swerve modules.
    *
