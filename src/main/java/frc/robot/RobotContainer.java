@@ -53,7 +53,9 @@ public class RobotContainer {
   private final CoralDeliverySubsystem m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final LimeLightSubsystem m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
+
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);

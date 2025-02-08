@@ -4,6 +4,8 @@
 // 
 
 package frc.robot.subsystems;
+import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
     public class ClimberSubsystem extends SubsystemBase {
 
@@ -16,16 +18,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
             //create a way to disable and enable the extend       
                 
 
+public class ClimberSubsystem extends SubsystemBase {
 
-            }
+    //private final SparkMax climberMotor;
 
+    // public ClimberSubsystem() {
+        
+            
          public void Extend() {
             if (isEnabled) {
                 
             
                     // code for extending Climber
                     System.out.println("Extending Arm");
-
+    // }
 
                 }
             }
@@ -55,3 +61,4 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
                 isEnabled = false;
          }
         }
+
