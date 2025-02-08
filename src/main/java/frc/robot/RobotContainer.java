@@ -2,6 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 // TODO: Finish the robot and party
+// TODO: Make a Predive Checklist. What do we need to do to home the bot, making sure we chose the correct auto etc. 
 
 package frc.robot;
 
@@ -14,6 +15,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -68,6 +70,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    // Supresses the "No Joystick Connected" Spam
+    DriverStation.silenceJoystickConnectionWarning(true);
     // Configure the button bindings
     configureButtonBindings();
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -157,9 +161,7 @@ public class RobotContainer {
     Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
 
     // Bind the Trigger to the AutoScoreCommand
-    autoScoreTrigger.onTrue(new RunCommand(
-        () -> System.out.println("Auto Score Command Requested"),
-        m_robotDrive));
+    autoScoreTrigger.onTrue(new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerController));
   }
   //LT= Score Left Coral
 //X= Level 1 for Coral Auto (should automatically got to selected Level)

@@ -4,15 +4,18 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.utils.RumbleHelper;
 
 public class AutoScoreCommand extends Command {
     private final ElevatorSubsystem elevatorSubsystem;
     private final XboxController gunnerController;
+    private final RumbleHelper rumbleHelper;
 
     public AutoScoreCommand(ElevatorSubsystem elevatorSubsystem, XboxController gunnerController) {
         this.elevatorSubsystem = elevatorSubsystem;
         this.gunnerController = gunnerController;
         addRequirements(elevatorSubsystem);
+        this.rumbleHelper = new RumbleHelper(gunnerController);
     }
 
     @Override
@@ -39,6 +42,8 @@ public class AutoScoreCommand extends Command {
         // Add shift to the Right when the Right Trigger is pressed
         if (gunnerController.getRightTriggerAxis() > 0.9) {
             if (gunnerController.getAButton()) {
+                //TODO: Example Rumble Implementation
+                rumbleHelper.rumbleForDuration(0.3, 2, 0.09); // Rumble for 0.3 seconds twice at low intensity
                 // elevatorSubsystem.setPositionInches(ElevatorConstants.kL1);
                 commandStatus = "Success: Elevator can score L1 on the right";
             } else if (gunnerController.getYButton()) {
@@ -70,6 +75,6 @@ public class AutoScoreCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 }
