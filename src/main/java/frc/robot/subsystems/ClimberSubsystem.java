@@ -4,6 +4,7 @@
 // 
 
 package frc.robot.subsystems;
+
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,32 +34,14 @@ public class ClimberSubsystem extends SubsystemBase {
                     System.out.println("Extending Arm");
     // }
 
-                }
-            }
+    public ClimberSubsystem() {
+        climberMotor = new SparkMax(ClimberConstants.KClimberMotorID, MotorType.kBrushless);  
+    }
     
-                public void retract(){
-                    if (isEnabled){
-                    System.out.println("Retracting Arm...");
-                    // code for retracting Climber
+    public void rotateClimber(int degrees) {
+        // code for rotating Climber
 
-                    }
-                }
-                public void periodic() {
-                    // This method will be called once per scheduler run 
-
-         };
-
-         public void toggleEnabled() {
-                isEnabled = !isEnabled;
-         }
-
-         public void enable() {
-                isEnabled = true;
-         }
-
-         public void disable(){
 
                 isEnabled = false;
          }
         }
-

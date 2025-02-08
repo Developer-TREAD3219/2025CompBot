@@ -126,6 +126,8 @@ public final class Constants {
     //TODO: ask the great bearded one what these ID's should be. I had to change them because the simulator yells at you if you try to use the same number twice
     public static final int KLeftElevatorID = 9;
     public static final int KRightElevatorID = 10;
+    public static final int kElevatorBottomSwitchID = 0;  // DIO - when switched,   TODO: zero the elevator
+
     public static final double kDownPos = 0;
     public static final double kL1 = 0;
     public static final double kL2 = 0;
@@ -155,19 +157,21 @@ public final class Constants {
     public static final double kIntakeServoClose = 0;
   }
 
-  public static final class ClimberConstants {
-    public static final int KClimberID = 14;
-  //Add code constants for Neo motors 
+  public static final class IntakeConstants {
+    public static final int kIntakeServoID = 0;  // PWM port for the intake servo - MAY NOT BE USED
+    public static final int kCoralMotorID = 1;  // PWM port for the SparkMax/Neo that runs the intake
+    public static final int kCoralInElevatorID = 1;  // DIO port 1 for the sensor that detects when a coral is in the elevator
+    public static final int kCoralInPlaceID = 2;  // DIO port 2 for the sensor that detects when a coral is in place
+    public static final double kIntakeServoOpen = 180.0;
+    public static final double kIntakeServoClosed = 0.0;
+   // TODO: need constant for intake and outtake speed 
+    public static final double kIntakeSpeed = 0;
+    public static final double kOuttakeSpeed = 0;
   }
 
-  public static final class ElevatorIntakeConstants {
-    public static final int kElevatorIntakeID = 13;
-    //Add code cons=stantsflex shaft motor
+  public static final class ClimberConstants {
+    public static final int KClimberMotorID = 14;  // PWM port for the SparkMax/Neo that runs the climber
   }
-   public static final class ElevatorSliderConstants {
-    public static final int kElevatorSliderID = 12;
-    //flex shaft motors
-  
-   }
+
 }
 
