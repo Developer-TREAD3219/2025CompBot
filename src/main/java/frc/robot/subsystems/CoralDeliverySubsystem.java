@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 import java.lang.ModuleLayer.Controller;
 
 import com.fasterxml.jackson.databind.type.PlaceholderForType;
+import com.revrobotics.RelativeEncoder;
+
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,16 +14,17 @@ import frc.robot.Constants.coralDeliveryConstants;
     // TODO: It sounds like this is going to be run with PWM. we should learn how that works
 public class CoralDeliverySubsystem extends SubsystemBase {
    
-    public CoralDeliverySubsystem() {
-        Spark spark = new Spark(coralDeliveryConstants.kCoralDeliveryMotorID); // 0 is the RIO PWM port this is connected to
+    SparkMax coralDeliveryMotor = new SparkMax(coralDeliveryConstants.kCoralDeliveryMotorID, MotorType.kBrushless);
+    RelativeEncoder coralEncoder = coralDeliveryMotor.getEncoder();
 
-        spark.set(-0.75); // the % output of the motor, between -1 and 1
+    public CoralDeliverySubsystem() {
+  coralDeliveryMotor.set(coralDeliveryConstants.kIntakeSpeed); // the % output of the motor, between -1 and 1
     }
 
     // Placeholder for intake
     public void intake() {
         // Code for intake
-
+        coralDeliveryMotor.set(coralDeliveryConstants.kIntakeSpeed); // the % output of the motor, between -1 and 1
         // TODO: intake shuts off motor when coral is in Place and rumble driver (()Controller
 
         //         elevator shouldn't move when coral has broken the beam, but not in place
@@ -32,10 +36,17 @@ public class CoralDeliverySubsystem extends SubsystemBase {
     // Placeholder for outtake
     public void outtake() {
         // Code for outtake
+        coralDeliveryMotor.set(coralDeliveryConstants.kOuttakeSpeed); // the % output of the motor, between -1 and 1
     }
-    //placeholder for possible periodic for Autonomous
-    public void periodic(){
-        // This method will be called once per scheduler run
-    }
-   
+
+    
+    public void stopMotor() {
+        // Stop the motor by setting its speed to 0.0
+        coralDeliveryMotor.set(0.0);
+     }
+
+    //      //placeholder for possible periodic for Autonomous
+    // public void periodic(){
+    //     // This method will be called once per scheduler run
+    // }
 }

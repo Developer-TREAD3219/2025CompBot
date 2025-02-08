@@ -47,10 +47,14 @@ import frc.robot.commands.AutoScoreCommand;
  */
 public class RobotContainer {
   // The robot's subsystems
-  // TODO: Add the subsystems to the RobotContainer
+  // : Add the subsystems to the RobotContainer
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
-  //todo: need sensor at bottom to reset controller value
+  //TODO: need sensor at bottom to reset controller value
+
+  public class ElevatorSensor {
+    
+  }
 
   private final CoralDeliverySubsystem m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
@@ -64,6 +68,8 @@ public class RobotContainer {
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
 
   private final SendableChooser<Command> autoChooser;
+
+
 
 
   /**
@@ -91,9 +97,11 @@ public class RobotContainer {
     
     //TODO: Add our commands here
     //TODO: Intake Coral: 
+
+
             //This should require just the Coral intake and some generic sensor to detect a stop
             //we want to be able to intake and stop when we have a coral
-      
+      //boolean that checks if we have a coral
     //TODO: We need to plan out how were going to structure our coral scoring commands
           //this is going to require the Elavator CoralDelivery Drive and Limelight systems
           // we want to be able to score a left and right version of L2 L3 and L4 as well as L1 which doesn't require a side(we may still want one or we may want to handle scoring L1 in an entirely different way discussion topic)
@@ -107,6 +115,7 @@ public class RobotContainer {
           //This is going to use the intake climber elevator maybe(to bring it home) and a Camera we haven't set up yet.
           //We want to open the intake enable the climber and switch from the Limelight to our climbcam
           //WE DO NOT WANT TO ACCIDENTLY TRIGGER THIS once we open that door its not closing and we can't score anymore
+
 
   }
 
