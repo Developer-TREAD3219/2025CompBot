@@ -6,42 +6,29 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
-
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-    public class ClimberSubsystem extends SubsystemBase {
-
-
-            private boolean isEnabled;
-
-            public ClimberSubsystem() {
-                
-            //make private boolean to make sure only the toggle will cause it to start
-            //create a way to disable and enable the extend       
-                
+import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
 
-    //private final SparkMax climberMotor;
+    private final SparkMax climberMotor;
+    private boolean isEnabled = false;
 
-    // public ClimberSubsystem() {
-        
-            
-         public void Extend() {
-            if (isEnabled) {
-                
-            
-                    // code for extending Climber
-                    System.out.println("Extending Arm");
-    // }
+            //make private boolean to make sure only the toggle will cause it to start
+            //create a way to disable and enable the extend       
 
     public ClimberSubsystem() {
-        climberMotor = new SparkMax(ClimberConstants.KClimberMotorID, MotorType.kBrushless);  
+        climberMotor = new SparkMax(ClimberConstants.KClimberMotorID, MotorType.kBrushless); 
     }
     
     public void rotateClimber(int degrees) {
         // code for rotating Climber
-
-
                 isEnabled = false;
-         }
-        }
+    }
+ 
+    public void isClimber(int degrees) {
+        // code for rotating Climber
+                isEnabled = false;
+    }
+}
