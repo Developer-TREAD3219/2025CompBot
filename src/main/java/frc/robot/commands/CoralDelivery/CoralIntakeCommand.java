@@ -6,14 +6,14 @@ import frc.robot.subsystems.CoralDeliverySubsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants.coralDeliveryConstants;
 
-public class CoralIntake extends Command {
+public class CoralIntakeCommand extends Command {
 
     CoralDeliverySubsystem coralDeliverySubsystem;
     DigitalInput CoralInPLaceSensor = new DigitalInput(coralDeliveryConstants.kCoralInPlaceID);
     DigitalInput Coral= new DigitalInput(coralDeliveryConstants.kCoralInPlaceID);
 
 
-    public CoralIntake(CoralDeliverySubsystem coralDeliverySubsystem) {
+    public CoralIntakeCommand(CoralDeliverySubsystem coralDeliverySubsystem) {
         // Use addRequirements() here to declare subsystem dependencies.
         this.coralDeliverySubsystem = coralDeliverySubsystem;
         addRequirements(coralDeliverySubsystem);
@@ -37,18 +37,11 @@ public class CoralIntake extends Command {
     }
 
     // Returns true when the command should end.
-   // @Override
-    //public boolean isFinished() {
+    @Override
+    public boolean isFinished() {
         //TODO: need to set kCoralInPlaceID boolean to true when coral is in place
-    //    return CoralDeliverySubsystem.CoralInPlace();
-    //}
-    
-
-   
-    //public boolean CoralInPlace() {
-        //returns 1 if beam is broken or 0 if beam is not broken
-       // return CoralInPLaceSensor.get();
-      //}
+        return coralDeliverySubsystem.CoralInPlace();
+    }
 }
 
 
