@@ -150,9 +150,9 @@ public final class Constants {
     public static final double kV = 0;
     public static final double kMinPos = 0;
   }
-
+  //TODO: Changed intake servoID to avoid crashing in sim due to double assigned port issues kIntakeSeroID will need updating if we even use it
   public static final class IntakeConstants {
-    public static final int kIntakeServoID = 0;  // PWM port for the intake servo - MAY NOT BE USED
+    public static final int kIntakeServoID = 19;  // PWM port for the intake servo - MAY NOT BE USED
     public static final int kCoralMotorID = 1;  // PWM port for the SparkMax/Neo that runs the intake
     public static final int kCoralInElevatorID = 1;  // DIO port 1 for the sensor that detects when a coral is in the elevator
     public static final int kCoralInPlaceID = 2;  // DIO port 2 for the sensor that detects when a coral is in place
