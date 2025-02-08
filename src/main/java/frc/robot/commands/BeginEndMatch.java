@@ -31,6 +31,7 @@ public class BeginEndMatch extends Command {
 
     @Override
     public void initialize() {
+        //TODO: ENABLE CLIMBER SUBSYSTEM.  why??? if this is the only place it's called?
         elevatorSubsystem.homeElevator();
         // intakeSubsystem.openServo();  // we may not be using a servo to open the intake door
         climberSubsystem.rotateClimber(270);

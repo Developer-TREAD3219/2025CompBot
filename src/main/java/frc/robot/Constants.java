@@ -152,12 +152,6 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int kIntakeServoMotorID = 0;
-    public static final double kIntakeServoOpen = 0;
-    public static final double kIntakeServoClose = 0;
-  }
-
-  public static final class IntakeConstants {
     public static final int kIntakeServoID = 0;  // PWM port for the intake servo - MAY NOT BE USED
     public static final int kCoralMotorID = 1;  // PWM port for the SparkMax/Neo that runs the intake
     public static final int kCoralInElevatorID = 1;  // DIO port 1 for the sensor that detects when a coral is in the elevator
