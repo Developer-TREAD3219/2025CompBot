@@ -36,7 +36,6 @@ import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import frc.robot.commands.AutoScoreCommand;
-import frc.robot.commands.ToggleManualElevator;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -150,8 +149,8 @@ public class RobotContainer {
 
     // TODO: Add button mappings for the gunner controller
 
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
-    .onTrue(new ToggleManualElevator(m_ElevatorSubsystem));
+    new JoystickButton(m_gunnerController, XboxController.Button.kStart.value)
+    .onTrue(new RunCommand(() -> m_ElevatorSubsystem.toggleManualMode()));
    
 
     // Define the Trigger

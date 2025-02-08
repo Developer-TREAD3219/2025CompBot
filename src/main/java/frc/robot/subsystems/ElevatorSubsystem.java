@@ -31,12 +31,24 @@ public class ElevatorSubsystem extends SubsystemBase{
     private TrapezoidProfile.State goalState;
     private TrapezoidProfile.State currentState;
     private final TrapezoidProfile profile;
-    private boolean isAutomated;
+    /**
+     * determines if we are in autoscore or manual score mod
+     */
+    private boolean isInManualMode;
+
+    /**
+     * determines if the elevator is enabled
+     */
+    private boolean isEnabled;
 
     private ElevatorPosition currentTarget = ElevatorPosition.DOWN;
     private boolean isHomed = false;
     private double setpoint = 0.0;
     SparkMaxConfig resetConfig = new SparkMaxConfig();
+
+    /**
+     * Current position of the elevator in inches
+     */
     double currentPos;
 
     public enum ElevatorPosition {
@@ -54,6 +66,8 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public ElevatorSubsystem() {
+        isEnabled = true;
+
         primaryMotor = new SparkMax(ElevatorConstants.KLeftElevatorID, MotorType.kBrushless);
         followerMotor = new SparkMax(ElevatorConstants.KRightElevatorID, MotorType.kBrushless);
         
@@ -237,19 +251,27 @@ public class ElevatorSubsystem extends SubsystemBase{
 
 
 
-    public void toggleForAutomated() {
-        isAutomated = !isAutomated;
- }
+    public void toggleManualMode() {
+        isInManualMode = !isInManualMode;
+    }
 
- public void enable() {
-        isAutomated = true;
- }
+    public boolean getManualMode() {
+            return isInManualMode;
+    }
 
- public void disable(){
+    public void setManualMode(boolean mode){
+            isInManualMode = mode;
+    }
 
-        isAutomated = false;
- }
+     // Getter for isEnabled
+     public boolean isEnabled() {
+        return isEnabled;
+    }
 
+    // Setter for isEnabled
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
 
 }
 
