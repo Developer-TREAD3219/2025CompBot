@@ -1,4 +1,7 @@
 package frc.robot.subsystems;
+import java.lang.ModuleLayer.Controller;
+
+import com.fasterxml.jackson.databind.type.PlaceholderForType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +20,13 @@ public class CoralDeliverySubsystem extends SubsystemBase {
     // Placeholder for intake
     public void intake() {
         // Code for intake
+
+        // TODO: intake shuts off motor when coral is in Place and rumble driver (()Controller
+
+        //         elevator shouldn't move when coral has broken the beam, but not in place
+        //         there will be a beam break sensor that will detect when coral has entered, 
+        //             a second sensor will tell us when the coral is captured)
+        //             Smartdashboard button to enable/disable intake sensor
     }
 
     // Placeholder for outtake
