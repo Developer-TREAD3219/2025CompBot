@@ -142,6 +142,11 @@ public final class Constants {
     public static final double kG = 0;
     public static final double kV = 0;
     public static final double kMinPos = 0;
+  }
 
+  public static final class IntakeConstants {
+    public static final int kIntakeServoMotorID = 0;
+    public static final double kIntakeServoOpen = 0;
+    public static final double kIntakeServoClose = 0;
   }
 }

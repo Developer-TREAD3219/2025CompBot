@@ -4,31 +4,41 @@
 // 
 
 package frc.robot.subsystems;
+import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-    public class ClimberSubsystem extends SubsystemBase {
-            public ClimberSubsystem() {
-                
-                    
-                
 
+public class ClimberSubsystem extends SubsystemBase {
 
-            }
+    //private final SparkMax climberMotor;
 
-         public void Extend() {
-                    // code for extending Climber
-                    System.out.println("");
-
-
-                }
-
-    
-                public void retract(){
-                    // code for retracting Climber
-
+    // public ClimberSubsystem() {
         
-                }
-                public void periodic() {
-                    // This method will be called once per scheduler run 
+            
+        
 
-         };
+
+    // }
+
+    public void Extend() {
+            // code for extending Climber
+            System.out.println("");
+
+
+    }
+
+
+    public void retract(){
+        // code for retracting Climber
+
+
+    }
+    public void periodic() {
+        // This method will be called once per scheduler run 
+
+    }
+    
+    public void rotateClimber(int degrees) {
+    // code for rotating Climber
+    }
 }
