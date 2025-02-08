@@ -1,5 +1,4 @@
 package frc.robot.subsystems;
-// TODO: Add Megatag or Megatag2 from functionality preferably megatag 2 https://docs.limelightvision.io/docs/docs-limelight/pipeline-apriltag/apriltag-robot-localization-megatag2
 import frc.robot.utils.LimelightHelpers;
 import frc.robot.utils.LimelightHelpers.LimelightTarget_Fiducial;
 import frc.robot.subsystems.DriveSubsystem;
