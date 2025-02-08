@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
-// import frc.robot.subsystems.IntakeSubsystem; // we may not be using a servo to open the intake door
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class BeginEndMatch extends Command {
@@ -49,4 +49,3 @@ public class BeginEndMatch extends Command {
     }
 
 }
-

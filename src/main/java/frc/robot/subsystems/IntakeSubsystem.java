@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Servo;
+
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase{
@@ -24,4 +26,5 @@ public class IntakeSubsystem extends SubsystemBase{
         intakeServo.setAngle(IntakeConstants.kIntakeServoClosed);
         }
     
+
 }
