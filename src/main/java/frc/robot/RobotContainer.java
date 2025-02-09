@@ -31,15 +31,19 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import frc.robot.commands.AutoScoreCommand;
 import frc.robot.commands.BeginEndMatch;
+
+
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -157,12 +161,8 @@ public class RobotContainer {
 
 
 //Gunner Control
-// Button Comp: 
 
-// LT + RT + LJoystick= Move Elevator Manually, In case of Auto Breaking
-// DPad Right + Button:Y= Spin Roller at Max Speed
-// Hold L and R DPad= Climber Stick moves towards or away from Robot
-//Regular Buttons:
+// LJoystick/ while in manual= Move Elevator Manually, In case of Auto Breaking
 //LT= Score Left Coral 
 //RT= Score Right Coral
 //X= Level 1 for Coral Auto (should automatically got to selected Level)
@@ -176,7 +176,16 @@ public class RobotContainer {
     // TODO: Add button mappings for the gunner controller
 
     new JoystickButton(m_gunnerController, XboxController.Button.kStart.value)
-    .onTrue(new RunCommand(() -> m_ElevatorSubsystem.toggleManualMode()));
+    .onTrue(new InstantCommand(() -> m_ElevatorSubsystem.toggleManualMode()));
+
+
+    // Using Left Joystick while in Manual mode in order to move the elevator manually.
+m_ElevatorSubsystem.setDefaultCommand(new RunCommand(() -> {
+  if (m_ElevatorSubsystem.getManualMode()) {
+      double speed = -m_gunnerController.getLeftY(); // Invert Y-axis if necessary
+      m_ElevatorSubsystem.moveElevator(speed);
+  }
+}, m_ElevatorSubsystem));
 
 // Define the Trigger
 // Bind the Trigger to the AutoScoreCommand
