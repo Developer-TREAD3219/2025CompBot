@@ -141,7 +141,7 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-    
+  
 // LT + RT + Button:A= Open Trap Door during Climb
         
     // Y button makes whatever direction the robot is facing the new forward
@@ -177,17 +177,19 @@ public class RobotContainer {
 
     new JoystickButton(m_gunnerController, XboxController.Button.kStart.value)
     .onTrue(new RunCommand(() -> m_ElevatorSubsystem.toggleManualMode()));
-   
 
-    // Define the Trigger
-    Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
+// Define the Trigger
+// Bind the Trigger to the AutoScoreCommand
+Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
+autoScoreTrigger.onTrue(new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerController));
+//LT= Score Left Coral
 
-    // Bind the Trigger to the AutoScoreCommand
-    autoScoreTrigger.onTrue(new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerController));
-  }
-  //LT= Score Left Coral
+// gunner dpad right triggers manual intake slow
+Trigger intakeTrigger = new Trigger(this::intakeRequested);
+intakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(0.5), m_CoralDeliverySubsystem));
+intakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
 
-
+}
   // Method to get the time remaining in the match
   public double getMatchTime() {
     return DriverStation.getMatchTime();
@@ -202,7 +204,7 @@ private boolean autoScoreCommandRequested() {
            (m_gunnerController.getLeftTriggerAxis() > 0.9 ||
             m_gunnerController.getRightTriggerAxis() > 0.9);
 }
-
+// check if we are trying to start the end game
 public boolean EndGameStartRequested() {
   return (m_driverController.getLeftTriggerAxis() > 0.9 &&
           m_driverController.getRightTriggerAxis() > 0.9 &&
@@ -211,9 +213,10 @@ public boolean EndGameStartRequested() {
           getMatchTime() < 30 || 
           RobotBase.isSimulation() || 
           DriverStation.isTest());
-}
-
-
+  }
+  public boolean intakeRequested(){
+    return m_gunnerController.getPOV() == 90;
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

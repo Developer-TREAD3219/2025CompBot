@@ -45,6 +45,12 @@ public class CoralDeliverySubsystem extends SubsystemBase {
         coralDeliveryMotor.set(0.0);
      }
 
+    public void manualSpin(double speed) {
+        // Spin the motor at a given speed
+        coralDeliveryMotor.set(speed);
+        System.out.println("Motor Speed: " + speed);
+    }
+
     //      //placeholder for possible periodic for Autonomous
     // public void periodic(){
     //     // This method will be called once per scheduler run
