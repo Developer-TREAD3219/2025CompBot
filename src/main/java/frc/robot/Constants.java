@@ -156,13 +156,14 @@ public final class Constants {
     public static final double kIntakeServoOpen = 180.0;
     public static final double kIntakeServoClosed = 0.0;
    // TODO: need constant for intake and outtake speed 
-    public static final double kIntakeSpeed = .50;
-    public static final double kOuttakeSpeed = .50;
+    public static final double kIntakeSpeed = 0.5;
+    public static final double kOuttakeSpeed = 0.5;
     
   }
 
   public static final class ClimberConstants {
     public static final int KClimberMotorID = 14;  // PWM port for the SparkMax/Neo that runs the climber
+    public static final double kClimberSpeed = 0.5;
   }
 
 }
