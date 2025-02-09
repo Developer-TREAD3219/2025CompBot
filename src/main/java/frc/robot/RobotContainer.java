@@ -189,6 +189,10 @@ Trigger intakeTrigger = new Trigger(this::intakeRequested);
 intakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(0.5), m_CoralDeliverySubsystem));
 intakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
 
+
+Trigger outtakeTrigger = new Trigger(this::outtakeRequested);
+outtakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(1), m_CoralDeliverySubsystem));
+outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
 }
   // Method to get the time remaining in the match
   public double getMatchTime() {
@@ -214,8 +218,14 @@ public boolean EndGameStartRequested() {
           RobotBase.isSimulation() || 
           DriverStation.isTest());
   }
+
+  //Check if dpad right is pressed on the gunner controller
   public boolean intakeRequested(){
     return m_gunnerController.getPOV() == 90;
+  }
+
+  public boolean outtakeRequested(){
+    return m_gunnerController.getPOV() == 270;
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
