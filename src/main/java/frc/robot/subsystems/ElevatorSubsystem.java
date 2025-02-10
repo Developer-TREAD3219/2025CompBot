@@ -72,7 +72,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         followerMotor = new SparkMax(ElevatorConstants.KRightElevatorID, MotorType.kBrushless);
         
         SparkMaxConfig followerConfig = new SparkMaxConfig();
-        followerConfig.follow(primaryMotor, true);
+        followerConfig.follow(primaryMotor, false);
 
         // Configure follower
         followerMotor.configure(followerConfig, null, null); 
