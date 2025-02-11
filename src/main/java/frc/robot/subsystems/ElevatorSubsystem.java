@@ -67,6 +67,7 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     public ElevatorSubsystem() {
         isEnabled = true;
+        isInManualMode = false;
 
         primaryMotor = new SparkMax(ElevatorConstants.KLeftElevatorID, MotorType.kBrushless);
         followerMotor = new SparkMax(ElevatorConstants.KRightElevatorID, MotorType.kBrushless);
@@ -253,6 +254,7 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     public void toggleManualMode() {
         isInManualMode = !isInManualMode;
+        System.out.println("Is in manual"+isInManualMode);
     }
 
     public boolean getManualMode() {
@@ -272,7 +274,13 @@ public class ElevatorSubsystem extends SubsystemBase{
     public void setEnabled(boolean isEnabled) {
         this.isEnabled = isEnabled;
     }
-
+    public void moveElevator(double speed) {
+        // Ensure the speed is within the valid range
+        speed = MathUtil.clamp(speed, -1.0, 1.0);
+        primaryMotor.set(speed);
+        followerMotor.set(speed);
+        System.out.println("Elevator moving at speed: " + speed);
+    }
 }
 
 
