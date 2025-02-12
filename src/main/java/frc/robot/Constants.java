@@ -37,9 +37,9 @@ public final class Constants {
 
     
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(26.5);
+    public static final double kTrackWidth = Units.inchesToMeters(24.5);  
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(26.5);
+    public static final double kWheelBase = Units.inchesToMeters(24.5);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -48,6 +48,7 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
+    //TODO: Set these values
     public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI;
@@ -65,7 +66,7 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 8;
 
     public static final boolean kGyroReversed = false;
-
+//TODO: Verify pigeon ID
     public static final int kPigeonID = 10;
   }
 
@@ -118,7 +119,7 @@ public final class Constants {
     public static final String kCameraName = "April";
   }
 
-
+//TODO: Set values for elevator constants
   public static final class ElevatorConstants {
     //TODO: ask the great bearded one what these ID's should be. I had to change them because the simulator yells at you if you try to use the same number twice
     public static final int KLeftElevatorID = 9;
@@ -134,7 +135,7 @@ public final class Constants {
     public static final double kMaxVelocity = 0;
     
     public static final double kMaxAcceleration = 0;
-    public static final double kP = 0;
+    public static final double kP = 1.0;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final int kCountsPerInch = 0;
@@ -156,8 +157,8 @@ public final class Constants {
     public static final double kIntakeServoOpen = 180.0;
     public static final double kIntakeServoClosed = 0.0;
    // TODO: need constant for intake and outtake speed 
-    public static final double kIntakeSpeed = .50;
-    public static final double kOuttakeSpeed = .50;
+    public static final double kIntakeSpeed = 0.50;
+    public static final double kOuttakeSpeed = 0.50;
     
   }
 
