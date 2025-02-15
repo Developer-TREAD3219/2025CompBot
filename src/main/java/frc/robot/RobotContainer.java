@@ -37,12 +37,14 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.CoralDelivery.CoralIntakeCommand;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import frc.robot.commands.AutoScoreCommand;
 import frc.robot.commands.BeginEndMatch;
 //TODO: Limit Robot speed when elevator is extended
+import frc.robot.commands.CoralDelivery.CoralIntakeCommand;
 
 
 /*
@@ -192,6 +194,10 @@ m_ElevatorSubsystem.setDefaultCommand(new RunCommand(() -> {
 Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
 autoScoreTrigger.onTrue(new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerController));
 //LT= Score Left Coral
+
+// gunner dpad up triggers auto intake
+Trigger autoIntakeTrigger = new Trigger(this::autoIntakeRequested);
+autoIntakeTrigger.onTrue(new CoralIntakeCommand(m_CoralDeliverySubsystem));
 
 // gunner dpad right triggers manual intake slow
 Trigger intakeTrigger = new Trigger(this::intakeRequested);
