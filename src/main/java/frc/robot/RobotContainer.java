@@ -40,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.CoralDelivery.CoralIntakeCommand;
 import java.util.List;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import frc.robot.commands.AutoScoreCommand;
 import frc.robot.commands.BeginEndMatch;
@@ -56,19 +57,21 @@ import frc.robot.commands.CoralDelivery.CoralIntakeCommand;
 public class RobotContainer {
   // The robot's subsystems
   // : Add the subsystems to the RobotContainer
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Pigeon2 m_Pigeon = new Pigeon2(15);
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_Pigeon);
 
   //TODO: need sensor at bottom to reset controller value
 
   public class ElevatorSensor {
     
   }
-
+  
   private final CoralDeliverySubsystem m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final LimeLightSubsystem m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
   private final Servo m_intakeServo = new Servo(coralDeliveryConstants.kIntakeServoID);
+
 
 
   // The driver's controller

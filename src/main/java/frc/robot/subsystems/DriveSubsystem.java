@@ -57,7 +57,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor
   //private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
-  private final Pigeon2 pigeon;
+  private final Pigeon2 m_pigeon;
   private Rotation2d headingOffset = new Rotation2d();
 
   // Odometry class for tracking robot pose
@@ -74,12 +74,12 @@ public SwerveDrivePoseEstimator getPoseEstimator() {
   return m_poseEstimator;
 }
 public Pigeon2 getGyro() {
-  return pigeon;
+  return m_pigeon;
 }
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
-    pigeon = new Pigeon2(DriveConstants.kPigeonID);
+  public DriveSubsystem(Pigeon2 pigeon) {
+    m_pigeon = new Pigeon2(DriveConstants.kPigeonID);
     pigeon.clearStickyFaults();
     pigeon.getConfigurator().apply(new Pigeon2Configuration());
     
@@ -238,7 +238,7 @@ public Pigeon2 getGyro() {
 
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
-    pigeon.reset();
+    m_pigeon.reset();
   }
 
   // THIS DOESN'T APPEAR TO BE USED
@@ -266,7 +266,7 @@ public Pigeon2 getGyro() {
    * Sets the current direction as forward for the driver
    */
   public void resetYaw() {
-    headingOffset = Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble() % 360);
+    headingOffset = Rotation2d.fromDegrees(m_pigeon.getYaw().getValueAsDouble() % 360);
   }
 
     /**
@@ -278,7 +278,7 @@ private Rotation2d getGyroRotation2d() {
     if (RobotBase.isSimulation()) {
         return new Rotation2d(0); // Return 0-degree rotation in simulation
     }
-    return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble() % 360);
+    return Rotation2d.fromDegrees(m_pigeon.getYaw().getValueAsDouble() % 360);
     //return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ));
 }
   /**
