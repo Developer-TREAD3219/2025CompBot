@@ -164,6 +164,7 @@ public final class Constants {
 
   public static final class ClimberConstants {
     public static final int KClimberMotorID = 14;  // PWM port for the SparkMax/Neo that runs the climber
+    public static final double kClimberSpeed = 0.5;
   }
 
 }
