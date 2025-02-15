@@ -238,12 +238,14 @@ public boolean EndGameStartRequested() {
   public boolean intakeRequested(){
     return m_gunnerController.getPOV() == 90;
   }
-
   public boolean outtakeRequested(){
     return m_gunnerController.getPOV() == 270;
   }
   public Boolean autoIntakeRequested(){
     return m_gunnerController.getPOV() == 0;
+  }
+  public Boolean autoOuttakeRequested(){
+    return m_gunnerController.getPOV() == 180;
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
