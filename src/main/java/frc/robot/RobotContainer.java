@@ -56,24 +56,13 @@ import frc.robot.commands.CoralDelivery.CoralIntakeCommand;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems
-  // : Add the subsystems to the RobotContainer
-  CANBus m_CanBus = new CANBus();
-  private final Pigeon2 m_Pigeon = new Pigeon2(15, m_CanBus);
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_Pigeon);
-
-  //TODO: need sensor at bottom to reset controller value
-
-  public class ElevatorSensor {
-    
-  }
-  
-  private final CoralDeliverySubsystem m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
-  private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-  private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
-  private final LimeLightSubsystem m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
-  private final Servo m_intakeServo = new Servo(coralDeliveryConstants.kIntakeServoID);
-
+  private Pigeon2 m_Pigeon;
+  private DriveSubsystem m_robotDrive;
+  private CoralDeliverySubsystem m_CoralDeliverySubsystem;
+  private ClimberSubsystem m_ClimberSubsystem;
+  private ElevatorSubsystem  m_ElevatorSubsystem;
+  private LimeLightSubsystem m_LimeLightSubsystem;
+  private Servo m_intakeServo;
 
 
   // The driver's controller
@@ -89,6 +78,21 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+      // The robot's subsystems
+  // : Add the subsystems to the RobotContainer
+  CANBus m_CanBus = new CANBus();
+  Pigeon2 m_Pigeon = new Pigeon2(15, m_CanBus);
+  System.out.println("This is the pigeon"+m_Pigeon);
+  DriveSubsystem m_robotDrive = new DriveSubsystem(m_Pigeon);
+
+  //TODO: need sensor at bottom to reset controller value
+  
+  m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
+  m_ClimberSubsystem = new ClimberSubsystem();
+  m_ElevatorSubsystem = new ElevatorSubsystem();
+  m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
+  m_intakeServo = new Servo(coralDeliveryConstants.kIntakeServoID);
+
     // Supresses the "No Joystick Connected" Spam
 
     if (RobotBase.isSimulation() || DriverStation.isTest()) {

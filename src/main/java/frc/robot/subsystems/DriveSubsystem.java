@@ -59,34 +59,28 @@ public class DriveSubsystem extends SubsystemBase {
   //private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private final Pigeon2 m_pigeon;
   private Rotation2d headingOffset = new Rotation2d();
-
-  // Odometry class for tracking robot pose
-  public final SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
-      DriveConstants.kDriveKinematics,
-      getGyroRotation2d(),                          // Current heading
-      getSwervePositions(),                         // Swerve module positions array
-      new Pose2d()                                  // Initial starting pose
-      // Optionally, you can provide standard deviation arrays for state and vision
-      // measurement if you want to tune the Kalman filter more precisely.
-  );
-
-public SwerveDrivePoseEstimator getPoseEstimator() {
-  return m_poseEstimator;
-}
-public Pigeon2 getGyro() {
-  return m_pigeon;
-}
-
+  private SwerveDrivePoseEstimator m_poseEstimator;
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(Pigeon2 pigeon) {
     m_pigeon = pigeon;
+    System.out.println("The drive has the pigeon" + m_pigeon);
     m_pigeon.clearStickyFaults();
     m_pigeon.getConfigurator().apply(new Pigeon2Configuration());
     
+
+
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
 
-
+  // Odometry class for tracking robot pose
+    m_poseEstimator = new SwerveDrivePoseEstimator(
+    DriveConstants.kDriveKinematics,
+    getGyroRotation2d(),                          // Current heading
+    getSwervePositions(),                         // Swerve module positions array
+    new Pose2d()                                  // Initial starting pose
+    // Optionally, you can provide standard deviation arrays for state and vision
+    // measurement if you want to tune the Kalman filter more precisely.
+  );
     
     //TODO Get the AutoBuilder working once we get configs
    
@@ -123,6 +117,13 @@ public Pigeon2 getGyro() {
     }
   }
 
+  public SwerveDrivePoseEstimator getPoseEstimator() {
+    return m_poseEstimator;
+  }
+  public Pigeon2 getGyro() {
+    return m_pigeon;
+  }
+  
   @Override
   public void periodic() {
     // Update the odometry in the periodic block

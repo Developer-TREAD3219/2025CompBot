@@ -15,8 +15,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 public class CoralDeliverySubsystem extends SubsystemBase {
    
-    SparkMax coralDeliveryMotor = new SparkMax(coralDeliveryConstants.kCoralDeliveryMotorID, MotorType.kBrushless);
-    RelativeEncoder coralEncoder = coralDeliveryMotor.getEncoder();
+    Spark coralDeliveryMotor = new Spark(coralDeliveryConstants.kCoralDeliveryMotorID);
     DigitalInput CoralInPlaceSensor = new DigitalInput(coralDeliveryConstants.kCoralInPlaceID);
     DigitalInput CoralInElevatorSensor = new DigitalInput(coralDeliveryConstants.kCoralInElevatorID);
 

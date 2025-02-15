@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ElevatorConstants;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -21,8 +22,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 // TODO: Add a method to return the Elevator to L1
 
 public class ElevatorSubsystem extends SubsystemBase{
-    private final SparkMax primaryMotor;
-    private final SparkMax followerMotor;
+    private final SparkFlex primaryMotor;
+    private final SparkFlex followerMotor;
     private final RelativeEncoder encoder;
     //TODO: is this the right kind of sensor for the bottom limit?
     private final DigitalInput bottomLimit;
@@ -69,8 +70,8 @@ public class ElevatorSubsystem extends SubsystemBase{
         isEnabled = true;
         isInManualMode = false;
 
-        primaryMotor = new SparkMax(ElevatorConstants.KLeftElevatorID, MotorType.kBrushless);
-        followerMotor = new SparkMax(ElevatorConstants.KRightElevatorID, MotorType.kBrushless);
+        primaryMotor = new SparkFlex(ElevatorConstants.KLeftElevatorID, MotorType.kBrushless);
+        followerMotor = new SparkFlex(ElevatorConstants.KRightElevatorID, MotorType.kBrushless);
         
         SparkMaxConfig followerConfig = new SparkMaxConfig();
         followerConfig.follow(primaryMotor, false);
