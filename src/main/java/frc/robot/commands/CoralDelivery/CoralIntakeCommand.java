@@ -11,7 +11,7 @@ import frc.robot.utils.RumbleHelper;
 public class CoralIntakeCommand extends Command {
 
     CoralDeliverySubsystem coralDeliverySubsystem;
-    DigitalInput m_deliverySensor = new DigitalInput(coralDeliveryConstants.kCoralInPlaceID);
+    DigitalInput m_deliverySensor = coralDeliverySubsystem.getCoralInPlaceSensor();
     Boolean currentSensorState = false;
     Boolean previousSensorState = false;
     XboxController m_driverController;

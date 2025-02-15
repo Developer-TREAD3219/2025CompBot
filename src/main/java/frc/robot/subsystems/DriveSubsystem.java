@@ -79,9 +79,9 @@ public Pigeon2 getGyro() {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(Pigeon2 pigeon) {
-    m_pigeon = new Pigeon2(DriveConstants.kPigeonID);
-    pigeon.clearStickyFaults();
-    pigeon.getConfigurator().apply(new Pigeon2Configuration());
+    m_pigeon = pigeon;
+    m_pigeon.clearStickyFaults();
+    m_pigeon.getConfigurator().apply(new Pigeon2Configuration());
     
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);

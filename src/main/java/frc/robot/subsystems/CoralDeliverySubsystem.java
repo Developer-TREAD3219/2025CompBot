@@ -51,6 +51,9 @@ public class CoralDeliverySubsystem extends SubsystemBase {
         coralDeliveryMotor.set(speed);
         System.out.println("Motor Speed: " + speed);
     }
+    public DigitalInput getCoralInPlaceSensor(){
+        return CoralInPlaceSensor;
+    }
 
      public boolean CoralInElevator() {
         //returns 1 if beam is broken or 0 if beam is not broken

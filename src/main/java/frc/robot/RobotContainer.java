@@ -40,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.CoralDelivery.CoralIntakeCommand;
 import java.util.List;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import frc.robot.commands.AutoScoreCommand;
@@ -57,7 +58,8 @@ import frc.robot.commands.CoralDelivery.CoralIntakeCommand;
 public class RobotContainer {
   // The robot's subsystems
   // : Add the subsystems to the RobotContainer
-  private final Pigeon2 m_Pigeon = new Pigeon2(15);
+  CANBus m_CanBus = new CANBus();
+  private final Pigeon2 m_Pigeon = new Pigeon2(15, m_CanBus);
   private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_Pigeon);
 
   //TODO: need sensor at bottom to reset controller value
