@@ -17,12 +17,14 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.coralDeliveryConstants;
 //TODO: Reminder to import any new subsystems
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.CoralDeliverySubsystem;
@@ -67,6 +69,7 @@ public class RobotContainer {
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final LimeLightSubsystem m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
+  private final Servo m_intakeServo = new Servo(coralDeliveryConstants.kIntakeServoID);
 
 
   // The driver's controller
@@ -155,7 +158,7 @@ public class RobotContainer {
      Trigger EndTriggerStart = new Trigger(this::EndGameStartRequested);
 
      // Bind the Trigger to the End Game Start
-     EndTriggerStart.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem));
+     EndTriggerStart.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem, m_intakeServo));
 
 // Many of these are going to need their own commmands
 
