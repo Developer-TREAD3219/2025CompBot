@@ -4,20 +4,25 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.coralDeliveryConstants;
 import frc.robot.subsystems.CoralDeliverySubsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.coralDeliveryConstants;
+import frc.robot.utils.RumbleHelper;
 
 public class CoralIntakeCommand extends Command {
 
     CoralDeliverySubsystem coralDeliverySubsystem;
     DigitalInput m_deliverySensor = new DigitalInput(coralDeliveryConstants.kCoralInPlaceID);
-    DigitalInput Coral= new DigitalInput(coralDeliveryConstants.kCoralInPlaceID);
     Boolean currentSensorState = false;
     Boolean previousSensorState = false;
+    XboxController m_driverController;
+    RumbleHelper rumble;
 
-    public CoralIntakeCommand(CoralDeliverySubsystem coralDeliverySubsystem) {
+    public CoralIntakeCommand(CoralDeliverySubsystem coralDeliverySubsystem, XboxController driverController) {
         // Use addRequirements() here to declare subsystem dependencies.
         this.coralDeliverySubsystem = coralDeliverySubsystem;
+        this.m_driverController = driverController;
         addRequirements(coralDeliverySubsystem);
+        RumbleHelper rumble = new RumbleHelper(driverController);
     }
 
     // Called when the command is initially scheduled.
@@ -25,7 +30,7 @@ public class CoralIntakeCommand extends Command {
     public void initialize() {
         coralDeliverySubsystem.intake();
         //get the current state of the input sensor
-        boolean previousSensorState = m_deliverySensor.get();
+        previousSensorState = m_deliverySensor.get();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -42,12 +47,13 @@ public class CoralIntakeCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         coralDeliverySubsystem.stopMotor();
+        rumble.rumbleForDuration(0.3, 1, 0.5);
+        
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        //TODO: need to set kCoralInPlaceID boolean to true when coral is in place
         return coralDeliverySubsystem.CoralInPlace();
     }
 }

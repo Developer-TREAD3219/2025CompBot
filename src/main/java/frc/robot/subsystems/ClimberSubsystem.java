@@ -1,4 +1,3 @@
-//TODO: We should add some sort of toggle to this system. We don't want to move the arm when we are ready to park
 // We can accomplish by adding an isEnabled bool that starts as false and gets set as true when we enter climb mode
 // Extend and retract should first check if isEnabled before they run the motor
 // 

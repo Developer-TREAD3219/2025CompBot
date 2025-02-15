@@ -33,7 +33,7 @@ public class BeginEndMatch extends Command {
 
     @Override
     public void initialize() {
-        //TODO: ENABLE CLIMBER SUBSYSTEM.  why??? if this is the only place it's called?
+        //TODO: ENABLE CLIMBER SUBSYSTEM.  why??? if this is the only place it's called? Only if we need it
         elevatorSubsystem.homeElevator();
         intakeServo.set(coralDeliveryConstants.kIntakeServoOpen);
         climberSubsystem.rotateClimber(270);

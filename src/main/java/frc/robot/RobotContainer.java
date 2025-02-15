@@ -197,7 +197,7 @@ autoScoreTrigger.onTrue(new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerContro
 
 // gunner dpad up triggers auto intake
 Trigger autoIntakeTrigger = new Trigger(this::autoIntakeRequested);
-autoIntakeTrigger.onTrue(new CoralIntakeCommand(m_CoralDeliverySubsystem));
+autoIntakeTrigger.onTrue(new CoralIntakeCommand(m_CoralDeliverySubsystem, m_driverController));
 
 // gunner dpad right triggers manual intake slow
 Trigger intakeTrigger = new Trigger(this::intakeRequested);
