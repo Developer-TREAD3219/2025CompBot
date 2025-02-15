@@ -9,9 +9,10 @@ import frc.robot.Constants.coralDeliveryConstants;
 public class CoralIntakeCommand extends Command {
 
     CoralDeliverySubsystem coralDeliverySubsystem;
-    DigitalInput CoralInPLaceSensor = new DigitalInput(coralDeliveryConstants.kCoralInPlaceID);
+    DigitalInput m_deliverySensor = new DigitalInput(coralDeliveryConstants.kCoralInPlaceID);
     DigitalInput Coral= new DigitalInput(coralDeliveryConstants.kCoralInPlaceID);
-
+    Boolean currentSensorState = false;
+    Boolean previousSensorState = false;
 
     public CoralIntakeCommand(CoralDeliverySubsystem coralDeliverySubsystem) {
         // Use addRequirements() here to declare subsystem dependencies.
@@ -23,11 +24,18 @@ public class CoralIntakeCommand extends Command {
     @Override
     public void initialize() {
         coralDeliverySubsystem.intake();
+        //get the current state of the input sensor
+        boolean previousSensorState = m_deliverySensor.get();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        boolean currentSensorState = m_deliverySensor.get();
+        if (previousSensorState && !currentSensorState){
+            this.end(true);
+        }
+        previousSensorState = currentSensorState;
     }
 
     // Called once the command ends or is interrupted.

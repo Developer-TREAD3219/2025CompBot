@@ -21,17 +21,15 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.coralDeliveryConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.coralDeliveryConstants;
-//TODO: Reminder to import any new subsystems
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.CoralDeliverySubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -44,7 +42,7 @@ import java.util.List;
 import com.pathplanner.lib.auto.AutoBuilder;
 import frc.robot.commands.AutoScoreCommand;
 import frc.robot.commands.BeginEndMatch;
-
+//TODO: Limit Robot speed when elevator is extended
 
 
 /*
@@ -67,7 +65,6 @@ public class RobotContainer {
   private final CoralDeliverySubsystem m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
-  private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final LimeLightSubsystem m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
   private final Servo m_intakeServo = new Servo(coralDeliveryConstants.kIntakeServoID);
 
@@ -198,12 +195,12 @@ autoScoreTrigger.onTrue(new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerContro
 
 // gunner dpad right triggers manual intake slow
 Trigger intakeTrigger = new Trigger(this::intakeRequested);
-intakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(0.5), m_CoralDeliverySubsystem));
+intakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(coralDeliveryConstants.kIntakeSpeed), m_CoralDeliverySubsystem));
 intakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
 
-
+//gunner dpad left manual spins at outake speed
 Trigger outtakeTrigger = new Trigger(this::outtakeRequested);
-outtakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(1), m_CoralDeliverySubsystem));
+outtakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem));
 outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
 }
   // Method to get the time remaining in the match
@@ -238,6 +235,9 @@ public boolean EndGameStartRequested() {
 
   public boolean outtakeRequested(){
     return m_gunnerController.getPOV() == 270;
+  }
+  public Boolean autoIntakeRequested(){
+    return m_gunnerController.getPOV() == 0;
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
