@@ -98,8 +98,6 @@ public class RobotContainer {
     if (RobotBase.isSimulation() || DriverStation.isTest()) {
   DriverStation.silenceJoystickConnectionWarning(true);
 }
-    // Configure the button bindings
-    configureButtonBindings();
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -114,7 +112,8 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
-    
+        // Configure the button bindings
+        configureButtonBindings();
     //TODO: Add our commands here
     //TODO: Intake Coral: 
 

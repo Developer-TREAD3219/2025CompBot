@@ -131,7 +131,7 @@ public final class Constants {
     public static final double kL2 = 0;
     public static final double kL3 = 0;
     public static final double kL4 = 0;
-    public static final int kLimitSwitchPort = 0;
+    public static final int kLimitSwitchPort = 2;
     public static final double kMaxVelocity = 0;
     
     public static final double kMaxAcceleration = 0;
@@ -152,7 +152,7 @@ public final class Constants {
     public static final class coralDeliveryConstants {
     public static final int kIntakeServoID = 0;  // PWM port for the intake servo - MAY NOT BE USED
     public static final int kCoralDeliveryMotorID = 1;  // PWM port for the SparkMax/Neo that runs the intake
-    public static final int kCoralInElevatorID = 2;  // DIO port 1 for the sensor that detects when a coral is in the elevator
+    public static final int kCoralInElevatorID = 3;  // DIO port 1 for the sensor that detects when a coral is in the elevator
     public static final int kCoralInPlaceID = 0;  // DIO port 2 for the sensor that detects when a coral is in place
     public static final double kIntakeServoOpen = 1.0;
     public static final double kIntakeServoClosed = 0.0;
