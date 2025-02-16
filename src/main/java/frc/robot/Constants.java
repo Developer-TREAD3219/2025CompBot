@@ -122,8 +122,8 @@ public final class Constants {
 //TODO: Set values for elevator constants
   public static final class ElevatorConstants {
     //TODO: ask the great bearded one what these ID's should be. I had to change them because the simulator yells at you if you try to use the same number twice
-    public static final int KLeftElevatorID = 9;
-    public static final int KRightElevatorID = 10;
+    public static final int KLeftElevatorID = 13;
+    public static final int KRightElevatorID = 14;
     public static final int kElevatorBottomSwitchID = 1;  // DIO - when switched,   TODO: zero the elevator
 
     public static final double kDownPos = 0;
@@ -163,7 +163,7 @@ public final class Constants {
   }
 
   public static final class ClimberConstants {
-    public static final int KClimberMotorID = 14;  // PWM port for the SparkMax/Neo that runs the climber
+    public static final int KClimberMotorID = 12;  // PWM port for the SparkMax/Neo that runs the climber
     public static final double kClimberSpeed = 0.5;
   }
 

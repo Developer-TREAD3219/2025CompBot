@@ -56,13 +56,14 @@ import frc.robot.commands.CoralDelivery.CoralIntakeCommand;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private Pigeon2 m_Pigeon;
-  private DriveSubsystem m_robotDrive;
-  private CoralDeliverySubsystem m_CoralDeliverySubsystem;
-  private ClimberSubsystem m_ClimberSubsystem;
-  private ElevatorSubsystem  m_ElevatorSubsystem;
-  private LimeLightSubsystem m_LimeLightSubsystem;
-  private Servo m_intakeServo;
+  public Pigeon2 m_Pigeon;
+  public DriveSubsystem m_robotDrive;
+  public CoralDeliverySubsystem m_CoralDeliverySubsystem;
+  public ClimberSubsystem m_ClimberSubsystem;
+  public ElevatorSubsystem  m_ElevatorSubsystem;
+  public LimeLightSubsystem m_LimeLightSubsystem;
+  public Servo m_intakeServo;
+  public CANBus m_CanBus;
 
 
   // The driver's controller
@@ -80,14 +81,15 @@ public class RobotContainer {
   public RobotContainer() {
       // The robot's subsystems
   // : Add the subsystems to the RobotContainer
-  CANBus m_CanBus = new CANBus();
-  Pigeon2 m_Pigeon = new Pigeon2(15, m_CanBus);
+  m_CanBus = new CANBus();
+  m_Pigeon = new Pigeon2(15, m_CanBus);
   System.out.println("This is the pigeon"+m_Pigeon);
-  DriveSubsystem m_robotDrive = new DriveSubsystem(m_Pigeon);
-
+  m_robotDrive = new DriveSubsystem(m_Pigeon);
+  System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +m_robotDrive);
   //TODO: need sensor at bottom to reset controller value
   
   m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
+  System.out.println("GGGGGGGGGGGGGGGGGGG"+ m_CoralDeliverySubsystem);
   m_ClimberSubsystem = new ClimberSubsystem();
   m_ElevatorSubsystem = new ElevatorSubsystem();
   m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
@@ -113,6 +115,7 @@ public class RobotContainer {
                 true),
             m_robotDrive));
         // Configure the button bindings
+        System.out.println("BBBBBBBBB"+ m_robotDrive);
         configureButtonBindings();
     //TODO: Add our commands here
     //TODO: Intake Coral: 
@@ -151,6 +154,7 @@ public class RobotContainer {
         // Drive Controller inputs
         // TODO: Add button mappings for the driver controller
         // The RB button on the driver controller locks our wheels in the X position if we held 
+        System.out.println("ZZZZZZ"+ m_robotDrive);
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),

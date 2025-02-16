@@ -17,9 +17,10 @@ public class CoralIntakeCommand extends Command {
     XboxController m_driverController;
     RumbleHelper rumble;
 
-    public CoralIntakeCommand(CoralDeliverySubsystem coralDeliverySubsystem, XboxController driverController) {
+    public CoralIntakeCommand(CoralDeliverySubsystem coralSubsystem, XboxController driverController) {
         // Use addRequirements() here to declare subsystem dependencies.
-        this.coralDeliverySubsystem = coralDeliverySubsystem;
+        System.out.println("BERRERROYYOUBOUH"+ coralSubsystem);
+        this.coralDeliverySubsystem = coralSubsystem;
         this.m_driverController = driverController;
         addRequirements(coralDeliverySubsystem);
         RumbleHelper rumble = new RumbleHelper(driverController);

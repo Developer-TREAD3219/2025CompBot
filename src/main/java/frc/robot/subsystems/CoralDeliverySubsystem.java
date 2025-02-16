@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class CoralDeliverySubsystem extends SubsystemBase {
    
     Spark coralDeliveryMotor = new Spark(coralDeliveryConstants.kCoralDeliveryMotorID);
+
     DigitalInput CoralInPlaceSensor = new DigitalInput(coralDeliveryConstants.kCoralInPlaceID);
     DigitalInput CoralInElevatorSensor = new DigitalInput(coralDeliveryConstants.kCoralInElevatorID);
 
