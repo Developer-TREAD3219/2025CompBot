@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.coralDeliveryConstants;
@@ -83,13 +84,10 @@ public class RobotContainer {
   // : Add the subsystems to the RobotContainer
   m_CanBus = new CANBus();
   m_Pigeon = new Pigeon2(15, m_CanBus);
-  System.out.println("This is the pigeon"+m_Pigeon);
   m_robotDrive = new DriveSubsystem(m_Pigeon);
-  System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +m_robotDrive);
   //TODO: need sensor at bottom to reset controller value
   
   m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
-  System.out.println("GGGGGGGGGGGGGGGGGGG"+ m_CoralDeliverySubsystem);
   m_ClimberSubsystem = new ClimberSubsystem();
   m_ElevatorSubsystem = new ElevatorSubsystem();
   m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
@@ -115,8 +113,8 @@ public class RobotContainer {
                 true),
             m_robotDrive));
         // Configure the button bindings
-        System.out.println("BBBBBBBBB"+ m_robotDrive);
         configureButtonBindings();
+        addShuffleboardWidgets();
     //TODO: Add our commands here
     //TODO: Intake Coral: 
 
@@ -150,11 +148,10 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() { 
+  private void configureButtonBindings() {
         // Drive Controller inputs
         // TODO: Add button mappings for the driver controller
         // The RB button on the driver controller locks our wheels in the X position if we held 
-        System.out.println("ZZZZZZ"+ m_robotDrive);
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
@@ -225,6 +222,14 @@ outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor()
   public double getMatchTime() {
     return DriverStation.getMatchTime();
 }
+/*
+ * Set up Shuffleboard controls
+ */
+  private void  addShuffleboardWidgets(){
+    Shuffleboard.getTab("Elevator")
+    .add("Home Elevator", new InstantCommand(m_ElevatorSubsystem::homeElevator));
+  }
+
 
 // Check if we have a valid button combo for auto score
 private boolean autoScoreCommandRequested() {

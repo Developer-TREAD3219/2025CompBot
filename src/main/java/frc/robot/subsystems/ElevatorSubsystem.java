@@ -5,6 +5,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ElevatorConstants;
 import com.revrobotics.RelativeEncoder;
@@ -69,6 +70,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     public ElevatorSubsystem() {
         isEnabled = true;
         isInManualMode = false;
+        Shuffleboard.getTab("Elevator").add("Elevator Position",currentPos);
 
         primaryMotor = new SparkFlex(ElevatorConstants.KLeftElevatorID, MotorType.kBrushless);
         followerMotor = new SparkFlex(ElevatorConstants.KRightElevatorID, MotorType.kBrushless);
@@ -122,8 +124,6 @@ public class ElevatorSubsystem extends SubsystemBase{
     public void periodic() {
 
         currentPos = encoder.getPosition() / ElevatorConstants.kCountsPerInch;
-        
-        // Calculate the next state and update current state
         currentState = profile.calculate(0.020, currentState, goalState); // 20ms control loop
 
         if (bottomLimit.get()) {
