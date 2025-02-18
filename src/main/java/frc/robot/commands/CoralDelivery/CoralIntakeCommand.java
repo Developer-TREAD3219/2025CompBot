@@ -11,7 +11,7 @@ import frc.robot.utils.RumbleHelper;
 public class CoralIntakeCommand extends Command {
 
     CoralDeliverySubsystem coralDeliverySubsystem;
-    DigitalInput m_deliverySensor = coralDeliverySubsystem.getCoralInPlaceSensor();
+    DigitalInput m_deliverySensor; 
     Boolean currentSensorState = false;
     Boolean previousSensorState = false;
     XboxController m_driverController;
@@ -19,6 +19,7 @@ public class CoralIntakeCommand extends Command {
 
     public CoralIntakeCommand(CoralDeliverySubsystem coralSubsystem, XboxController driverController) {
         // Use addRequirements() here to declare subsystem dependencies.
+        m_deliverySensor = coralSubsystem.getCoralInPlaceSensor();
         System.out.println("BERRERROYYOUBOUH"+ coralSubsystem);
         this.coralDeliverySubsystem = coralSubsystem;
         this.m_driverController = driverController;
