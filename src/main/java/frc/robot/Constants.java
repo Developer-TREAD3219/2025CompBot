@@ -128,18 +128,19 @@ public final class Constants {
 
     public static final double kDownPos = 0;
     public static final double kL1 = 0;
-    public static final double kL2 = 0;
-    public static final double kL3 = 0;
-    public static final double kL4 = 0;
+    public static final double kL2 = 8.1;
+    public static final double kL3 = 24.3;
+    public static final double kL4 = 48.7;
     public static final int kLimitSwitchPort = 2;
     public static final double kMaxVelocity = 0.1;
     
     public static final double kMaxAcceleration = 0.1;
-    public static final double kP = 1.0;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final int kCountsPerInch = 1;
-    public static final double kMaxPos = 0;
+    public static final double kP = 0.1;
+    public static final double kI = 0.001;
+    public static final double kD = 0.1;
+    //TODO: We made this \/ a double maybe that was cringe
+    public static final double kCountsPerInch = 0.276987;
+    public static final double kMaxPos = 66.0;
     public static final double kMax_output = 0;
     public static final double kBottomPos = 0;
     public static final double kPosTolerance = 0;

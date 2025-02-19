@@ -22,19 +22,26 @@ public class AutoScoreCommand extends Command {
     public void initialize() {
         String commandStatus = "Waiting for command";
 
+        if (gunnerController.getXButton()) {
+            elevatorSubsystem.setManualPower(0.1);
+            commandStatus = "Success: manual X";
+            System.out.println(commandStatus);
+        } 
+
+
         // Add shift to the Left when the Left Trigger is pressed
         if (gunnerController.getLeftTriggerAxis() > 0.9) {
             if (gunnerController.getYButton()) {
-                // elevatorSubsystem.setPositionInches(ElevatorConstants.kL1);
+                elevatorSubsystem.setPositionInches(ElevatorConstants.kL1);
                 commandStatus = "Success: Elevator can score L1 on the left";
             } else if (gunnerController.getXButton()) {
-                // elevatorSubsystem.setPositionInches(ElevatorConstants.kL2);
+                elevatorSubsystem.setPositionInches(ElevatorConstants.kL2);
                 commandStatus = "Success: Elevator can score L2 on the left";
             } else if (gunnerController.getBButton()) {
-                // elevatorSubsystem.setPositionInches(ElevatorConstants.kL3);
+                elevatorSubsystem.setPositionInches(ElevatorConstants.kL3);
                 commandStatus = "Success: Elevator can score L3 on the left";
             } else if (gunnerController.getAButton()) {
-                // elevatorSubsystem.setPositionInches(ElevatorConstants.kL4);
+                elevatorSubsystem.setPositionInches(ElevatorConstants.kL4);
                 commandStatus = "Success: Elevator can score L4 on the left";
             }
         }
@@ -44,16 +51,16 @@ public class AutoScoreCommand extends Command {
             if (gunnerController.getAButton()) {
                 //TODO: Example Rumble Implementation
                 rumbleHelper.rumbleForDuration(0.3, 2, 0.09); // Rumble for 0.3 seconds twice at low intensity
-                // elevatorSubsystem.setPositionInches(ElevatorConstants.kL1);
+                elevatorSubsystem.setPositionInches(ElevatorConstants.kL1);
                 commandStatus = "Success: Elevator can score L1 on the right";
             } else if (gunnerController.getYButton()) {
-                // elevatorSubsystem.setPositionInches(ElevatorConstants.kL2);
+                elevatorSubsystem.setPositionInches(ElevatorConstants.kL2);
                 commandStatus = "Success: Elevator can score L2 on the right";
             } else if (gunnerController.getXButton()) {
-                // elevatorSubsystem.setPositionInches(ElevatorConstants.kL3);
+                elevatorSubsystem.setPositionInches(ElevatorConstants.kL3);
                 commandStatus = "Success: Elevator can score L3 on the right";
             } else if (gunnerController.getBButton()) {
-                // elevatorSubsystem.setPositionInches(ElevatorConstants.kL4);
+                elevatorSubsystem.setPositionInches(ElevatorConstants.kL4);
                 commandStatus = "Success: Elevator can score L4 on the right";
                 
             }

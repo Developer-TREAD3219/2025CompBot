@@ -125,8 +125,9 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         currentPos = encoder.getPosition() / ElevatorConstants.kCountsPerInch;
         currentState = profile.calculate(0.020, currentState, goalState); // 20ms control loop
-
-        if (bottomLimit.get()) {
+        //System.out.println("The elevator is at " + getHeightInches());
+        //System.out.println("limit switch engaged " + !bottomLimit.get());
+        if (!bottomLimit.get()) {
             handleBottomLimit();
         }
 
@@ -153,6 +154,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     private void handleBottomLimit() {
+        //System.out.println("Elevator is homed");
         stopMotors();
         encoder.setPosition(ElevatorConstants.kBottomPos * ElevatorConstants.kCountsPerInch);
         isHomed = true;
@@ -207,12 +209,12 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public double getHeightInches() {
-        return encoder.getPosition() / ElevatorConstants.kCountsPerInch;
+        return Math.abs(encoder.getPosition() / ElevatorConstants.kCountsPerInch);
     }
 
     public void homeElevator() {
         primaryMotor.set(-0.1); // Slow downward movement until bottom limit is hit
-        if (bottomLimit.get()) {
+        if (!bottomLimit.get()) {
             handleBottomLimit();
         }
     }
@@ -231,6 +233,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public void setManualPower(double power) {
+        System.out.println("set manual power");
         // Disable PID control when in manual mode
         pidController.reset();
         currentState = new TrapezoidProfile.State(getHeightInches(), 0);
@@ -243,10 +246,10 @@ public class ElevatorSubsystem extends SubsystemBase{
         if (getHeightInches() >= ElevatorConstants.kMaxPos && power > 0) {
             power = 0;
         }
-        
-        if (bottomLimit.get() && power < 0) {
-            power = 0;
-        }
+        //TODO: turned this off. probably a bad idea
+        // if (!bottomLimit.get() && power < 0) {
+        //     power = 0;
+        // }
         
         primaryMotor.set(MathUtil.clamp(power, -ElevatorConstants.kMax_output, ElevatorConstants.kMax_output));
     }

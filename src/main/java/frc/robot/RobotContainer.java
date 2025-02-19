@@ -233,12 +233,15 @@ outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor()
 
 // Check if we have a valid button combo for auto score
 private boolean autoScoreCommandRequested() {
-    return (m_gunnerController.getAButton() ||
-            m_gunnerController.getYButton() ||
-            m_gunnerController.getXButton() ||
-            m_gunnerController.getBButton() ) &&
-           (m_gunnerController.getLeftTriggerAxis() > 0.9 ||
-            m_gunnerController.getRightTriggerAxis() > 0.9);
+  return (m_gunnerController.getXButton());
+  
+// private boolean autoScoreCommandRequested() {
+//     return (m_gunnerController.getAButton() ||
+//             m_gunnerController.getYButton() ||
+//             m_gunnerController.getXButton() ||
+//             m_gunnerController.getBButton() ) &&
+//            (m_gunnerController.getLeftTriggerAxis() > 0.9 ||
+//             m_gunnerController.getRightTriggerAxis() > 0.9);
 }
 // check if we are trying to start the end game
 public boolean EndGameStartRequested() {
