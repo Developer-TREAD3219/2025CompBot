@@ -5,7 +5,6 @@ import frc.robot.Constants.coralDeliveryConstants;
 import frc.robot.subsystems.CoralDeliverySubsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.coralDeliveryConstants;
 import frc.robot.utils.RumbleHelper;
 
 public class CoralIntakeCommand extends Command {
@@ -16,16 +15,19 @@ public class CoralIntakeCommand extends Command {
     Boolean previousSensorState = false;
     XboxController m_driverController;
     RumbleHelper rumble;
+    private boolean isFinished = false;
     enum Stage { STAGE0, STAGE1, STAGE2 }
     Stage m_stage = Stage.STAGE0;
+    
 
     public CoralIntakeCommand(CoralDeliverySubsystem coralSubsystem, XboxController driverController) {
         // Use addRequirements() here to declare subsystem dependencies.
-        m_deliverySensor = coralSubsystem.getCoralInPlaceSensor();
+        this.m_deliverySensor = coralSubsystem.getCoralInPlaceSensor();
         this.coralDeliverySubsystem = coralSubsystem;
         this.m_driverController = driverController;
+        this.isFinished = false;
         addRequirements(coralDeliverySubsystem);
-        RumbleHelper rumble = new RumbleHelper(driverController);
+        this.rumble = new RumbleHelper(driverController);
     }
 
     // Called when the command is initially scheduled.
@@ -56,7 +58,7 @@ public class CoralIntakeCommand extends Command {
             case STAGE2:
                 if (!currentSensorState) {
                     m_stage = Stage.STAGE0;
-                    this.end(true);
+                    isFinished = true;
                 }
                 break;
         }
@@ -75,8 +77,7 @@ public class CoralIntakeCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return coralDeliverySubsystem.isCoralInScoringPosition();
+        return isFinished;
     }
 }
-
 
