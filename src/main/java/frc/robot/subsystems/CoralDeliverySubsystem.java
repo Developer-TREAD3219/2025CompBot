@@ -8,30 +8,18 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.coralDeliveryConstants;
-import edu.wpi.first.wpilibj.DigitalInput;
-
-    // :  CoralDeliverySubsystem should extend from SubsystemBase. See an example subsystem here https://docs.wpilib.org/en/stable/docs/software/commandbased/subsystems.html
-    // :  Make placeholder intake and outtake methods for the coral delivery subsystem
+import edu.wpi.first.wpilibj.DigitalInput; 
 
 public class CoralDeliverySubsystem extends SubsystemBase {
    
     Spark coralDeliveryMotor = new Spark(coralDeliveryConstants.kCoralDeliveryMotorID);
-
     DigitalInput CoralInPlaceSensor = new DigitalInput(coralDeliveryConstants.kCoralInPlaceID);
-    DigitalInput CoralInElevatorSensor = new DigitalInput(coralDeliveryConstants.kCoralInElevatorID);
+    // DigitalInput CoralInElevatorSensor = new DigitalInput(coralDeliveryConstants.kCoralInElevatorID);
+
+    // Bool traking weather the system believes the coral is in scoring position
+    private boolean coralInScoringPosition = false;
 
     public CoralDeliverySubsystem() {
-        coralDeliveryMotor.set(coralDeliveryConstants.kIntakeSpeed); // the % output of the motor, between -1 and 1
-    }
-
-    // Placeholder for intake
-    public void intake() {
-        // Code for intake
-        coralDeliveryMotor.set(coralDeliveryConstants.kIntakeSpeed); // the % output of the motor, between -1 and 1
-        //         elevator shouldn't move when coral has broken the beam, but not in place
-        //         there will be a beam break sensor that will detect when coral has entered, 
-        //             a second sensor will tell us when the coral is captured)
-        //             Smartdashboard button to enable/disable intake sensor
     }
 
     // Placeholder for outtake
@@ -46,6 +34,10 @@ public class CoralDeliverySubsystem extends SubsystemBase {
         coralDeliveryMotor.set(0.0);
      }
 
+    public void spinMotor(double speed) {
+        // Spin the motor at a given speed
+        coralDeliveryMotor.set(speed);
+    }
     public void manualSpin(double speed) {
         // Spin the motor at a given speed
         coralDeliveryMotor.set(speed);
@@ -55,18 +47,28 @@ public class CoralDeliverySubsystem extends SubsystemBase {
         return CoralInPlaceSensor;
     }
 
-     public boolean CoralInElevator() {
-        //returns 1 if beam is broken or 0 if beam is not broken
-        return CoralInElevatorSensor.get();
-     }
-        
-    public boolean CoralInPlace() {
-        //returns 1 if beam is broken or 0 if beam is not broken
-        return CoralInPlaceSensor.get();
-      }
-
-    //      //placeholder for possible periodic for Autonomous
-    // public void periodic(){
-    //     // This method will be called once per scheduler run
+    //  public boolean CoralInElevator() {
+    //     //returns 1 if beam is broken or 0 if beam is not broken
+    //     return CoralInElevatorSensor.get();
     // }
+        
+    // public boolean CoralInPlace() {
+    //     //returns 1 if beam is broken or 0 if beam is not broken
+    //     return CoralInPlaceSensor.get();
+    //   }
+
+    public boolean isCoralInScoringPosition() {
+        return coralInScoringPosition;
+    }
+
+    public void setCoralInScoringPosition(boolean coralInScoringPosition) {
+        this.coralInScoringPosition = coralInScoringPosition;
+    }
+    
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
+
+
 }

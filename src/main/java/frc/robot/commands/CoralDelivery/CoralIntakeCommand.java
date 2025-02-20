@@ -16,11 +16,12 @@ public class CoralIntakeCommand extends Command {
     Boolean previousSensorState = false;
     XboxController m_driverController;
     RumbleHelper rumble;
+    enum Stage { STAGE0, STAGE1, STAGE2 }
+    Stage m_stage = Stage.STAGE0;
 
     public CoralIntakeCommand(CoralDeliverySubsystem coralSubsystem, XboxController driverController) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_deliverySensor = coralSubsystem.getCoralInPlaceSensor();
-        System.out.println("BERRERROYYOUBOUH"+ coralSubsystem);
         this.coralDeliverySubsystem = coralSubsystem;
         this.m_driverController = driverController;
         addRequirements(coralDeliverySubsystem);
@@ -30,18 +31,36 @@ public class CoralIntakeCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        coralDeliverySubsystem.intake();
+        coralDeliverySubsystem.spinMotor(coralDeliveryConstants.kIntakeSpeedStage1);
         //get the current state of the input sensor
         previousSensorState = m_deliverySensor.get();
+        // set the state to 1
+        m_stage = Stage.STAGE1;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        // check the sensor before running the logicf
         boolean currentSensorState = m_deliverySensor.get();
-        if (previousSensorState && !currentSensorState){
-            this.end(true);
+        // use the current stage to determine the correct action
+        switch (m_stage) {
+            // STAGE1 we should leave this stage once the sensor reads high
+            case STAGE1:
+                if (currentSensorState) {
+                    coralDeliverySubsystem.spinMotor(coralDeliveryConstants.kIntakeSpeedStage2);
+                    m_stage = Stage.STAGE2;
+                }
+                break;
+            // STAGE2 we should leave this stage once the sensor reads low
+            case STAGE2:
+                if (!currentSensorState) {
+                    m_stage = Stage.STAGE0;
+                    this.end(true);
+                }
+                break;
         }
+        // update the previous state once we are done thinking
         previousSensorState = currentSensorState;
     }
 
@@ -56,7 +75,7 @@ public class CoralIntakeCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return coralDeliverySubsystem.CoralInPlace();
+        return coralDeliverySubsystem.isCoralInScoringPosition();
     }
 }
 
