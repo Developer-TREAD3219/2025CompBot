@@ -121,8 +121,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     @Override
-    public void periodic() {
-
+        public void periodic() {
         currentPos = encoder.getPosition() / ElevatorConstants.kCountsPerInch;
         currentState = profile.calculate(0.020, currentState, goalState); // 20ms control loop
         //System.out.println("The elevator is at " + getHeightInches());

@@ -34,11 +34,13 @@ public class CoralIntakeCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        System.out.println("Intake started");
         coralDeliverySubsystem.spinMotor(coralDeliveryConstants.kIntakeSpeedStage1);
         //get the current state of the input sensor
         previousSensorState = !m_deliverySensor.get();
         // set the state to 1
         m_stage = Stage.STAGE1;
+        this.isFinished = false;
 
     }
 
@@ -52,14 +54,16 @@ public class CoralIntakeCommand extends Command {
         switch (m_stage) {
             // STAGE1 we should leave this stage once the sensor reads high
             case STAGE1:
-                if (currentSensorState) {
+                System.out.println("In stage 1 waiting for sensor");
+                if (!currentSensorState) {
                     coralDeliverySubsystem.spinMotor(coralDeliveryConstants.kIntakeSpeedStage2);
                     m_stage = Stage.STAGE2;
                 }
                 break;
             // STAGE2 we should leave this stage once the sensor reads low
             case STAGE2:
-                if (!currentSensorState) {
+                System.out.println("in stage 2 waiting for sensor");
+                if (currentSensorState) {
                     m_stage = Stage.STAGE0;
                     isFinished = true;
                 }

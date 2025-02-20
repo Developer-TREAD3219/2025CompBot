@@ -185,24 +185,29 @@ public class RobotContainer {
 //Start= Toggle between Manual and Automatic mode.
 
     // TODO: Add button mappings for the gunner controller
-
     new JoystickButton(m_gunnerController, XboxController.Button.kStart.value)
     .onTrue(new InstantCommand(() -> m_ElevatorSubsystem.toggleManualMode()));
 
+    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+    .whileTrue(new RunCommand(() -> m_ClimberSubsystem.rotateClimber(1), m_ClimberSubsystem))
+    .onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopClimber(), m_ClimberSubsystem));
+
+
+
 
     // Using Left Joystick while in Manual mode in order to move the elevator manually.
-m_ElevatorSubsystem.setDefaultCommand(new RunCommand(() -> {
-  if (m_ElevatorSubsystem.getManualMode()) {
-      double speed = -m_gunnerController.getLeftY(); // Invert Y-axis if necessary
-      m_ElevatorSubsystem.moveElevator(speed);
-  }
-}, m_ElevatorSubsystem));
+// m_ElevatorSubsystem.setDefaultCommand(new RunCommand(() -> {
+//   if (m_ElevatorSubsystem.getManualMode()) {
+//       double speed = -m_gunnerController.getLeftY(); // Invert Y-axis if necessary
+//       m_ElevatorSubsystem.moveElevator(speed);
+//   }
+// }, m_ElevatorSubsystem));
 
 // Define the Trigger
-// Bind the Trigger to the AutoScoreCommand
-Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
-autoScoreTrigger.onTrue(new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerController));
-//LT= Score Left Coral
+// // Bind the Trigger to the AutoScoreCommand
+// Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
+// autoScoreTrigger.onTrue(new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerController));
+// //LT= Score Left Coral
 
 // gunner dpad up triggers auto intake
 Trigger autoIntakeTrigger = new Trigger(this::autoIntakeRequested);
@@ -210,13 +215,16 @@ autoIntakeTrigger.onTrue(new CoralIntakeCommand(m_CoralDeliverySubsystem, m_driv
 
 // gunner dpad right = manual intake slow
 Trigger intakeTrigger = new Trigger(this::intakeRequested);
-intakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(coralDeliveryConstants.kIntakeSpeedStage2), m_CoralDeliverySubsystem));
-intakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
+intakeTrigger.onTrue(new CoralIntakeCommand(m_CoralDeliverySubsystem, m_driverController));
 
 //gunner dpad left manual spins at outake speed
 Trigger outtakeTrigger = new Trigger(this::outtakeRequested);
 outtakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem));
 outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
+
+Trigger endgameTrigger = new Trigger(this::EndGameStartRequested);
+endgameTrigger.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem, m_intakeServo));
+
 }
   // Method to get the time remaining in the match
   public double getMatchTime() {

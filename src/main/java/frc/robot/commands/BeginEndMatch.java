@@ -24,7 +24,8 @@ public class BeginEndMatch extends Command {
     public BeginEndMatch (ElevatorSubsystem elevatorSubsystem, ClimberSubsystem climberSubsystem, Servo intakeServo) {
         this.elevatorSubsystem = elevatorSubsystem;
         this.intakeServo = intakeServo;
-        this.climberSubsystem = climberSubsystem; 
+        this.climberSubsystem = climberSubsystem;
+        System.out.println("Begin... the END GAME!"); 
        
         addRequirements(elevatorSubsystem);
         // addRequirements(intakeSubsystem); // we may not be using a servo to open the intake door
@@ -34,9 +35,9 @@ public class BeginEndMatch extends Command {
     @Override
     public void initialize() {
         //TODO: ENABLE CLIMBER SUBSYSTEM.  why??? if this is the only place it's called? Only if we need it
-        elevatorSubsystem.homeElevator();
+        // elevatorSubsystem.homeElevator();
         intakeServo.set(coralDeliveryConstants.kIntakeServoOpen);
-        climberSubsystem.rotateClimber(270);
+        // climberSubsystem.rotateClimber(270);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
