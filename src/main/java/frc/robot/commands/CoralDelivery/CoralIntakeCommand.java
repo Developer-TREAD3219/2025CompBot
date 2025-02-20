@@ -20,6 +20,7 @@ public class CoralIntakeCommand extends Command {
     Stage m_stage = Stage.STAGE0;
     
 
+
     public CoralIntakeCommand(CoralDeliverySubsystem coralSubsystem, XboxController driverController) {
         // Use addRequirements() here to declare subsystem dependencies.
         this.m_deliverySensor = coralSubsystem.getCoralInPlaceSensor();
@@ -35,14 +36,16 @@ public class CoralIntakeCommand extends Command {
     public void initialize() {
         coralDeliverySubsystem.spinMotor(coralDeliveryConstants.kIntakeSpeedStage1);
         //get the current state of the input sensor
-        previousSensorState = m_deliverySensor.get();
+        previousSensorState = !m_deliverySensor.get();
         // set the state to 1
         m_stage = Stage.STAGE1;
+
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+
         // check the sensor before running the logicf
         boolean currentSensorState = m_deliverySensor.get();
         // use the current stage to determine the correct action
@@ -61,6 +64,7 @@ public class CoralIntakeCommand extends Command {
                     isFinished = true;
                 }
                 break;
+
         }
         // update the previous state once we are done thinking
         previousSensorState = currentSensorState;

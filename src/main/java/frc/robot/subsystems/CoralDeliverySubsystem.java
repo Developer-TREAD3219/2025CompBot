@@ -1,14 +1,12 @@
 package frc.robot.subsystems;
 
-import java.lang.ModuleLayer.Controller;
-import com.fasterxml.jackson.databind.type.PlaceholderForType;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.coralDeliveryConstants;
+
 import edu.wpi.first.wpilibj.DigitalInput; 
+
 
 public class CoralDeliverySubsystem extends SubsystemBase {
    
@@ -70,5 +68,10 @@ public class CoralDeliverySubsystem extends SubsystemBase {
         // This method will be called once per scheduler run
     }
 
+
+    //placeholder for possible periodic for Autonomous
+     public void periodic(){;
+    //     // This method will be called once per scheduler run
+     }
 
 }
