@@ -16,6 +16,7 @@ public class CoralIntakeCommand extends Command {
     Boolean previousSensorState = false;
     XboxController m_driverController;
     RumbleHelper rumble;
+    boolean isFinished = false;
 
     public CoralIntakeCommand(CoralDeliverySubsystem coralSubsystem, XboxController driverController) {
         // Use addRequirements() here to declare subsystem dependencies.
@@ -23,6 +24,7 @@ public class CoralIntakeCommand extends Command {
         System.out.println("BERRERROYYOUBOUH"+ coralSubsystem);
         this.coralDeliverySubsystem = coralSubsystem;
         this.m_driverController = driverController;
+        this.isFinished = false;
         addRequirements(coralDeliverySubsystem);
         RumbleHelper rumble = new RumbleHelper(driverController);
     }
@@ -32,15 +34,14 @@ public class CoralIntakeCommand extends Command {
     public void initialize() {
         coralDeliverySubsystem.intake();
         //get the current state of the input sensor
-        previousSensorState = m_deliverySensor.get();
+        previousSensorState = !m_deliverySensor.get();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        boolean currentSensorState = m_deliverySensor.get();
+        boolean currentSensorState = !m_deliverySensor.get();
         if (previousSensorState && !currentSensorState){
-            this.end(true);
         }
         previousSensorState = currentSensorState;
     }
