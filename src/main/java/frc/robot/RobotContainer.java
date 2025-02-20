@@ -208,9 +208,9 @@ autoScoreTrigger.onTrue(new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerContro
 Trigger autoIntakeTrigger = new Trigger(this::autoIntakeRequested);
 autoIntakeTrigger.onTrue(new CoralIntakeCommand(m_CoralDeliverySubsystem, m_driverController));
 
-// gunner dpad right triggers manual intake slow
+// gunner dpad right = manual intake slow
 Trigger intakeTrigger = new Trigger(this::intakeRequested);
-intakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(coralDeliveryConstants.kIntakeSpeed), m_CoralDeliverySubsystem));
+intakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(coralDeliveryConstants.kIntakeSpeedStage2), m_CoralDeliverySubsystem));
 intakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
 
 //gunner dpad left manual spins at outake speed
@@ -233,12 +233,15 @@ outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor()
 
 // Check if we have a valid button combo for auto score
 private boolean autoScoreCommandRequested() {
-    return (m_gunnerController.getAButton() ||
-            m_gunnerController.getYButton() ||
-            m_gunnerController.getXButton() ||
-            m_gunnerController.getBButton() ) &&
-           (m_gunnerController.getLeftTriggerAxis() > 0.9 ||
-            m_gunnerController.getRightTriggerAxis() > 0.9);
+  return (m_gunnerController.getXButton());
+  
+// private boolean autoScoreCommandRequested() {
+//     return (m_gunnerController.getAButton() ||
+//             m_gunnerController.getYButton() ||
+//             m_gunnerController.getXButton() ||
+//             m_gunnerController.getBButton() ) &&
+//            (m_gunnerController.getLeftTriggerAxis() > 0.9 ||
+//             m_gunnerController.getRightTriggerAxis() > 0.9);
 }
 // check if we are trying to start the end game
 public boolean EndGameStartRequested() {
