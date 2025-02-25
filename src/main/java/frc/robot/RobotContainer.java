@@ -188,6 +188,7 @@ public class RobotContainer {
     new JoystickButton(m_gunnerController, XboxController.Button.kStart.value)
     .onTrue(new InstantCommand(() -> m_ElevatorSubsystem.toggleManualMode()));
 
+    //Drive controller left bumper rotates the climber
     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
     .whileTrue(new RunCommand(() -> m_ClimberSubsystem.rotateClimber(1), m_ClimberSubsystem))
     .onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopClimber(), m_ClimberSubsystem));
@@ -224,6 +225,26 @@ outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor()
 
 Trigger endgameTrigger = new Trigger(this::EndGameStartRequested);
 endgameTrigger.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem, m_intakeServo));
+
+/*
+ * ELEVATOR COMMANDS
+ */
+
+//A sets to L1/home
+new JoystickButton(m_gunnerController, XboxController.Button.kA.value)
+.onTrue(new RunCommand(() -> m_ElevatorSubsystem.setPositionInches(0), m_ElevatorSubsystem));
+
+ //X sets to L2
+new JoystickButton(m_gunnerController, XboxController.Button.kX.value)
+.onTrue(new RunCommand(() -> m_ElevatorSubsystem.setPositionInches(Constants.ElevatorConstants.kL2), m_ElevatorSubsystem));
+
+//Y sets to L3
+new JoystickButton(m_gunnerController, XboxController.Button.kY.value)
+.onTrue(new RunCommand(() -> m_ElevatorSubsystem.setPositionInches(Constants.ElevatorConstants.kL3), m_ElevatorSubsystem));
+
+//B sets to L4
+new JoystickButton(m_gunnerController, XboxController.Button.kB.value)
+.onTrue(new RunCommand(() -> m_ElevatorSubsystem.setPositionInches(Constants.ElevatorConstants.kL4), m_ElevatorSubsystem));
 
 }
   // Method to get the time remaining in the match
