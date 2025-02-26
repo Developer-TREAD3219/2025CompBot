@@ -88,7 +88,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         //TODO: Ask the Great Bearded One if these should be set here, or are they just set on the physical motor controller?
 
 
-        resetConfig.smartCurrentLimit(40);
+        resetConfig.smartCurrentLimit(60);
         resetConfig.voltageCompensation(12.0);
 
         constraints = new TrapezoidProfile.Constraints(
@@ -124,21 +124,28 @@ public class ElevatorSubsystem extends SubsystemBase{
         public void periodic() {
         currentPos = encoder.getPosition() / ElevatorConstants.kCountsPerInch;
         currentState = profile.calculate(0.020, currentState, goalState); // 20ms control loop
-        //System.out.println("The elevator is at " + getHeightInches());
-        //System.out.println("limit switch engaged " + !bottomLimit.get());
+        System.out.println("The elevator is at " + getHeightInches());
+        // System.out.println("limit switch engaged " + !bottomLimit.get());
+        System.out.println("are we currently homed?"+ isHomed);
+       System.out.println("current goal state" + goalState.position + " and current state is " +currentState.position);
+           // System.out.println(goalState.goal);
+
         if (!bottomLimit.get()) {
-            handleBottomLimit();
+           // handleBottomLimit();
+           isHomed = true;
+           encoder.setPosition(0.0);        
         }
 
         if (getHeightInches() > ElevatorConstants.kMaxPos) {
             stopMotors();
         }
 
-        // Only run control if homed
+       // Only run control if homed
         if (isHomed) {
-            double pidOutput = pidController.calculate(getHeightInches(), currentState.position);
-            double ff = calculateFeedForward(currentState);
-            
+            double pidOutput = pidController.calculate(getHeightInches(), goalState.position);
+            double ff = calculateFeedForward(goalState);
+        
+
             double outputPower = MathUtil.clamp(
                 pidOutput + ff,
                 -ElevatorConstants.kMax_output,
@@ -146,21 +153,22 @@ public class ElevatorSubsystem extends SubsystemBase{
             );
             
             primaryMotor.set(outputPower);
+            System.out.println("Pid:" + pidOutput + " + ff: "+ ff+ " = " + outputPower);
         }
 
-        // Update SmartDashboard
+       // Update SmartDashboard
         updateTelemetry();
     }
 
     private void handleBottomLimit() {
         //System.out.println("Elevator is homed");
         stopMotors();
-        encoder.setPosition(ElevatorConstants.kBottomPos * ElevatorConstants.kCountsPerInch);
+        //encoder.setPosition(ElevatorConstants.kBottomPos * ElevatorConstants.kCountsPerInch);
         isHomed = true;
         setpoint = ElevatorConstants.kBottomPos;
-        currentState = new TrapezoidProfile.State(ElevatorConstants.kBottomPos, 0);
-        goalState = new TrapezoidProfile.State(ElevatorConstants.kBottomPos, 0);
-        pidController.reset();
+        //currentState = new TrapezoidProfile.State(ElevatorConstants.kBottomPos, 0);
+        // goalState = new TrapezoidProfile.State(ElevatorConstants.kBottomPos, 0);
+        //pidController.reset();
     }
 
     public void stopMotors() {
@@ -177,9 +185,10 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     private double calculateFeedForward(TrapezoidProfile.State state) {
         // kS (static friction), kG (gravity), kV (velocity),
-        return ElevatorConstants.kS * Math.signum(state.velocity) +
-               ElevatorConstants.kG +
-               ElevatorConstants.kV * state.velocity;
+        // return ElevatorConstants.kS * Math.signum(state.velocity) +
+        //        ElevatorConstants.kG +
+        //        ElevatorConstants.kV * state.velocity;
+        return 0.0;
     }
 
     public void setPositionInches(double inches) {
@@ -187,7 +196,7 @@ public class ElevatorSubsystem extends SubsystemBase{
             System.out.println("Warning: Elevator not homed! Home first before moving to positions.");
             return;
         }
-
+            System.out.println("setting Elevator :" + inches);
         setpoint = MathUtil.clamp(
             inches,
             ElevatorConstants.kMinPos,

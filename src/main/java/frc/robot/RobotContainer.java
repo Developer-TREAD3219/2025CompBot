@@ -236,7 +236,7 @@ new JoystickButton(m_gunnerController, XboxController.Button.kA.value)
 
  //X sets to L2
 new JoystickButton(m_gunnerController, XboxController.Button.kX.value)
-.onTrue(new RunCommand(() -> m_ElevatorSubsystem.setPositionInches(Constants.ElevatorConstants.kL2), m_ElevatorSubsystem));
+.onTrue(new InstantCommand(() -> m_ElevatorSubsystem.setPositionInches(Constants.ElevatorConstants.kL2), m_ElevatorSubsystem));
 
 //Y sets to L3
 new JoystickButton(m_gunnerController, XboxController.Button.kY.value)
