@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants.VisionConstants;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLightSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator m_poseEstimator;
@@ -143,5 +144,18 @@ public class LimeLightSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Distance", get2dDistance(currentLock));
         }
         // This method will be called once per scheduler run
+
+        // tv int 1 if valid target exists. 0 if no valid targets exist
+        //tx double	Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees / LL2: -29.8 to 29.8 degrees)
+        //ty double	Vertical Offset From Crosshair To Target (LL1: -20.5 degrees to 20.5 degrees / LL2: -24.85 to 24.85 degrees)
+        // double tv = NetworkTableInstance.getDefault().getTable("limelightCam").getEntry("tv").getDouble(0);
+        // double tx = NetworkTableInstance.getDefault().getTable("limelightCam").getEntry("tx").getDouble(0);
+        // double ty = NetworkTableInstance.getDefault().getTable("limelightCam").getEntry("ty").getDouble(0);
+        // double ta = NetworkTableInstance.getDefault().getTable("limelightCam").getEntry("ta").getDouble(0);
+        
     }
+
+   
+
+    //NetworkTableInstance.getDefault().getTable("limeLightCam").getEntry("<variablename>").getDouble(0);
 }
