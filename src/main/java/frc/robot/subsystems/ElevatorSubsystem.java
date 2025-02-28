@@ -49,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private TrapezoidProfile.State mGoalState = new TrapezoidProfile.State();
   private double prevUpdateTime = Timer.getFPGATimestamp();
 
-  private ElevatorSubsystem() {
+  public ElevatorSubsystem() {
 
     super("ElevatorSubsystem");
 

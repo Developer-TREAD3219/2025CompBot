@@ -146,7 +146,7 @@ public final class Constants {
     public static final double kBottomPos = 0;
     public static final double kPosTolerance = 0.5;
     public static final double kS = 0.0;
-    public static final double kG = 0.5;
+    public static final double kG = 0.;
     public static final double kV = 0.0;
     public static final double kMinPos = 0;
   }
