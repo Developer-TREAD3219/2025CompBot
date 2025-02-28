@@ -136,8 +136,8 @@ public final class Constants {
     
     public static final double kMaxAcceleration = 0.1;
     public static final double kP = 0.1;
-    public static final double kI = 0.001;
-    public static final double kD = 0.1;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
     //TODO: We made this \/ a double maybe that was cringe
     public static final double kCountsPerInch = 0.276987;
     public static final double kMaxPos = 66.0;

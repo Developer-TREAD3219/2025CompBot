@@ -71,15 +71,19 @@ public class ElevatorSubsystem extends SubsystemBase{
         isEnabled = true;
         isInManualMode = false;
         Shuffleboard.getTab("Elevator").add("Elevator Position",currentPos);
-
         primaryMotor = new SparkFlex(ElevatorConstants.KLeftElevatorID, MotorType.kBrushless);
         followerMotor = new SparkFlex(ElevatorConstants.KRightElevatorID, MotorType.kBrushless);
         
-        SparkMaxConfig followerConfig = new SparkMaxConfig();
-        followerConfig.follow(primaryMotor, false);
 
+        //primaryMotor.configure(resetConfig.inverted(true));
+        // Follower motor configuration
+       
+
+        //SparkMaxConfig followerConfig = new SparkMaxConfig();
+        //followerConfig.follow(13);
+        //followerMotor.configure(followerConfig.inverted(true), ResetMode.kResetSafeParameters, null);
         // Configure follower
-        followerMotor.configure(followerConfig, null, null); 
+
         
         encoder = primaryMotor.getEncoder();
         bottomLimit = new DigitalInput(ElevatorConstants.kLimitSwitchPort);
@@ -90,6 +94,7 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         resetConfig.smartCurrentLimit(60);
         resetConfig.voltageCompensation(12.0);
+        
 
         constraints = new TrapezoidProfile.Constraints(
             ElevatorConstants.kMaxVelocity,
@@ -109,25 +114,30 @@ public class ElevatorSubsystem extends SubsystemBase{
         goalState = new TrapezoidProfile.State(0, 0);
         profile = new TrapezoidProfile(constraints);
         
-        configureMotors();
+        //configureMotors();
     }
 
-    private void configureMotors() {
-        // Primary motor configuration
-        primaryMotor.configure(resetConfig, ResetMode.kResetSafeParameters, null);
-        
-        // Follower motor configuration
-        followerMotor.configure(resetConfig, ResetMode.kResetSafeParameters, null);
-    }
+    // private void configureMotors() {
+    //     // Primary motor configuration
+    //     primaryMotor.configure(resetConfig.inverted(true), ResetMode.kResetSafeParameters, null);
+    //     // Follower motor configuration
+    //     followerMotor.configure(resetConfig.inverted(true), ResetMode.kResetSafeParameters, null);
+    // }
 
     @Override
         public void periodic() {
         currentPos = encoder.getPosition() / ElevatorConstants.kCountsPerInch;
         currentState = profile.calculate(0.020, currentState, goalState); // 20ms control loop
+        System.out.println("goal state is :" + goalState.position);
+        System.out.println("current state is :" + currentState.position);
         System.out.println("The elevator is at " + getHeightInches());
+        System.out.println("Primary is:" + primaryMotor.get());
+        System.out.println("secondary is:" + followerMotor.get());
+        System.out.println("is follower motor following? :" + followerMotor.isFollower());
+
         // System.out.println("limit switch engaged " + !bottomLimit.get());
-        System.out.println("are we currently homed?"+ isHomed);
-       System.out.println("current goal state" + goalState.position + " and current state is " +currentState.position);
+        //System.out.println("are we currently homed?"+ isHomed);
+      // System.out.println("current goal state" + goalState.position + " and current state is " +currentState.position);
            // System.out.println(goalState.goal);
 
         if (!bottomLimit.get()) {
@@ -204,7 +214,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         );
         
         // Update goal state for motion profile
-        goalState = new TrapezoidProfile.State(setpoint, 0);
+        goalState = new TrapezoidProfile.State(setpoint, 1.0);
     }
 
     private void updateTelemetry() {
@@ -244,6 +254,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         System.out.println("set manual power");
         // Disable PID control when in manual mode
         pidController.reset();
+        //TODO; change velocity to power?
         currentState = new TrapezoidProfile.State(getHeightInches(), 0);
         goalState = new TrapezoidProfile.State(getHeightInches(), 0);
         
