@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.coralDeliveryConstants;
 
@@ -18,7 +20,9 @@ public class CoralDeliverySubsystem extends SubsystemBase {
     private boolean coralInScoringPosition = false;
 
     public CoralDeliverySubsystem() {
+        SmartDashboard.putBoolean("Coral", CoralInPlaceSensor.get());
     }
+    
 
     // Placeholder for outtake
     public void outtake() {
@@ -66,6 +70,7 @@ public class CoralDeliverySubsystem extends SubsystemBase {
     
     @Override
     public void periodic() {
+    System.out.println(CoralInPlaceSensor.get());
     }
 
 }

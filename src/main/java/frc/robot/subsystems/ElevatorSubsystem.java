@@ -12,11 +12,16 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
+
 import com.revrobotics.spark.SparkFlex;
 //import frc.robot.simulation.SimulatableCANSparkMax;
 
@@ -25,6 +30,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   /*-------------------------------- Private instance variables ---------------------------------*/
   private static ElevatorSubsystem mInstance;
   private PeriodicIO mPeriodicIO;
+  private DigitalInput bottomLimitSwitch;
 
   // private static final double kPivotCLRampRate = 0.5;
   // private static final double kCLRampRate = 0.5;
@@ -54,7 +60,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     super("ElevatorSubsystem");
 
     mPeriodicIO = new PeriodicIO();
-
+    bottomLimitSwitch = new DigitalInput(ElevatorConstants.kLimitSwitchPort);
     SparkMaxConfig elevatorConfig = new SparkMaxConfig();
 
     elevatorConfig.closedLoop
@@ -63,6 +69,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     elevatorConfig.smartCurrentLimit(Constants.ElevatorConstants.kMaxCurrent);
 
+    elevatorConfig.inverted(true);
+
     elevatorConfig.idleMode(IdleMode.kBrake);
     elevatorConfig.limitSwitch.reverseLimitSwitchEnabled(true);
 
@@ -70,6 +78,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     mLeftMotor = new SparkFlex(Constants.ElevatorConstants.KLeftElevatorID, MotorType.kBrushless);
     // mLeftMotor = new SimulatableCANSparkMax(Constants.Elevator.kElevatorLeftMotorId, MotorType.kBrushless);
     mLeftEncoder = mLeftMotor.getEncoder();
+    
     mLeftPIDController = mLeftMotor.getClosedLoopController();
     mLeftMotor.configure(
         elevatorConfig,
@@ -80,7 +89,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     mRightMotor = new SparkFlex(Constants.ElevatorConstants.KRightElevatorID, MotorType.kBrushless);
     // mRightMotor = new SimulatableCANSparkMax(Constants.Elevator.KRightElevatorID, MotorType.kBrushless);
     mRightMotor.configure(
-        elevatorConfig.follow(mLeftMotor, true),
+        elevatorConfig.follow(mLeftMotor),
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
@@ -111,20 +120,29 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   /*-------------------------------- Generic Subsystem Functions --------------------------------*/
 
-  @Override
+  // @Override
+  // public void periodic() {
+  //   // TODO: Use this pattern to only drive slowly when we're really high up
+  //   // if(mPivotEncoder.getPosition() > Constants.kPivotScoreCount) {
+  //   // mPeriodicIO.is_pivot_low = true;
+  //   // } else {
+  //   // mPeriodicIO.is_pivot_low = false;
+  //   // }
+  // }
+//this was the other thing first
   public void periodic() {
-    // TODO: Use this pattern to only drive slowly when we're really high up
-    // if(mPivotEncoder.getPosition() > Constants.kPivotScoreCount) {
-    // mPeriodicIO.is_pivot_low = true;
-    // } else {
-    // mPeriodicIO.is_pivot_low = false;
-    // }
-  }
-
-  public void writePeriodicOutputs() {
+    // System.out.println("Limit switch status: "+bottomLimitSwitch.get());
+    // System.out.println("current position:" + -mLeftEncoder.getPosition() + 
+    //jjj "      Delta: "+ (mLeftEncoder.getPosition()-Constants.ElevatorConstants.kL4));
+    // System.out.println("Left Motor Set: "+ mLeftMotor.get() + " Amps: "+mLeftMotor.getOutputCurrent());
+    // System.out.println("Right Motor Set: "+ mRightMotor.get() + " Amps: "+mRightMotor.getOutputCurrent());
+    //System.out.println("mCurState= " + mCurState);
     double curTime = Timer.getFPGATimestamp();
     double dt = curTime - prevUpdateTime;
     prevUpdateTime = curTime;
+    if (!bottomLimitSwitch.get()){
+      mLeftEncoder.setPosition(0.0);
+    }
     if (mPeriodicIO.is_elevator_pos_control) {
       // Update goal
       mGoalState.position = mPeriodicIO.elevator_target;
@@ -141,10 +159,11 @@ public class ElevatorSubsystem extends SubsystemBase {
           Constants.ElevatorConstants.kG,
           ArbFFUnits.kVoltage);
     } else {
-      mCurState.position = mLeftEncoder.getPosition();
+      mCurState.position = -mLeftEncoder.getPosition();
       mCurState.velocity = 0;
       mLeftMotor.set(mPeriodicIO.elevator_power);
     }
+    SmartDashboard.putBoolean("Elevator Homed", !bottomLimitSwitch.get());
   }
 
   public void stop() {
@@ -155,7 +174,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void outputTelemetry() {
-    putNumber("Position/Current", mLeftEncoder.getPosition());
+    putNumber("Position/Current", -mLeftEncoder.getPosition());
     putNumber("Position/Target", mPeriodicIO.elevator_target);
     putNumber("Velocity/Current", mLeftEncoder.getVelocity());
 

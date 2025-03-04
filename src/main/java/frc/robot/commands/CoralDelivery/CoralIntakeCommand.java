@@ -1,10 +1,11 @@
 package frc.robot.commands.CoralDelivery;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.coralDeliveryConstants;
 import frc.robot.subsystems.CoralDeliverySubsystem;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.utils.RumbleHelper;
 
 public class CoralIntakeCommand extends Command {
@@ -16,7 +17,7 @@ public class CoralIntakeCommand extends Command {
     XboxController m_driverController;
     RumbleHelper rumble;
     private boolean isFinished = false;
-    enum Stage { STAGE0, STAGE1, STAGE2 }
+    enum Stage { STAGE0, STAGE1, STAGE2, STAGE3}
     Stage m_stage = Stage.STAGE0;
     
 
@@ -54,7 +55,7 @@ public class CoralIntakeCommand extends Command {
         switch (m_stage) {
             // STAGE1 we should leave this stage once the sensor reads high
             case STAGE1:
-                System.out.println("In stage 1 waiting for sensor");
+                System.out.println("In stage 1 waiting for sensor" + Timer.getFPGATimestamp());
                 if (!currentSensorState) {
                     coralDeliverySubsystem.spinMotor(coralDeliveryConstants.kIntakeSpeedStage2);
                     m_stage = Stage.STAGE2;
@@ -62,13 +63,18 @@ public class CoralIntakeCommand extends Command {
                 break;
             // STAGE2 we should leave this stage once the sensor reads low
             case STAGE2:
-                System.out.println("in stage 2 waiting for sensor");
+                System.out.println("in stage 2 waiting for sensor" + Timer.getFPGATimestamp());
                 if (currentSensorState) {
+                    m_stage = Stage.STAGE3;
+                    coralDeliverySubsystem.spinMotor(coralDeliveryConstants.kIntakeSpeedStage3);
+                }
+                break;
+            case STAGE3:
+                System.out.println("Stage 3");
+                if (!currentSensorState) {
                     m_stage = Stage.STAGE0;
                     isFinished = true;
                 }
-                break;
-
         }
         // update the previous state once we are done thinking
         previousSensorState = currentSensorState;
@@ -85,6 +91,7 @@ public class CoralIntakeCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+        System.out.println("Command finished" + Timer.getFPGATimestamp());
         return isFinished;
     }
 }
