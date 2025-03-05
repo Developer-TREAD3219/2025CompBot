@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.coralDeliveryConstants;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 import edu.wpi.first.wpilibj.DigitalInput; 
 
@@ -13,7 +15,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class CoralDeliverySubsystem extends SubsystemBase {
    
     Spark coralDeliveryMotor = new Spark(coralDeliveryConstants.kCoralDeliveryMotorID);
-    DigitalInput CoralInPlaceSensor = new DigitalInput(coralDeliveryConstants.kCoralInPlaceID);
+    DigitalInput CoralInPlaceSensor = new DigitalInput(coralDeliveryConstants.kCoralInPlaceID); 
+    ElevatorSubsystem m_ElevatorSubsystem;
     // DigitalInput CoralInElevatorSensor = new DigitalInput(coralDeliveryConstants.kCoralInElevatorID);
 
     // Bool traking weather the system believes the coral is in scoring position
@@ -36,6 +39,11 @@ public class CoralDeliverySubsystem extends SubsystemBase {
         coralDeliveryMotor.set(0.0);
      }
 
+     public void stopAndLower() {
+        // Stop the motor by setting its speed to 0.0
+        stopMotor();
+        m_ElevatorSubsystem.goToElevatorStow();
+     }
     public void spinMotor(double speed) {
         // Spin the motor at a given speed
         System.out.println("attempting spin at" +speed);
@@ -70,7 +78,7 @@ public class CoralDeliverySubsystem extends SubsystemBase {
     
     @Override
     public void periodic() {
-    System.out.println(CoralInPlaceSensor.get());
+    //System.out.println(CoralInPlaceSensor.get());
     }
 
 }

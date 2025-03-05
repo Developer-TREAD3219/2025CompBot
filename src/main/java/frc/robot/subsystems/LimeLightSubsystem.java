@@ -51,9 +51,15 @@ public class LimeLightSubsystem extends SubsystemBase {
         LimelightHelpers.setPipelineIndex(limelightCam, 0);
     }
 
+   
     public void update() {
         double currentTime = Timer.getFPGATimestamp();
         result = LimelightHelpers.getLatestResults(limelightCam);
+
+        // System.out.println(" result = " + result.targets_Fiducials.length);
+        // System.out.println(" Yaw=" + getYaw());
+        // System.out.println(" Skew=" + getSkew());
+        // System.out.println(" Pitch=" + getPitch());
 
         // Clear our lock on if it's been too long
         if (currentLock != null && (currentTime - lastUpdateTime > bufferTime)) {
@@ -70,9 +76,12 @@ public class LimeLightSubsystem extends SubsystemBase {
                     break;
                 }
             }
+            System.out.println("target found");
         }
     }
 
+    // called from Drive subsystem
+    // 
     public void updateRobotOrientation() {
         LimelightHelpers.SetRobotOrientation("limelight", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
@@ -95,6 +104,7 @@ public class LimeLightSubsystem extends SubsystemBase {
     }
 
     public void attemptReefLockon() {
+        System.out.println("fiducials length=" + result.targets_Fiducials.length);
         if (result != null && result.targets_Fiducials.length > 0) {
             for (LimelightHelpers.LimelightTarget_Fiducial target : result.targets_Fiducials) {
                 if (Arrays.stream(reefTags).anyMatch(id -> id == target.fiducialID)) {
@@ -134,14 +144,15 @@ public class LimeLightSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        System.out.println("id=" + NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getInteger(0));
         update();
         if (currentLock != null) {
-            SmartDashboard.putNumber("Apriltag ID", getApriltagID());
-            SmartDashboard.putNumber("Skew", getSkew());
-            SmartDashboard.putNumber("Yaw", getYaw());
-            SmartDashboard.putNumber("Pitch", getPitch());
-            // SmartDashboard.putBoolean("Ambiguous Pose", isAmbiguousPose());
-            SmartDashboard.putNumber("Distance", get2dDistance(currentLock));
+            // SmartDashboard.putNumber("Apriltag ID", getApriltagID());
+            // SmartDashboard.putNumber("Skew", getSkew());
+            // SmartDashboard.putNumber("Yaw", getYaw());
+            // SmartDashboard.putNumber("Pitch", getPitch());
+            // // SmartDashboard.putBoolean("Ambiguous Pose", isAmbiguousPose());
+            // SmartDashboard.putNumber("Distance", get2dDistance(currentLock));
         }
         // This method will be called once per scheduler run
 

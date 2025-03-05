@@ -161,6 +161,7 @@ public final class Constants {
     public static final double kIntakeSpeedStage1 = 0.5;
     public static final double kIntakeSpeedStage2 = 0.2;
     public static final double kIntakeSpeedStage3 = -0.1;
+    public static final double kIntakeSpeedStage4 = 0.15;
     public static final double kOuttakeSpeed = 0.50;
     
   }

@@ -17,7 +17,7 @@ public class CoralIntakeCommand extends Command {
     XboxController m_driverController;
     RumbleHelper rumble;
     private boolean isFinished = false;
-    enum Stage { STAGE0, STAGE1, STAGE2, STAGE3}
+    enum Stage { STAGE0, STAGE1, STAGE2, STAGE3, STAGE4}
     Stage m_stage = Stage.STAGE0;
     
 
@@ -72,6 +72,13 @@ public class CoralIntakeCommand extends Command {
             case STAGE3:
                 System.out.println("Stage 3");
                 if (!currentSensorState) {
+                    m_stage = Stage.STAGE4;
+                   coralDeliverySubsystem.spinMotor(coralDeliveryConstants.kIntakeSpeedStage4);
+                }
+                break;
+            case STAGE4:
+                System.out.println("Stage 4");
+                if (currentSensorState) {
                     m_stage = Stage.STAGE0;
                     isFinished = true;
                 }
@@ -91,7 +98,7 @@ public class CoralIntakeCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        System.out.println("Command finished" + Timer.getFPGATimestamp());
+        //System.out.println("Command finished" + Timer.getFPGATimestamp());
         return isFinished;
     }
 }
