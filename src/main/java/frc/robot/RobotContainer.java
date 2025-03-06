@@ -223,7 +223,7 @@ intakeTrigger.onTrue(new CoralIntakeCommand(m_CoralDeliverySubsystem, m_driverCo
 Trigger outtakeTrigger = new Trigger(this::outtakeRequested);
 outtakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem));
 outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
-outtakeTrigger.onFalse(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsys));
+outtakeTrigger.onFalse(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem));
 
 
 
