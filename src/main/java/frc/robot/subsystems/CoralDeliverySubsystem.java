@@ -22,7 +22,8 @@ public class CoralDeliverySubsystem extends SubsystemBase {
     // Bool traking weather the system believes the coral is in scoring position
     private boolean coralInScoringPosition = false;
 
-    public CoralDeliverySubsystem() {
+    public CoralDeliverySubsystem(ElevatorSubsystem elevator) {
+        m_ElevatorSubsystem = elevator;
         SmartDashboard.putBoolean("Coral", CoralInPlaceSensor.get());
     }
     

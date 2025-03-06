@@ -144,7 +144,7 @@ public class LimeLightSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println("id=" + NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getInteger(0));
+       // System.out.println("id=" + NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getInteger(0));
         update();
         if (currentLock != null) {
             // SmartDashboard.putNumber("Apriltag ID", getApriltagID());

@@ -87,11 +87,12 @@ public class RobotContainer {
   m_robotDrive = new DriveSubsystem(m_Pigeon);
   //TODO: need sensor at bottom to reset controller value
   
-  m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
+  
   m_ClimberSubsystem = new ClimberSubsystem();
   m_ElevatorSubsystem = new ElevatorSubsystem();
   m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
   m_intakeServo = new Servo(coralDeliveryConstants.kIntakeServoID);
+  m_CoralDeliverySubsystem = new CoralDeliverySubsystem(m_ElevatorSubsystem);
 
     // Supresses the "No Joystick Connected" Spam
 
@@ -107,8 +108,8 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(Math.pow(m_driverController.getLeftY(), 3), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(Math.pow(m_driverController.getLeftX(), 3), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
