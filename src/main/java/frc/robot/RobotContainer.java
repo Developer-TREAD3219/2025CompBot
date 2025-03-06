@@ -87,11 +87,12 @@ public class RobotContainer {
   m_robotDrive = new DriveSubsystem(m_Pigeon);
   //TODO: need sensor at bottom to reset controller value
   
-  m_CoralDeliverySubsystem = new CoralDeliverySubsystem();
+  
   m_ClimberSubsystem = new ClimberSubsystem();
   m_ElevatorSubsystem = new ElevatorSubsystem();
   m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
   m_intakeServo = new Servo(coralDeliveryConstants.kIntakeServoID);
+  m_CoralDeliverySubsystem = new CoralDeliverySubsystem(m_ElevatorSubsystem);
 
     // Supresses the "No Joystick Connected" Spam
 
@@ -107,8 +108,8 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(Math.pow(m_driverController.getLeftY(), 3), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(Math.pow(m_driverController.getLeftX(), 3), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
@@ -185,8 +186,8 @@ public class RobotContainer {
 //Start= Toggle between Manual and Automatic mode.
 
     // TODO: Add button mappings for the gunner controller
-    new JoystickButton(m_gunnerController, XboxController.Button.kStart.value)
-    .onTrue(new InstantCommand(() -> m_ElevatorSubsystem.toggleManualMode()));
+    // new JoystickButton(m_gunnerController, XboxController.Button.kStart.value)
+    // .onTrue(new InstantCommand(() -> m_ElevatorSubsystem.toggleManualMode()));
 
     //Drive controller left bumper rotates the climber
     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
@@ -221,7 +222,7 @@ intakeTrigger.onTrue(new CoralIntakeCommand(m_CoralDeliverySubsystem, m_driverCo
 //gunner dpad left manual spins at outake speed
 Trigger outtakeTrigger = new Trigger(this::outtakeRequested);
 outtakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem));
-outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
+outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopAndLower(), m_CoralDeliverySubsystem));
 
 Trigger endgameTrigger = new Trigger(this::EndGameStartRequested);
 endgameTrigger.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem, m_intakeServo));
@@ -232,19 +233,19 @@ endgameTrigger.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem,
 
 //A sets to L1/home
 new JoystickButton(m_gunnerController, XboxController.Button.kA.value)
-.onTrue(new RunCommand(() -> m_ElevatorSubsystem.setPositionInches(0), m_ElevatorSubsystem));
+.onTrue(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem));
 
  //X sets to L2
 new JoystickButton(m_gunnerController, XboxController.Button.kX.value)
-.onTrue(new InstantCommand(() -> m_ElevatorSubsystem.setPositionInches(Constants.ElevatorConstants.kL2), m_ElevatorSubsystem));
+.onTrue(new InstantCommand(() -> m_ElevatorSubsystem.goToElevatorL2(), m_ElevatorSubsystem));
 
 //Y sets to L3
 new JoystickButton(m_gunnerController, XboxController.Button.kY.value)
-.onTrue(new RunCommand(() -> m_ElevatorSubsystem.setPositionInches(Constants.ElevatorConstants.kL3), m_ElevatorSubsystem));
+.onTrue(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorL3(), m_ElevatorSubsystem));
 
 //B sets to L4
 new JoystickButton(m_gunnerController, XboxController.Button.kB.value)
-.onTrue(new RunCommand(() -> m_ElevatorSubsystem.setPositionInches(Constants.ElevatorConstants.kL4), m_ElevatorSubsystem));
+.onTrue(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorL4(), m_ElevatorSubsystem));
 
 }
   // Method to get the time remaining in the match
@@ -256,7 +257,7 @@ new JoystickButton(m_gunnerController, XboxController.Button.kB.value)
  */
   private void  addShuffleboardWidgets(){
     Shuffleboard.getTab("Elevator")
-    .add("Home Elevator", new InstantCommand(m_ElevatorSubsystem::homeElevator));
+    .add("Home Elevator", new InstantCommand(m_ElevatorSubsystem::goToElevatorStow));
   }
 
 

@@ -128,38 +128,40 @@ public final class Constants {
 
     public static final double kDownPos = 0;
     public static final double kL1 = 0;
-    public static final double kL2 = 8.1;
-    public static final double kL3 = 24.3;
-    public static final double kL4 = 48.7;
+    public static final double kL2 = 3.0;
+    public static final double kL3 = 9.5;
+    public static final double kL4 = 18.0;
     public static final int kLimitSwitchPort = 1;
-    public static final double kMaxVelocity = 0.1;
-    
-    public static final double kMaxAcceleration = 0.1;
-    public static final double kP = 0.1;
-    public static final double kI = 0.001;
-    public static final double kD = 0.1;
-    //TODO: We made this \/ a double maybe that was cringe
-    public static final double kCountsPerInch = 0.276987;
-    public static final double kMaxPos = 66.0;
-    public static final double kMax_output = 1;
-    public static final double kBottomPos = 0;
-    public static final double kPosTolerance = 0.5;
-    public static final double kS = 0.0;
-    public static final double kG = 0.0;
-    public static final double kV = 0.0;
-    public static final double kMinPos = 0;
+    public static final double kMaxVelocity = 30;
+    public static final double kMaxAcceleration = 20;
+    public static final double kP = 0.18;
+    public static final double kI = 0.0005;
+    public static final double kD = 0.0004;
+    public static final double kIZone = 5.0;
+    public static final int kMaxCurrent = 60;
+    // public static final double kCountsPerInch = 0.276987;
+    // public static final double kMaxPos = 66.0;
+    // public static final double kMax_output = 1;
+    // public static final double kBottomPos = 0;
+    // public static final double kPosTolerance = 0.5;
+    // public static final double kS = 0.0;
+    public static final double kG = 0.5;
+    // public static final double kV = 0.0;
+    // public static final double kMinPos = 0;
   }
 
     public static final class coralDeliveryConstants {
     public static final int kIntakeServoID = 1;  // PWM port for the intake servo
     public static final int kCoralDeliveryMotorID = 0;  // PWM port for the SparkMax/Neo that runs the intake
     public static final int kCoralInElevatorID = 3;  // DIO port 1 for the sensor that detects when a coral is in the elevator
-    public static final int kCoralInPlaceID = 0;  // DIO port 2 for the sensor that detects when a coral is in place
+    public static final int kCoralInPlaceID = 0;  // DIO port 0 for the sensor that detects when a coral is in place
     public static final double kIntakeServoOpen = 0.0;
     public static final double kIntakeServoClosed = 1.0;
    // TODO: need constant for intake and outtake speed 
     public static final double kIntakeSpeedStage1 = 0.5;
     public static final double kIntakeSpeedStage2 = 0.2;
+    public static final double kIntakeSpeedStage3 = -0.1;
+    public static final double kIntakeSpeedStage4 = 0.15;
     public static final double kOuttakeSpeed = 0.50;
     
   }
