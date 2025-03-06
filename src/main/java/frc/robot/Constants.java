@@ -130,7 +130,7 @@ public final class Constants {
     public static final double kL1 = 0;
     public static final double kL2 = 3.0;
     public static final double kL3 = 9.5;
-    public static final double kL4 = 18.0;
+    public static final double kL4 = 18.5;
     public static final int kLimitSwitchPort = 1;
     public static final double kMaxVelocity = 30;
     public static final double kMaxAcceleration = 20;

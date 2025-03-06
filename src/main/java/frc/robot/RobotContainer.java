@@ -222,7 +222,10 @@ intakeTrigger.onTrue(new CoralIntakeCommand(m_CoralDeliverySubsystem, m_driverCo
 //gunner dpad left manual spins at outake speed
 Trigger outtakeTrigger = new Trigger(this::outtakeRequested);
 outtakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem));
-outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopAndLower(), m_CoralDeliverySubsystem));
+outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
+outtakeTrigger.onFalse(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsys));
+
+
 
 Trigger endgameTrigger = new Trigger(this::EndGameStartRequested);
 endgameTrigger.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem, m_intakeServo));
