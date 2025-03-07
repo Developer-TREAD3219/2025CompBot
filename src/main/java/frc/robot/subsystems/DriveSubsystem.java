@@ -22,6 +22,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -60,12 +62,23 @@ public class DriveSubsystem extends SubsystemBase {
   private final Pigeon2 m_pigeon;
   private Rotation2d headingOffset = new Rotation2d();
   private SwerveDrivePoseEstimator m_poseEstimator;
+
+  private int robotDirection;
+  private SendableChooser<Integer> directionChooser;
+
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(Pigeon2 pigeon) {
     m_pigeon = pigeon;
     System.out.println("The drive has the pigeon" + m_pigeon);
     m_pigeon.clearStickyFaults();
     m_pigeon.getConfigurator().apply(new Pigeon2Configuration());
+
+    // Get robot direction from dashboard.  it will be applied in DriveSubsystem.
+    // this.directionChooser = new SendableChooser<>();
+    // this.directionChooser.setDefaultOption("Forward", 1);
+    // this.directionChooser.addOption("Reverse", -1);
+    // SmartDashboard.putData("Direction Chooser", directionChooser);
+    
     
 
 
@@ -136,6 +149,8 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
         });
+
+       // int robotDirection = directionChooser.getSelected();
   }
 
   /**
@@ -187,9 +202,9 @@ public class DriveSubsystem extends SubsystemBase {
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     // Convert the commanded speeds into the correct units for the drivetrain
     // TODO: lets add that drivecontroll exponentiation we discussed. Ask Mr B for details
-    double xSpeedDelivered = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
-    double ySpeedDelivered = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
-    double rotDelivered = rot * DriveConstants.kMaxAngularSpeed;
+    double xSpeedDelivered = -xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
+    double ySpeedDelivered = -ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
+    double rotDelivered = rot * DriveConstants.kMaxAngularSpeed; 
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative

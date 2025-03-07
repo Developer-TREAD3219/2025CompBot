@@ -111,7 +111,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(Math.pow(m_driverController.getLeftY(), 3), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(Math.pow(m_driverController.getLeftX(), 3), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true),
+              true),
             m_robotDrive));
         // Configure the button bindings
         configureButtonBindings();
