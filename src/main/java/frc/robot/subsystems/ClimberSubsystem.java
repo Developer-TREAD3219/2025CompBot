@@ -26,10 +26,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
     }
     
-    public void rotateClimber(int degrees) {
+    public void rotateClimber(int isReversed) {
         // code for rotating Climber
         isEnabled = false;
 
+         
         // set the motor's target velocity to a value proportional to the desired rotation angle "x" using your
         // programming language and the SparkFlex controller's CAN interface, taking into account the motor's
         // gearing and the desired rotation direction (clockwise or counter clockwise)
@@ -41,9 +42,9 @@ public class ClimberSubsystem extends SubsystemBase {
                 // Assuming the motor controller uses degrees for position control
                 //climberMotor.set(ControlMode.Position, 270.0);
 
-        climberMotor.set(ClimberConstants.kClimberSpeed);
+        climberMotor.set(ClimberConstants.kClimberSpeed * isReversed);
     }
- 
+  
     // public void isClimber(int degrees) {
     //     // code for rotating Climber
     //             isEnabled = false;

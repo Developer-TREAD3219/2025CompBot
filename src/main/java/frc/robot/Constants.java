@@ -128,15 +128,15 @@ public final class Constants {
 
     public static final double kDownPos = 0;
     public static final double kL1 = 0;
-    public static final double kL2 = 3.0;
-    public static final double kL3 = 9.5;
-    public static final double kL4 = 18.5;
+    public static final double kL2 = 3.2;
+    public static final double kL3 = 9.0;
+    public static final double kL4 = 18.0;
     public static final int kLimitSwitchPort = 1;
     public static final double kMaxVelocity = 30;
     public static final double kMaxAcceleration = 20;
     public static final double kP = 0.18;
     public static final double kI = 0.0005;
-    public static final double kD = 0.0004;
+    public static final double kD = 0.0008;
     public static final double kIZone = 5.0;
     public static final int kMaxCurrent = 60;
     // public static final double kCountsPerInch = 0.276987;
