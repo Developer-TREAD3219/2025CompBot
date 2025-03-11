@@ -9,6 +9,8 @@ package frc.robot;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -289,6 +292,30 @@ public boolean EndGameStartRequested() {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    // return new PathPlannerAuto("Dead Ahead");
+   
+    Command m_autonomousCommand;
+    m_autonomousCommand = new PathPlannerAuto("Dead Ahead")
+      .andThen(() -> m_ElevatorSubsystem.goToElevatorL2(), m_ElevatorSubsystem)
+      .andThen(() -> m_CoralDeliverySubsystem.spinMotor(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem)
+      .andThen(Commands.waitSeconds(2))
+      .andThen(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem)
+      .andThen(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem);
+      // .andThen(() -> m_robotDrive.stop(), m_robotDrive);
+    
+      // m_autonomousCommand.schedule();
+      return m_autonomousCommand;
+    }
+
+      // try{
+      //   PathPlannerPath path = PathPlannerPath.fromPathFile("Dead Ahead");
+      //   return AutoBuilder.followPath(path);
+      // } catch (Exception e) {
+      //   DriverStation.reportError("Error in autonomous: " + e.getMessage(), e.getStackTrace());
+      //   return Commands.none();
+      // }
+
+    
+    //return autoChooser.getSelected();
   }
-}
+
