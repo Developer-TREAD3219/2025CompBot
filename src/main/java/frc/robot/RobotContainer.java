@@ -9,6 +9,9 @@ package frc.robot;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -19,13 +22,17 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.coralDeliveryConstants;
 import frc.robot.commands.BeginEndMatch;
+import frc.robot.commands.goToElevatorL2;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CoralDelivery.CoralIntakeCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralDeliverySubsystem;
@@ -80,9 +87,9 @@ public class RobotContainer {
 
     // Supresses the "No Joystick Connected" Spam
 
-    if (RobotBase.isSimulation() || DriverStation.isTest()) {
+  //  if (RobotBase.isSimulation() || DriverStation.isTest()) {
   DriverStation.silenceJoystickConnectionWarning(true);
-}
+
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -100,6 +107,9 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
         addShuffleboardWidgets();
+
+      // Auto Named Commands for path planner
+      NamedCommands.registerCommand("RaiseToL2", Commands.print("we did it"));
     //TODO: Add our commands here
     //TODO: Intake Coral: 
 
@@ -289,6 +299,17 @@ public boolean EndGameStartRequested() {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+   return autoChooser.getSelected();
+    // Command m_autonomousCommand;
+    // m_autonomousCommand = new PathPlannerAuto("Dead Ahead")
+    //   // .andThen(() -> m_ElevatorSubsystem.goToElevatorL2(), m_ElevatorSubsystem)
+      // .andThen(Commands.waitSeconds(2))
+      // .andThen(() -> m_CoralDeliverySubsystem.spinMotor(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem)
+      // .andThen(Commands.waitSeconds(2))
+      // .andThen(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem)
+      // .andThen(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem);
+    //return m_autonomousCommand;
+    };
   }
-}
+  
+
