@@ -136,7 +136,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     //jjj "      Delta: "+ (mLeftEncoder.getPosition()-Constants.ElevatorConstants.kL4));
     // System.out.println("Left Motor Set: "+ mLeftMotor.get() + " Amps: "+mLeftMotor.getOutputCurrent());
     // System.out.println("Right Motor Set: "+ mRightMotor.get() + " Amps: "+mRightMotor.getOutputCurrent());
-    //System.out.println("mCurState= " + mCurState);
+    System.out.println("mCurState= " + mCurState.velocity);
+    System.out.println("mCurState= " + mCurState.position);
     double curTime = Timer.getFPGATimestamp();
     double dt = curTime - prevUpdateTime;
     prevUpdateTime = curTime;
