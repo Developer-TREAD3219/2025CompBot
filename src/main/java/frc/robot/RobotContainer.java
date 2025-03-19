@@ -32,6 +32,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.coralDeliveryConstants;
 import frc.robot.commands.BeginEndMatch;
 import frc.robot.commands.goToElevatorL2;
+import frc.robot.commands.ReefAlignment;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CoralDelivery.CoralIntakeCommand;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -99,11 +100,21 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(Math.pow(m_driverController.getLeftY(), 3), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(Math.pow(m_driverController.getLeftX(), 3), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(Math.pow(m_driverController.getLeftY(), 5), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(Math.pow(m_driverController.getLeftX(), 5), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
               true),
             m_robotDrive));
+
+        // fine controls
+        new RunCommand(
+          () -> m_robotDrive.drive(
+              Math.sin(m_driverController.getPOV()/10),
+              Math.cos(m_driverController.getPOV()/10),
+              0,
+              false),
+          m_robotDrive);
+
         // Configure the button bindings
         configureButtonBindings();
         addShuffleboardWidgets();
@@ -187,7 +198,8 @@ public class RobotContainer {
     .whileTrue(new RunCommand(() -> m_ClimberSubsystem.rotateClimber(1), m_ClimberSubsystem))
     .onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopClimber(), m_ClimberSubsystem));
 
-
+    new JoystickButton(m_driverController, XboxController.Button.kX.value)
+    .whileTrue(new ReefAlignment(m_LimeLightSubsystem, m_robotDrive, m_ElevatorSubsystem));
 
 
     // Using Left Joystick while in Manual mode in order to move the elevator manually.
@@ -299,16 +311,16 @@ public boolean EndGameStartRequested() {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-   return autoChooser.getSelected();
-    // Command m_autonomousCommand;
-    // m_autonomousCommand = new PathPlannerAuto("Dead Ahead")
-    //   // .andThen(() -> m_ElevatorSubsystem.goToElevatorL2(), m_ElevatorSubsystem)
-      // .andThen(Commands.waitSeconds(2))
-      // .andThen(() -> m_CoralDeliverySubsystem.spinMotor(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem)
-      // .andThen(Commands.waitSeconds(2))
-      // .andThen(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem)
-      // .andThen(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem);
-    //return m_autonomousCommand;
+   //return autoChooser.getSelected();
+    Command m_autonomousCommand;
+    m_autonomousCommand = new PathPlannerAuto("Dead Ahead")
+      .andThen(() -> m_ElevatorSubsystem.goToElevatorL2(), m_ElevatorSubsystem)
+      .andThen(Commands.waitSeconds(2))
+      .andThen(() -> m_CoralDeliverySubsystem.spinMotor(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem)
+      .andThen(Commands.waitSeconds(2))
+      .andThen(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem)
+      .andThen(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem);
+    return m_autonomousCommand;
     };
   }
   
