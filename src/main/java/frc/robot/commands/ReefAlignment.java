@@ -11,23 +11,26 @@ import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ReefAlignment extends Command {
     LimeLightSubsystem m_LimeLightSubsystem;
-    double m_Yaw, m_Skew;
     DriveSubsystem m_DriveSubsystem;
     ElevatorSubsystem m_ElevatorSubsystem;
     boolean alignedStage1;
+    boolean isLeftAligning;
+    double kRight;
+    private int targetSeenCounter = 0;
+    //anti jitter logic 2oo
+    private final SlewRateLimiter xLimiter   = new SlewRateLimiter(0.5);
+    private final SlewRateLimiter yLimiter   = new SlewRateLimiter(0.5);
+    private final SlewRateLimiter rotLimiter = new SlewRateLimiter(0.5);
 
-    public ReefAlignment(LimeLightSubsystem limelight, DriveSubsystem drive, ElevatorSubsystem elevator) {
+    public ReefAlignment(LimeLightSubsystem limelight, DriveSubsystem drive, ElevatorSubsystem elevator, boolean isLeft) {
         m_LimeLightSubsystem = limelight;
         m_DriveSubsystem = drive;
         m_ElevatorSubsystem = elevator;
+        isLeftAligning = isLeft;
+        // Left right alignment chooser
 
-    }
+        addRequirements(m_LimeLightSubsystem, m_DriveSubsystem);
 
-    public void leftAlignment() {
-        m_Yaw = m_LimeLightSubsystem.getYaw();
-        m_Skew = m_LimeLightSubsystem.getSkew();
-        System.out.println("left Alignment, m_Yaw = " + m_Yaw + ", Skew = " + m_Skew);
-        
     }
 
     @Override
@@ -41,13 +44,24 @@ public class ReefAlignment extends Command {
         double xPosition = botpose[0];
         double yPosition = botpose[2];
         double yaw = botpose[4];
-        double targetSeen = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+        double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
         double rotAdjust = 0;
         double yAdjust = 0;
         double xAdjust = 0;
+
         System.out.println("X  : " + xPosition);
         System.out.println("Y  : " + yPosition);
         System.out.println("Yaw: " + yaw);
+
+        //Potential anti jitter fix if the issue is dropping tv for a moment
+        if (tv >= 1.0) {
+            targetSeenCounter = 10; // reset the counter any time we see the target
+        } else if (targetSeenCounter > 0) {
+            targetSeenCounter--;
+        }
+    
+        boolean hasTarget = (targetSeenCounter > 0);
+
 
         if (yaw > 2.5){
             rotAdjust = -0.05;
@@ -55,23 +69,39 @@ public class ReefAlignment extends Command {
         if (yaw < -2.5){
             rotAdjust = 0.05;
         }
-        // left allignment
-        if (xPosition > -.17){
-            yAdjust = 0.05;
+        // left/right allignment
+        if (isLeftAligning){ //left alignment these need tuning
+            if (xPosition > .19){
+                yAdjust = 0.05;
+            }
+            else if (xPosition < .17){
+                yAdjust = -0.05;
+            }
         }
-        if (xPosition < -.19){
-            yAdjust = -0.05;
+        else{// right alignment. In theory these are correct
+            if (xPosition > -.17){
+                yAdjust = 0.05;
+            }
+            else if (xPosition < -.19){
+                yAdjust = -0.05;
+            }
         }
-        // left allignment
+
         if (yPosition > .7){
             xAdjust = -0.05;
         }
         if (yPosition < .6){
             xAdjust = 0.05;
         }
+
+        //slew rate proccessing to smooth things out
+        double xCmd   = xLimiter.calculate(xAdjust);
+        double yCmd   = yLimiter.calculate(yAdjust);
+        double rotCmd = rotLimiter.calculate(rotAdjust);        
+
         // drive to pose code
-        if (!alignedStage1 && targetSeen == 1 && Math.abs(xAdjust)+Math.abs(yAdjust)+Math.abs(rotAdjust) != 0){
-        m_DriveSubsystem.drive(xAdjust, yAdjust, rotAdjust, false);
+        if (!alignedStage1 && hasTarget && Math.abs(xAdjust)+Math.abs(yAdjust)+Math.abs(rotAdjust) != 0){
+        m_DriveSubsystem.drive(xCmd, yCmd, rotCmd, false);
         }
         if (!alignedStage1 && Math.abs(xAdjust)+Math.abs(yAdjust)+Math.abs(rotAdjust) ==0){
             alignedStage1 = true;

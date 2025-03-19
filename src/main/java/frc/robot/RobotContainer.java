@@ -33,7 +33,6 @@ import frc.robot.Constants.coralDeliveryConstants;
 import frc.robot.commands.BeginEndMatch;
 import frc.robot.commands.goToElevatorL2;
 import frc.robot.commands.ReefAlignment;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CoralDelivery.CoralIntakeCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralDeliverySubsystem;
@@ -77,9 +76,6 @@ public class RobotContainer {
   m_CanBus = new CANBus();
   m_Pigeon = new Pigeon2(15, m_CanBus);
   m_robotDrive = new DriveSubsystem(m_Pigeon);
-  //TODO: need sensor at bottom to reset controller value
-  
-  
   m_ClimberSubsystem = new ClimberSubsystem();
   m_ElevatorSubsystem = new ElevatorSubsystem();
   m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
@@ -106,156 +102,85 @@ public class RobotContainer {
               true),
             m_robotDrive));
 
-        // fine controls
-        new RunCommand(
-          () -> m_robotDrive.drive(
-              Math.sin(m_driverController.getPOV()/10),
-              Math.cos(m_driverController.getPOV()/10),
-              0,
-              false),
-          m_robotDrive);
-
         // Configure the button bindings
         configureButtonBindings();
         addShuffleboardWidgets();
 
       // Auto Named Commands for path planner
       NamedCommands.registerCommand("RaiseToL2", Commands.print("we did it"));
-    //TODO: Add our commands here
-    //TODO: Intake Coral: 
-
-
-            //This should require just the Coral intake and some generic sensor to detect a stop
-            //we want to be able to intake and stop when we have a coral
-      //boolean that checks if we have a coral
-    //TODO: We need to plan out how were going to structure our coral scoring commands
-          //this is going to require the Elavator CoralDelivery Drive and Limelight systems
-          // we want to be able to score a left and right version of L2 L3 and L4 as well as L1 which doesn't require a side(we may still want one or we may want to handle scoring L1 in an entirely different way discussion topic)
-          // This should probably all be in 1 command with logic to choose between the 7 different scoring configurations
-          // Keeping it all in 1 command means we only have to adjust one command as we fine tune
-          // We are going to want a way to abort the command incase there is a technical difficulty
-          // It would be really cool if we made the controllers rumble when this action is done so the driver knows they can go
-          // Make sure it lowers back down so we can drive fast without tipping
-    
-    //TODO: We need a command that switches us into an end game mode
-          //This is going to use the intake climber elevator maybe(to bring it home) and a Camera we haven't set up yet.
-          //We want to open the intake enable the climber and switch from the Limelight to our climbcam
-          //WE DO NOT WANT TO ACCIDENTLY TRIGGER THIS once we open that door its not closing and we can't score anymore
-
-
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-   * subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-   * passing it to a
-   * {@link JoystickButton}.
+   * Button Bindings
    */
   private void configureButtonBindings() {
-        // Drive Controller inputs
-        // TODO: Add button mappings for the driver controller
-        // The RB button on the driver controller locks our wheels in the X position if we held 
-    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
-        .whileTrue(new RunCommand(() -> m_ClimberSubsystem.rotateClimber(-1), m_ClimberSubsystem))
-    .onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopClimber(), m_ClimberSubsystem));
   
-// LT + RT + Button:A= Open Trap Door during Climb
 
-    // Y button makes whatever direction the robot is facing the new forward
-    new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new RunCommand(() -> m_robotDrive.resetYaw(), m_robotDrive));
+    //   _____       _                   _____            _             _     
+    //  |  __ \     |_|                 / ____|          | |           | |    
+    //  | |  | |_ __ ___   _____ _ __  | |     ___  _ __ | |_ _ __ ___ | |___ 
+    //  | |  | | '__| \ \ / / _ \ '__| | |    / _ \| '_ \| __| '__/ _ \| / __|
+    //  | |__| | |  | |\ V /  __/ |    | |___| (_) | | | | |_| | | (_) | \__ \
+    //  |_____/|_|  |_| \_/ \___|_|     \_____\___/|_| |_|\__|_|  \___/|_|___/
+ 
+      //Drive controller left bumper rotates the climber
+      new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+      .whileTrue(new RunCommand(() -> m_ClimberSubsystem.rotateClimber(1), m_ClimberSubsystem))
+      .onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopClimber(), m_ClimberSubsystem));
 
-     // Define the Trigger
-     Trigger EndTriggerStart = new Trigger(this::EndGameStartRequested);
+      // The RB button rotates the climber in the other direction
+      new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+      .whileTrue(new RunCommand(() -> m_ClimberSubsystem.rotateClimber(-1), m_ClimberSubsystem))
+      .onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopClimber(), m_ClimberSubsystem));
 
-     // Bind the Trigger to the End Game Start
-     EndTriggerStart.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem, m_intakeServo));
+      // The X button attempts to alling on the right reef
+      new JoystickButton(m_driverController, XboxController.Button.kX.value)
+      .whileTrue(new ReefAlignment(m_LimeLightSubsystem, m_robotDrive, m_ElevatorSubsystem, true));
 
-// Many of these are going to need their own commmands
-
-
-//Gunner Control
-
-// LJoystick/ while in manual= Move Elevator Manually, In case of Auto Breaking
-//LT= Score Left Coral 
-//RT= Score Right Coral
-//X= Level 1 for Coral Auto (should automatically got to selected Level)
-//Y= Level 2 for Coral Auto (should automatically got to selected Level)
-//B= Level 3 for Coral Auto (should automatically got to selected Level)
-//A= Level 4 for Coral Auto (should automatically got to selected Level)
-//DPad Up= Going Up to Selected Level and should be Combined with Level Auto
-//DPad Down= Going Down to Selected Level and should be Combined with Level Auto
-//Start= Toggle between Manual and Automatic mode.
-
-    // TODO: Add button mappings for the gunner controller
-    // new JoystickButton(m_gunnerController, XboxController.Button.kStart.value)
-    // .onTrue(new InstantCommand(() -> m_ElevatorSubsystem.toggleManualMode()));
-
-    //Drive controller left bumper rotates the climber
-    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
-    .whileTrue(new RunCommand(() -> m_ClimberSubsystem.rotateClimber(1), m_ClimberSubsystem))
-    .onFalse(new InstantCommand(() -> m_ClimberSubsystem.stopClimber(), m_ClimberSubsystem));
-
-    new JoystickButton(m_driverController, XboxController.Button.kX.value)
-    .whileTrue(new ReefAlignment(m_LimeLightSubsystem, m_robotDrive, m_ElevatorSubsystem));
+      // LT + RT + Button:A= Open Trap Door during Climb
+      Trigger endTriggerStart = new Trigger(this::EndGameStartRequested);
+      // Bind the Trigger to the End Game Start
+      endTriggerStart.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem, m_intakeServo));
 
 
-    // Using Left Joystick while in Manual mode in order to move the elevator manually.
-// m_ElevatorSubsystem.setDefaultCommand(new RunCommand(() -> {
-//   if (m_ElevatorSubsystem.getManualMode()) {
-//       double speed = -m_gunnerController.getLeftY(); // Invert Y-axis if necessary
-//       m_ElevatorSubsystem.moveElevator(speed);
-//   }
-// }, m_ElevatorSubsystem));
+  //    _____                                _____            _             _     
+  //   / ____|                              / ____|          | |           | |    
+  //  | |  __ _   _ _ __  _ __   ___ _ __  | |     ___  _ __ | |_ _ __ ___ | |___ 
+  //  | | |_ | | | | '_ \| '_ \ / _ \ '__| | |    / _ \| '_ \| __| '__/ _ \| / __|
+  //  | |__| | |_| | | | | | | |  __/ |    | |___| |_| | | | | |_| | | (_) | \__ \
+  //   \_____|\__,_|_| |_|_| |_|\___|_|     \_____\___/|_| |_|\__|_|  \___/|_|___/
 
-// Define the Trigger
-// // Bind the Trigger to the AutoScoreCommand
-// Trigger autoScoreTrigger = new Trigger(this::autoScoreCommandRequested);
-// autoScoreTrigger.onTrue(new AutoScoreCommand(m_ElevatorSubsystem, m_gunnerController));
-// //LT= Score Left Coral
+      // gunner dpad up triggers auto intake
+      Trigger autoIntakeTrigger = new Trigger(this::autoIntakeRequested);
+      autoIntakeTrigger.onTrue(new CoralIntakeCommand(m_CoralDeliverySubsystem, m_driverController));
 
-// gunner dpad up triggers auto intake
-Trigger autoIntakeTrigger = new Trigger(this::autoIntakeRequested);
-autoIntakeTrigger.onTrue(new CoralIntakeCommand(m_CoralDeliverySubsystem, m_driverController));
+      //gunner dpad left manual spins at outake speed
+      Trigger outtakeTrigger = new Trigger(this::outtakeRequested);
+      outtakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem));
+      outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
+      outtakeTrigger.onFalse(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem));
+  
+    /*
+    * ELEVATOR COMMANDS
+    */
 
-// gunner dpad right = manual intake slow
-Trigger intakeTrigger = new Trigger(this::intakeRequested);
-intakeTrigger.onTrue(new CoralIntakeCommand(m_CoralDeliverySubsystem, m_driverController));
+    //A sets to L1/home
+    new JoystickButton(m_gunnerController, XboxController.Button.kA.value)
+    .onTrue(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem));
 
-//gunner dpad left manual spins at outake speed
-Trigger outtakeTrigger = new Trigger(this::outtakeRequested);
-outtakeTrigger.whileTrue(new RunCommand(() -> m_CoralDeliverySubsystem.manualSpin(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem));
-outtakeTrigger.onFalse(new RunCommand(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem));
-outtakeTrigger.onFalse(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem));
+    //X sets to L2
+    new JoystickButton(m_gunnerController, XboxController.Button.kX.value)
+    .onTrue(new InstantCommand(() -> m_ElevatorSubsystem.goToElevatorL2(), m_ElevatorSubsystem));
 
+    //Y sets to L3
+    new JoystickButton(m_gunnerController, XboxController.Button.kY.value)
+    .onTrue(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorL3(), m_ElevatorSubsystem));
 
+    //B sets to L4
+    new JoystickButton(m_gunnerController, XboxController.Button.kB.value)
+    .onTrue(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorL4(), m_ElevatorSubsystem));
 
-Trigger endgameTrigger = new Trigger(this::EndGameStartRequested);
-endgameTrigger.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem, m_intakeServo));
-
-/*
- * ELEVATOR COMMANDS
- */
-
-//A sets to L1/home
-new JoystickButton(m_gunnerController, XboxController.Button.kA.value)
-.onTrue(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem));
-
- //X sets to L2
-new JoystickButton(m_gunnerController, XboxController.Button.kX.value)
-.onTrue(new InstantCommand(() -> m_ElevatorSubsystem.goToElevatorL2(), m_ElevatorSubsystem));
-
-//Y sets to L3
-new JoystickButton(m_gunnerController, XboxController.Button.kY.value)
-.onTrue(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorL3(), m_ElevatorSubsystem));
-
-//B sets to L4
-new JoystickButton(m_gunnerController, XboxController.Button.kB.value)
-.onTrue(new RunCommand(() -> m_ElevatorSubsystem.goToElevatorL4(), m_ElevatorSubsystem));
-
-}
+    }
   // Method to get the time remaining in the match
   public double getMatchTime() {
     return DriverStation.getMatchTime();
@@ -263,23 +188,9 @@ new JoystickButton(m_gunnerController, XboxController.Button.kB.value)
 /*
  * Set up Shuffleboard controls
  */
-  private void  addShuffleboardWidgets(){
-    Shuffleboard.getTab("Elevator")
-    .add("Home Elevator", new InstantCommand(m_ElevatorSubsystem::goToElevatorStow));
-  }
-
-
-// Check if we have a valid button combo for auto score
-private boolean autoScoreCommandRequested() {
-  return (m_gunnerController.getXButton());
-  
-// private boolean autoScoreCommandRequested() {
-//     return (m_gunnerController.getAButton() ||
-//             m_gunnerController.getYButton() ||
-//             m_gunnerController.getXButton() ||
-//             m_gunnerController.getBButton() ) &&
-//            (m_gunnerController.getLeftTriggerAxis() > 0.9 ||
-//             m_gunnerController.getRightTriggerAxis() > 0.9);
+private void  addShuffleboardWidgets(){
+  Shuffleboard.getTab("Elevator")
+  .add("Home Elevator", new InstantCommand(m_ElevatorSubsystem::goToElevatorStow));
 }
 // check if we are trying to start the end game
 public boolean EndGameStartRequested() {
@@ -287,29 +198,26 @@ public boolean EndGameStartRequested() {
           m_driverController.getRightTriggerAxis() > 0.9 &&
           m_driverController.getAButton()) &&
           (
-          getMatchTime() < 30 || 
+          DriverStation.getMatchTime() < 45 || 
           RobotBase.isSimulation() || 
           DriverStation.isTest());
   }
 
   //Check if dpad right is pressed on the gunner controller
-  public boolean intakeRequested(){
-    return m_gunnerController.getPOV() == 90;
-  }
   public boolean outtakeRequested(){
     return m_gunnerController.getPOV() == 270;
   }
   public Boolean autoIntakeRequested(){
     return m_gunnerController.getPOV() == 0;
   }
-  public Boolean autoOuttakeRequested(){
-    return m_gunnerController.getPOV() == 180;
-  }
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+
+//                 _                                              
+//      /\        | |                                             
+//     /  \  _   _| |_ ___  _ __   ___  _ __ ___   ___  _   _ ___ 
+//    / /\ \| | | | __/ _ \| '_ \ / _ \| '_ ` _ \ / _ \| | | / __|
+//   / ____ \ |_| | || (_) | | | | (_) | | | | | | (_) | |_| \__ \
+//  /_/    \_\__,_|\__\___/|_| |_|\___/|_| |_| |_|\___/ \__,_|___/
+//
   public Command getAutonomousCommand() {
    //return autoChooser.getSelected();
     Command m_autonomousCommand;

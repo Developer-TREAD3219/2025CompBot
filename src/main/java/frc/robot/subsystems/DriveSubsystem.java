@@ -201,7 +201,6 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     // Convert the commanded speeds into the correct units for the drivetrain
-    // TODO: lets add that drivecontroll exponentiation we discussed. Ask Mr B for details
     double xSpeedDelivered = -xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double ySpeedDelivered = -ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = rot * DriveConstants.kMaxAngularSpeed; 
@@ -209,7 +208,6 @@ public class DriveSubsystem extends SubsystemBase {
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                // Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ))
                 getGyroRotation2d())
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
