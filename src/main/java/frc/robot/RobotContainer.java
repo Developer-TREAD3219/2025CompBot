@@ -136,6 +136,10 @@ public class RobotContainer {
       // The X button attempts to alling on the right reef
       new JoystickButton(m_driverController, XboxController.Button.kX.value)
       .whileTrue(new ReefAlignment(m_LimeLightSubsystem, m_robotDrive, m_ElevatorSubsystem, true));
+      
+      // The B button attempts to alling on the right reef
+      new JoystickButton(m_driverController, XboxController.Button.kB.value)
+      .whileTrue(new ReefAlignment(m_LimeLightSubsystem, m_robotDrive, m_ElevatorSubsystem, false));
 
       // LT + RT + Button:A= Open Trap Door during Climb
       Trigger endTriggerStart = new Trigger(this::EndGameStartRequested);
@@ -221,13 +225,21 @@ public boolean EndGameStartRequested() {
   public Command getAutonomousCommand() {
    //return autoChooser.getSelected();
     Command m_autonomousCommand;
-    m_autonomousCommand = new PathPlannerAuto("Dead Ahead")
-      .andThen(() -> m_ElevatorSubsystem.goToElevatorL2(), m_ElevatorSubsystem)
-      .andThen(Commands.waitSeconds(2))
-      .andThen(() -> m_CoralDeliverySubsystem.spinMotor(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem)
-      .andThen(Commands.waitSeconds(2))
-      .andThen(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem)
-      .andThen(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem);
+    
+    m_autonomousCommand = new PathPlannerAuto(autoChooser.getSelected())     
+    .andThen(() -> m_robotDrive.drive(0.1, 0, 0, false))
+    .andThen(Commands.waitSeconds(0.3))
+    .andThen(() -> m_robotDrive.drive(0,0,0, false))
+    .andThen(() -> m_ElevatorSubsystem.goToElevatorL4(), m_ElevatorSubsystem)
+    .andThen(Commands.waitSeconds(2))
+    .andThen(() -> m_robotDrive.drive(-0.1, 0 , 0, false))
+    .andThen(Commands.waitSeconds(0.3))
+    .andThen(() -> m_robotDrive.drive(0,0,0, false))
+    .andThen(() -> m_CoralDeliverySubsystem.spinMotor(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem)
+    .andThen(Commands.waitSeconds(2))
+    .andThen(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem)
+    .andThen(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem);
+    
     return m_autonomousCommand;
     };
   }

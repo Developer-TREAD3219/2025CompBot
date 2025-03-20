@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 
 public class ReefAlignment extends Command {
     LimeLightSubsystem m_LimeLightSubsystem;
@@ -55,7 +56,7 @@ public class ReefAlignment extends Command {
 
         //Potential anti jitter fix if the issue is dropping tv for a moment
         if (tv >= 1.0) {
-            targetSeenCounter = 10; // reset the counter any time we see the target
+            targetSeenCounter = 5; // reset the counter any time we see the target
         } else if (targetSeenCounter > 0) {
             targetSeenCounter--;
         }
@@ -71,19 +72,31 @@ public class ReefAlignment extends Command {
         }
         // left/right allignment
         if (isLeftAligning){ //left alignment these need tuning
-            if (xPosition > .19){
-                yAdjust = 0.05;
+            if (xPosition > .191){
+                yAdjust = 0.2;
+                if (Math.abs(xPosition-.19) < .1){
+                    yAdjust /= 5;
+                }
             }
-            else if (xPosition < .17){
-                yAdjust = -0.05;
+            else if (xPosition < .189){
+                yAdjust = -0.2;
+                if (Math.abs(xPosition-.19) < .1){
+                    yAdjust /= 5;
+                }
             }
         }
         else{// right alignment. In theory these are correct
-            if (xPosition > -.17){
-                yAdjust = 0.05;
+            if (xPosition > -.179){
+                yAdjust = 0.2;
+                if (Math.abs(xPosition+.18) < .1){
+                    yAdjust /= 5;
+                }
             }
-            else if (xPosition < -.19){
-                yAdjust = -0.05;
+            else if (xPosition < -.181){
+                yAdjust = -0.2;
+                if (Math.abs(xPosition+.18) < .1){
+                    yAdjust /= 5;
+                }
             }
         }
 
