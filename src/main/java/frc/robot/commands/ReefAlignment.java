@@ -17,11 +17,16 @@ public class ReefAlignment extends Command {
     boolean alignedStage1;
     boolean isLeftAligning;
     double kRight;
+    double xCmd;
+    double yCmd;
+    double rotCmd;
+    double yDivisor;
+    double previousYDirection;
     private int targetSeenCounter = 0;
     //anti jitter logic 2oo
-    private final SlewRateLimiter xLimiter   = new SlewRateLimiter(0.5);
-    private final SlewRateLimiter yLimiter   = new SlewRateLimiter(0.5);
-    private final SlewRateLimiter rotLimiter = new SlewRateLimiter(0.5);
+    private final SlewRateLimiter xLimiter   = new SlewRateLimiter(0.8);
+    private final SlewRateLimiter yLimiter   = new SlewRateLimiter(0.8);
+    private final SlewRateLimiter rotLimiter = new SlewRateLimiter(0.8);
 
     public ReefAlignment(LimeLightSubsystem limelight, DriveSubsystem drive, ElevatorSubsystem elevator, boolean isLeft) {
         m_LimeLightSubsystem = limelight;
@@ -37,6 +42,8 @@ public class ReefAlignment extends Command {
     @Override
     public void initialize(){
         alignedStage1 = false;
+        yDivisor = 1.0;
+        previousYDirection = 0.0;
     }
 
     @Override
@@ -56,7 +63,7 @@ public class ReefAlignment extends Command {
 
         //Potential anti jitter fix if the issue is dropping tv for a moment
         if (tv >= 1.0) {
-            targetSeenCounter = 5; // reset the counter any time we see the target
+            targetSeenCounter = 3; // reset the counter any time we see the target
         } else if (targetSeenCounter > 0) {
             targetSeenCounter--;
         }
@@ -73,31 +80,40 @@ public class ReefAlignment extends Command {
         // left/right allignment
         if (isLeftAligning){ //left alignment these need tuning
             if (xPosition > .191){
-                yAdjust = 0.2;
-                if (Math.abs(xPosition-.19) < .1){
-                    yAdjust /= 5;
+                yAdjust = 0.25;
+                if (Math.abs(xPosition-.19) < .15){
+                    yAdjust /= 15;
                 }
             }
-            else if (xPosition < .189){
-                yAdjust = -0.2;
-                if (Math.abs(xPosition-.19) < .1){
-                    yAdjust /= 5;
+            else if (xPosition < .189){ 
+                yAdjust = -0.25;
+                if (Math.abs(xPosition-.19) < .15){
+                    yAdjust /= 15;
                 }
             }
         }
         else{// right alignment. In theory these are correct
-            if (xPosition > -.179){
-                yAdjust = 0.2;
-                if (Math.abs(xPosition+.18) < .1){
-                    yAdjust /= 5;
+            if (xPosition > -.175){
+                yAdjust = 0.25;
+                if (Math.abs(xPosition+.18) < .15){
+                    yAdjust /= 10;
                 }
             }
-            else if (xPosition < -.181){
-                yAdjust = -0.2;
-                if (Math.abs(xPosition+.18) < .1){
-                    yAdjust /= 5;
+            else if (xPosition < -.180
+            ){
+                yAdjust = -0.25;
+                if (Math.abs(xPosition+.18) < .15){
+                    yAdjust /= 10;
                 }
             }
+            yAdjust/= yDivisor;
+    
+            if (yAdjust*previousYDirection<0){
+            yDivisor += 5;
+        }
+         previousYDirection = yAdjust;
+            
+
         }
 
         if (yPosition > .7){
@@ -107,10 +123,23 @@ public class ReefAlignment extends Command {
             xAdjust = 0.05;
         }
 
-        //slew rate proccessing to smooth things out
-        double xCmd   = xLimiter.calculate(xAdjust);
-        double yCmd   = yLimiter.calculate(yAdjust);
-        double rotCmd = rotLimiter.calculate(rotAdjust);        
+        //slew rate proccessing to smooth things out unless we are in the right spot
+        if (xAdjust != 0){
+            xCmd   = xLimiter.calculate(xAdjust);
+        }else{
+            xCmd = 0;
+        }
+        if (yAdjust != 0){
+            yCmd   = yLimiter.calculate(yAdjust);
+        }else{
+            yCmd = 0;
+        }
+        if (rotAdjust != 0){
+            rotCmd   = rotLimiter.calculate(rotAdjust);
+        }else{
+            rotCmd = 0;
+        }
+      
 
         // drive to pose code
         if (!alignedStage1 && hasTarget && Math.abs(xAdjust)+Math.abs(yAdjust)+Math.abs(rotAdjust) != 0){
@@ -119,9 +148,14 @@ public class ReefAlignment extends Command {
         if (!alignedStage1 && Math.abs(xAdjust)+Math.abs(yAdjust)+Math.abs(rotAdjust) ==0){
             alignedStage1 = true;
         }
+        if (!hasTarget){
+            yCmd = 0;
+            rotCmd = 0;
+        }
         if (alignedStage1){
-            m_DriveSubsystem.drive(-0.1, 0, 0, false);
+            m_DriveSubsystem.drive(-0.1, yCmd/10, rotCmd/10, false);
         }
     }
 }
+// Lunch Changes. Upped slew rate added 1/10 y and rot adjustments as we approach if we see the reef tags. added Y/rot command overrides that set to 0 if we are added 0 slew rate overrides for when we are alligned
 

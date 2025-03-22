@@ -130,7 +130,7 @@ public final class Constants {
     public static final double kL1 = 0;
     public static final double kL2 = 3.2;
     public static final double kL3 = 8.8;
-    public static final double kL4 = 17.5;
+    public static final double kL4 = 18.0;
     public static final int kLimitSwitchPort = 1;
     public static final double kMaxVelocity = 30;
     public static final double kMaxAcceleration = 20;
@@ -151,7 +151,7 @@ public final class Constants {
   }
 
     public static final class coralDeliveryConstants {
-    public static final int kIntakeServoID = 1;  // PWM port for the intake servo
+    public static final int kIntakeServoID = 1;  // PWM port for the intake servo (which is now a Talon SR)
     public static final int kCoralDeliveryMotorID = 0;  // PWM port for the SparkMax/Neo that runs the intake
     public static final int kCoralInElevatorID = 3;  // DIO port 1 for the sensor that detects when a coral is in the elevator
     public static final int kCoralInPlaceID = 0;  // DIO port 0 for the sensor that detects when a coral is in place
@@ -162,7 +162,7 @@ public final class Constants {
     public static final double kIntakeSpeedStage2 = 0.2;
     public static final double kIntakeSpeedStage3 = -0.1;
     public static final double kIntakeSpeedStage4 = 0.15;
-    public static final double kOuttakeSpeed = 0.50;
+    public static final double kOuttakeSpeed = 0.65;
     
   }
 

@@ -16,7 +16,8 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.Servo;
+//import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -54,7 +55,8 @@ public class RobotContainer {
   public ClimberSubsystem m_ClimberSubsystem;
   public ElevatorSubsystem  m_ElevatorSubsystem;
   public LimeLightSubsystem m_LimeLightSubsystem;
-  public Servo m_intakeServo;
+  //public Servo m_intakeServo;
+  public Talon  m_hatchMotor;
   public CANBus m_CanBus;
 
 
@@ -79,8 +81,10 @@ public class RobotContainer {
   m_ClimberSubsystem = new ClimberSubsystem();
   m_ElevatorSubsystem = new ElevatorSubsystem();
   m_LimeLightSubsystem = new LimeLightSubsystem(m_robotDrive);
-  m_intakeServo = new Servo(coralDeliveryConstants.kIntakeServoID);
+  // m_intakeServo = new Servo(coralDeliveryConstants.kIntakeServoID);
+  m_hatchMotor = new Talon(coralDeliveryConstants.kIntakeServoID);
   m_CoralDeliverySubsystem = new CoralDeliverySubsystem(m_ElevatorSubsystem);
+    
 
     // Supresses the "No Joystick Connected" Spam
 
@@ -144,7 +148,13 @@ public class RobotContainer {
       // LT + RT + Button:A= Open Trap Door during Climb
       Trigger endTriggerStart = new Trigger(this::EndGameStartRequested);
       // Bind the Trigger to the End Game Start
-      endTriggerStart.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem, m_intakeServo));
+      endTriggerStart.onTrue(new BeginEndMatch(m_ElevatorSubsystem, m_ClimberSubsystem, m_hatchMotor)
+      .withTimeout(2));  // was m_intakeServo
+
+
+
+
+      
 
 
   //    _____                                _____            _             _     
@@ -200,11 +210,14 @@ private void  addShuffleboardWidgets(){
 public boolean EndGameStartRequested() {
   return (m_driverController.getLeftTriggerAxis() > 0.9 &&
           m_driverController.getRightTriggerAxis() > 0.9 &&
-          m_driverController.getAButton()) &&
-          (
-          DriverStation.getMatchTime() < 45 || 
-          RobotBase.isSimulation() || 
-          DriverStation.isTest());
+          m_driverController.getAButton())
+          //  &&
+          // (
+          // DriverStation.getMatchTime() < 45 || 
+          // RobotBase.isSimulation() || 
+          // DriverStation.isTest()
+          // )
+          ;
   }
 
   //Check if dpad right is pressed on the gunner controller
@@ -237,8 +250,8 @@ public boolean EndGameStartRequested() {
     .andThen(() -> m_robotDrive.drive(0,0,0, false))
     .andThen(() -> m_CoralDeliverySubsystem.spinMotor(coralDeliveryConstants.kOuttakeSpeed), m_CoralDeliverySubsystem)
     .andThen(Commands.waitSeconds(2))
-    .andThen(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem)
-    .andThen(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem);
+    .andThen(() -> m_CoralDeliverySubsystem.stopMotor(), m_CoralDeliverySubsystem);
+    // .andThen(() -> m_ElevatorSubsystem.goToElevatorStow(), m_ElevatorSubsystem);
     
     return m_autonomousCommand;
     };
