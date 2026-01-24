@@ -13,7 +13,7 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {}
 
-  public void toggleIntake() {
+  public void toggleIntakeExtentions() {
     // Code to toggle the intake mechanism
     if (m_intakeExtended == true) {
           System.out.println("[INTAKE] Retract intake");
@@ -23,6 +23,21 @@ public class IntakeSubsystem extends SubsystemBase {
           m_intakeExtended = true;
     }
   }
+
+public void startIntakeRollers(){
+  //Starts the Intake rollers to intake fuel
+  System.out.println("[INTAKE] Rollers started");
+}
+
+public void stopIntakeRollers(){
+  //Stops the Intake rollers
+  System.out.println("[INTAKE] Rollers stopped");
+}
+
+public void reverseIntakeRollers(){
+  //Reverses the Intake rollers to get stuff unstuck
+  System.out.println("[INTAKE] Rollers reversed");
+}
 
   @Override
   public void periodic() {

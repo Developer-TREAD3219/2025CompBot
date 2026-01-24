@@ -15,6 +15,16 @@ public class TurretSubsystem extends SubsystemBase {
     // Code to set turret to alliance zone lock position
     System.out.println("[TURRET] Set to Alliance Zone Lock position");
   }
+  
+  public void lockOntoHub(){
+    //This function is to lock onto the AprilTag on the Hub
+    System.out.println("[TURRET] Set to AprilTag on Hub");
+  } 
+
+public void startStopLauncherMotors(){
+  //Starts or stops the launcher motors
+  System.out.println("[TURRET] Launcher motors started/stopped");
+  }
 
   @Override
   public void periodic() {
